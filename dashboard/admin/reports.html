@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Reports — Admin Dashboard</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:var(--emergency);"><i class="bi bi-shield-fill"></i></div>
+      <div><div class="sidebar-user-name">Platform Admin</div><div class="sidebar-user-role"><span class="verified-dot"></span> Super Admin</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Control Panel</div>
+    <a href="index.html"         class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="verifications.html" class="sidebar-nav-link"><i class="bi bi-shield-check"></i> Verifications <span class="nav-badge" id="pendingBadge">0</span></a>
+    <a href="users.html"         class="sidebar-nav-link"><i class="bi bi-people"></i> All Users</a>
+    <a href="donations.html"     class="sidebar-nav-link"><i class="bi bi-box-seam"></i> All Donations</a>
+    <a href="reports.html"       class="sidebar-nav-link active"><i class="bi bi-flag"></i> Reports <span class="nav-badge" id="reportsBadge">3</span></a>
+    <a href="emergency.html"     class="sidebar-nav-link"><i class="bi bi-exclamation-triangle"></i> Emergency Mode</a>
+    <a href="analytics.html"     class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+    <a href="settings.html"      class="sidebar-nav-link"><i class="bi bi-gear"></i> Settings</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"       class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Admin Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">Incident Reports</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+    
+    <div class="dash-table-card">
+      <div class="dash-table-header">
+        <div class="dash-table-title">Open Flagged Tickets</div>
+      </div>
+      
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>Reporter</th>
+              <th>Issue Summary</th>
+              <th>Date Filed</th>
+              <th>Priority</th>
+              <th>Handoff Action</th>
+            </tr>
+          </thead>
+          <tbody id="reportsTbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Action Modal -->
+<div class="confirm-modal-overlay" id="reportActionModal">
+  <div class="confirm-modal">
+    <h4 style="font-family:var(--font-heading); font-weight:700; margin-bottom:1rem;" id="reportActionTitle">Resolve Incident Ticket</h4>
+    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius-md); padding:1rem; margin-bottom:1.5rem; font-size:var(--text-xs); color:var(--dash-text);" id="reportDetailsBox">
+      <!-- Info filled here -->
+    </div>
+    
+    <div class="form-field">
+      <label class="form-label" for="reportActionNote">Action Notes</label>
+      <input type="text" id="reportActionNote" class="form-input" placeholder="e.g. Warned restaurant about packaging quality standards. Resolved.">
+    </div>
+
+    <div style="display:flex; gap:1rem; margin-top:2rem;">
+      <button class="btn btn-outline-green flex-1" onclick="closeReportModal()">Cancel</button>
+      <button class="btn btn-danger flex-1" onclick="resolveTicket(false)">Dismiss Ticket</button>
+      <button class="btn btn-green flex-1" onclick="resolveTicket(true)">Mark Resolved</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const tickets = [
+    { id: 'tkt1', reporter: 'Asha NGO', summary: 'Food quality complaint - sour smell in Dal', date: '2 hours ago', priority: 'high', details: 'Asha NGO reported Dal Makhani received from Patel\'s Dhaba had sour smell on arrival. Safety engine verification score was 88.' },
+    { id: 'tkt2', reporter: "Patel's Hotel", summary: 'Volunteer rider did not show up', date: '4 hours ago', priority: 'medium', details: 'Donor hotel reports rider did not show up within 30 min window. Rescheduled matching to Priya Singh.' },
+    { id: 'tkt3', reporter: 'Auto-Flagged', summary: 'FSSAI License near expiry window', date: '1 day ago', priority: 'critical', details: 'System logs indicate Al-Naimat Restaurant FSSAI permit expires in 48 hours. Auto-alert sent.' }
+  ];
+
+  let selectedTicketId = null;
+
+  function renderTickets() {
+    const tbody = document.getElementById('reportsTbody');
+    tbody.innerHTML = tickets.map(t => `
+      <tr>
+        <td>${t.reporter}</td>
+        <td><div class="food-name">${t.summary}</div></td>
+        <td style="font-size:var(--text-xs); color:var(--dash-muted);">${t.date}</td>
+        <td><span class="status-badge" style="background:${t.priority === 'critical' ? 'var(--emergency)' : t.priority === 'high' ? 'var(--saffron-400)' : 'var(--green-500)'}; color:${t.priority === 'high' ? 'var(--ink-900)' : 'white'};">${t.priority}</span></td>
+        <td>
+          <button class="btn btn-green btn-sm" onclick="openReportModal('${t.id}')">Audit</button>
+        </td>
+      </tr>
+    `).join('');
+    
+    document.getElementById('reportsBadge').textContent = tickets.length;
+  }
+
+  window.openReportModal = function(id) {
+    selectedTicketId = id;
+    const ticket = tickets.find(t => t.id === id);
+    if (!ticket) return;
+
+    document.getElementById('reportActionTitle').textContent = `Resolve: ${ticket.summary}`;
+    document.getElementById('reportDetailsBox').innerHTML = `
+      <strong>Reporter:</strong> ${ticket.reporter}<br>
+      <strong>Date Filed:</strong> ${ticket.date}<br>
+      <strong>Severity:</strong> ${ticket.priority.toUpperCase()}<br><br>
+      <strong>Full Details:</strong><br>
+      ${ticket.details}
+    `;
+    document.getElementById('reportActionNote').value = '';
+    document.getElementById('reportActionModal').classList.add('open');
+  };
+
+  window.closeReportModal = function() {
+    document.getElementById('reportActionModal').classList.remove('open');
+  };
+
+  window.resolveTicket = function(success) {
+    const ticket = tickets.find(t => t.id === selectedTicketId);
+    if (!ticket) return;
+
+    const index = tickets.findIndex(t => t.id === selectedTicketId);
+    if (index > -1) {
+      tickets.splice(index, 1);
+    }
+
+    closeReportModal();
+    renderTickets();
+
+    if (success) {
+      showToast('✅ Ticket Resolved', 'Marked as completed in incident reports database.', 'success');
+    } else {
+      showToast('Dismissed Ticket', 'No violation recorded. Ticket closed.', 'info');
+    }
+  };
+
+  renderTickets();
+</script>
+
+</body>
+</html>

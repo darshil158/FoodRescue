@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — FoodRescue Restaurant</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="dash-body">
+<div id="toast-container"></div>
+<button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="sidebar-user"><div class="sidebar-avatar"><i class="bi bi-building"></i></div><div><div class="sidebar-user-name">Patel's Dhaba</div><div class="sidebar-user-role"><span class="verified-dot"></span> Verified Donor</div></div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"   class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="post.html"    class="sidebar-nav-link"><i class="bi bi-plus-circle"></i> Post Donation</a>
+    <a href="active.html"  class="sidebar-nav-link"><i class="bi bi-lightning-charge"></i> Active</a>
+    <a href="history.html" class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="impact.html"  class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i> Impact</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html" class="sidebar-nav-link active"><i class="bi bi-person-circle"></i> Profile</a>
+  </nav>
+  <div class="sidebar-footer"><button class="sidebar-logout" data-logout><i class="bi bi-box-arrow-left"></i> Logout</button></div>
+</aside>
+<main class="dash-main">
+  <div class="dash-topbar">
+    <div><div class="dash-greeting">My Profile</div><div class="dash-date" id="dateText"></div></div>
+    <div class="dash-topbar-actions"><button class="btn btn-primary btn-sm" onclick="saveProfile()"><i class="bi bi-check-circle"></i> Save Changes</button></div>
+  </div>
+  <div class="dash-content">
+    <div class="row g-4">
+      <!-- Profile Card -->
+      <div class="col-lg-4">
+        <div class="dash-chart-card text-center">
+          <div style="width:100px;height:100px;border-radius:50%;background:var(--green-700);border:3px solid var(--green-500);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🏪</div>
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--white);font-size:1.1rem;">Patel's Dhaba</div>
+          <div style="margin:8px 0;"><span class="verify-badge verify-fssai"><i class="bi bi-shield-check"></i> FSSAI Verified</span></div>
+          <div style="font-size:var(--text-xs);color:var(--dash-muted);margin-bottom:1rem;">Member since Jan 2024</div>
+          <button class="btn btn-outline-green btn-sm w-100"><i class="bi bi-camera"></i> Change Photo</button>
+        </div>
+      </div>
+
+      <!-- Edit Form -->
+      <div class="col-lg-8">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">Business Information</div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label-dark">Business Name</label>
+              <input type="text" class="form-input-dark" value="Patel's Dhaba" id="bizName">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Contact Name</label>
+              <input type="text" class="form-input-dark" value="Ravi Patel" id="contactName">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Email</label>
+              <input type="email" class="form-input-dark" value="ravi@pateldhaba.com" id="email">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Phone</label>
+              <input type="tel" class="form-input-dark" value="9876543210" id="phone">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">FSSAI Number</label>
+              <input type="text" class="form-input-dark" value="12345678901234" id="fssai" readonly style="opacity:.6;">
+              <div style="font-size:.65rem;color:var(--dash-muted);margin-top:4px;">Contact admin to update FSSAI</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Business Type</label>
+              <select class="form-input-dark" id="bizType">
+                <option value="restaurant" selected>Restaurant</option>
+                <option value="hotel">Hotel</option>
+                <option value="caterer">Caterer</option>
+                <option value="bakery">Bakery</option>
+                <option value="cloud_kitchen">Cloud Kitchen</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label-dark">Address</label>
+              <textarea class="form-input-dark" rows="2" id="address">Main Road, Nanpura, Surat — 395001</textarea>
+            </div>
+          </div>
+
+          <div class="dash-chart-title mt-4">Notification Preferences</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <label style="display:flex;align-items:center;gap:10px;font-size:var(--text-sm);color:var(--dash-text);cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:var(--green-500);"> Push notifications when NGO accepts my donation
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:var(--text-sm);color:var(--dash-text);cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:var(--green-500);"> Email delivery confirmation
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:var(--text-sm);color:var(--dash-text);cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:var(--green-500);"> Monthly impact report email
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:var(--text-sm);color:var(--dash-text);cursor:pointer;">
+              <input type="checkbox" style="accent-color:var(--green-500);"> WhatsApp notifications
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+  initDashboardSidebar(); initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+  window.saveProfile = function() {
+    showToast('Profile Saved', 'Your profile has been updated successfully.', 'success');
+  };
+</script>
+</body>
+</html>

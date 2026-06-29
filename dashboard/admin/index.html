@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Control Panel — FoodRescue</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="dash-body">
+<div id="toast-container"></div>
+<button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:var(--emergency);"><i class="bi bi-shield-fill"></i></div>
+      <div><div class="sidebar-user-name">Platform Admin</div><div class="sidebar-user-role"><span class="verified-dot"></span> Super Admin</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Control Panel</div>
+    <a href="index.html"         class="sidebar-nav-link active"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="verifications.html" class="sidebar-nav-link"><i class="bi bi-shield-check"></i> Verifications <span class="nav-badge" id="pendingBadge">12</span></a>
+    <a href="users.html"         class="sidebar-nav-link"><i class="bi bi-people"></i> All Users</a>
+    <a href="donations.html"     class="sidebar-nav-link"><i class="bi bi-box-seam"></i> All Donations</a>
+    <a href="reports.html"       class="sidebar-nav-link"><i class="bi bi-flag"></i> Reports <span class="nav-badge" id="reportsBadge">3</span></a>
+    <a href="emergency.html"     class="sidebar-nav-link"><i class="bi bi-exclamation-triangle"></i> Emergency Mode</a>
+    <a href="analytics.html"     class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+    <a href="settings.html"      class="sidebar-nav-link"><i class="bi bi-gear"></i> Settings</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"       class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Admin Profile</a>
+  </nav>
+  <div class="sidebar-footer"><button class="sidebar-logout" data-logout><i class="bi bi-box-arrow-left"></i> Logout</button></div>
+</aside>
+
+<main class="dash-main">
+  <div class="dash-topbar">
+    <div><div class="dash-greeting">Admin Control Panel</div><div class="dash-date" id="dateText"></div></div>
+    <div class="dash-topbar-actions">
+      <!-- Emergency Mode Button -->
+      <button id="emergencyModeBtn" onclick="toggleEmergencyMode()" style="display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius-md);border:2px solid var(--emergency);background:rgba(204,38,38,0.12);color:var(--emergency);font-family:var(--font-heading);font-weight:700;font-size:var(--text-sm);cursor:pointer;transition:all var(--transition-base);">
+        🚨 Activate Emergency
+      </button>
+      <button class="dash-topbar-btn"><i class="bi bi-bell"></i></button>
+    </div>
+  </div>
+  <div class="dash-content">
+
+    <!-- Platform Status Bar -->
+    <div class="dash-chart-card mb-4" style="padding:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--green-400);animation:pulse-ring 1.2s ease-out infinite;"></div>
+          <span style="font-family:var(--font-heading);font-weight:700;color:var(--white);font-size:var(--text-sm);">Platform Status: <span style="color:var(--green-400);">All Systems Operational</span></span>
+        </div>
+        <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:var(--green-300);" id="liveActive">24</div>
+            <div style="font-size:.65rem;color:var(--dash-muted);">Live Donations</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:var(--saffron-400);" id="liveVols">38</div>
+            <div style="font-size:.65rem;color:var(--dash-muted);">Volunteers Online</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:var(--white);" id="liveNGOs">12</div>
+            <div style="font-size:.65rem;color:var(--dash-muted);">NGOs Active</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:var(--green-300);" id="todayMeals">1,240</div>
+            <div style="font-size:.65rem;color:var(--dash-muted);">Meals Today</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards-row mb-4">
+      <div class="stat-card"><div class="stat-icon"><i class="bi bi-box-seam"></i></div><div class="stat-number">8,512</div><div class="stat-label">Total Donations</div><div class="stat-trend up"><i class="bi bi-arrow-up"></i> 18%</div></div>
+      <div class="stat-card accent-saffron"><div class="stat-icon"><i class="bi bi-people"></i></div><div class="stat-number">320,000</div><div class="stat-label">Meals Saved</div><div class="stat-trend up"><i class="bi bi-arrow-up"></i> 24%</div></div>
+      <div class="stat-card"><div class="stat-icon"><i class="bi bi-building"></i></div><div class="stat-number">850</div><div class="stat-label">Food Donors</div><div class="stat-trend up"><i class="bi bi-arrow-up"></i> 32</div></div>
+      <div class="stat-card accent-saffron"><div class="stat-icon"><i class="bi bi-people-fill"></i></div><div class="stat-number">1,100</div><div class="stat-label">Active Volunteers</div><div class="stat-trend up"><i class="bi bi-arrow-up"></i> 45</div></div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-8">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">Platform Growth <span class="dash-chart-subtitle">Last 6 months</span></div>
+          <div class="chart-container"><canvas id="adminLineChart"></canvas></div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">User Distribution</div>
+          <div class="chart-container"><canvas id="adminDoughnutChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <!-- Pending Verifications -->
+      <div class="col-lg-6">
+        <div class="dash-table-card">
+          <div class="dash-table-header">
+            <div class="dash-table-title">Pending Verifications <span class="nav-badge" style="background:var(--saffron-400);color:var(--ink-900);">12</span></div>
+            <a href="verifications.html" style="font-size:var(--text-xs);color:var(--dash-muted);">View all →</a>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="dash-table" id="verifyTable">
+              <thead><tr><th>Name</th><th>Role</th><th>Applied</th><th>Action</th></tr></thead>
+              <tbody id="verifyTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Reports -->
+      <div class="col-lg-6">
+        <div class="dash-table-card">
+          <div class="dash-table-header">
+            <div class="dash-table-title">Open Reports</div>
+            <a href="reports.html" style="font-size:var(--text-xs);color:var(--dash-muted);">View all →</a>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="dash-table">
+              <thead><tr><th>Issue</th><th>Reporter</th><th>Priority</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><div class="food-name">Food quality complaint</div></td>
+                  <td style="font-size:var(--text-xs);color:var(--dash-muted);">Asha NGO</td>
+                  <td><span class="status-badge" style="background:var(--emergency);color:white;">High</span></td>
+                  <td><a href="reports.html" style="font-size:var(--text-xs);color:var(--green-400);">Review</a></td>
+                </tr>
+                <tr>
+                  <td><div class="food-name">Volunteer no-show</div></td>
+                  <td style="font-size:var(--text-xs);color:var(--dash-muted);">Patel's Hotel</td>
+                  <td><span class="status-badge status-matched">Medium</span></td>
+                  <td><a href="reports.html" style="font-size:var(--text-xs);color:var(--green-400);">Review</a></td>
+                </tr>
+                <tr>
+                  <td><div class="food-name">Expired food donated</div></td>
+                  <td style="font-size:var(--text-xs);color:var(--dash-muted);">Auto-flagged</td>
+                  <td><span class="status-badge" style="background:var(--emergency);color:white;">Critical</span></td>
+                  <td><a href="reports.html" style="font-size:var(--text-xs);color:var(--green-400);">Review</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- City Bar Chart -->
+    <div class="dash-chart-card">
+      <div class="dash-chart-title">Donations by City <span class="dash-chart-subtitle">All time</span></div>
+      <div class="chart-container"><canvas id="adminBarChart"></canvas></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Emergency Modal -->
+<div class="confirm-modal-overlay" id="emergencyModal">
+  <div class="confirm-modal" style="border:2px solid var(--emergency);">
+    <h3 style="font-family:var(--font-heading);font-weight:700;color:var(--emergency);margin-bottom:0.5rem;">🚨 Activate Emergency Mode</h3>
+    <p style="font-size:var(--text-sm);color:var(--ink-500);margin-bottom:1.5rem;">
+      This will send push notifications to ALL verified NGOs and volunteers within 50 km radius, suspend quantity limits, and enable priority dispatch.
+    </p>
+    <div class="form-field mb-3">
+      <label class="form-label" for="emergencyTitle">Emergency Title</label>
+      <input type="text" id="emergencyTitle" class="form-input" placeholder="e.g. Flood Relief — Surat West" required>
+    </div>
+    <div class="form-field mb-3">
+      <label class="form-label" for="emergencyLocation">Affected Area</label>
+      <input type="text" id="emergencyLocation" class="form-input" placeholder="e.g. Adajan, Surat">
+    </div>
+    <div class="form-field mb-4">
+      <label class="form-label" for="emergencyDetails">Situation Details</label>
+      <textarea id="emergencyDetails" class="form-input" rows="3" placeholder="Brief description of the emergency..."></textarea>
+    </div>
+    <div style="display:flex;gap:1rem;">
+      <button class="btn btn-outline-green flex-1" onclick="closeEmergencyModal()">Cancel</button>
+      <button class="btn w-100" style="background:var(--emergency);color:white;font-family:var(--font-heading);font-weight:700;flex:1;" onclick="activateEmergency()">
+        🚨 Activate Emergency
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initAdminCharts } from '../../assets/js/analytics.js';
+  import { initDashboardSidebar, initLogout, formatRelativeTime } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+  initDashboardSidebar(); initLogout();
+  initAdminCharts();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+
+  // Demo verifications
+  const pendingUsers = [
+    { name: 'Raj Sweets', role: 'restaurant', applied: '2h ago' },
+    { name: 'Suresh Mehta', role: 'volunteer', applied: '4h ago' },
+    { name: 'Kavita Shelter', role: 'ngo', applied: '1d ago' },
+    { name: 'Hotel Grand', role: 'restaurant', applied: '2d ago' }
+  ];
+  document.getElementById('verifyTbody').innerHTML = pendingUsers.map(u => `
+    <tr>
+      <td><div class="food-name">${u.name}</div></td>
+      <td><span class="status-badge ${u.role==='restaurant'?'status-posted':u.role==='ngo'?'status-accepted':'status-matched'}">${u.role}</span></td>
+      <td style="font-size:var(--text-xs);color:var(--dash-muted);">${u.applied}</td>
+      <td style="display:flex;gap:4px;">
+        <button onclick="approveUser('${u.name}')" style="background:var(--green-500);color:white;border:none;border-radius:4px;padding:3px 8px;font-size:.65rem;cursor:pointer;font-weight:600;">✓</button>
+        <button onclick="rejectUser('${u.name}')" style="background:var(--danger);color:white;border:none;border-radius:4px;padding:3px 8px;font-size:.65rem;cursor:pointer;font-weight:600;">✗</button>
+      </td>
+    </tr>
+  `).join('');
+
+  window.approveUser = (name) => showToast('✅ Approved', `${name} has been verified and can now use the platform.`, 'success');
+  window.rejectUser  = (name) => showToast('❌ Rejected', `${name}'s application has been declined.`, 'error');
+
+  window.toggleEmergencyMode = () => { document.getElementById('emergencyModal').classList.add('open'); };
+  window.closeEmergencyModal = () => { document.getElementById('emergencyModal').classList.remove('open'); };
+  window.activateEmergency = async () => {
+    const title    = document.getElementById('emergencyTitle').value;
+    const location = document.getElementById('emergencyLocation').value;
+    if (!title) { showToast('Required', 'Please enter an emergency title.', 'warn'); return; }
+    document.getElementById('emergencyModal').classList.remove('open');
+    showToast('🚨 Emergency Activated', `All NGOs and volunteers in 50 km radius have been alerted: ${title}`, 'emergency', 0);
+    document.getElementById('emergencyModeBtn').style.background = 'var(--emergency)';
+    document.getElementById('emergencyModeBtn').style.color      = 'white';
+    document.getElementById('emergencyModeBtn').textContent      = '🚨 Emergency ACTIVE';
+  };
+
+  // Simulate live counter updates
+  setInterval(() => {
+    const el = document.getElementById('liveActive');
+    if (el) el.textContent = Math.floor(20 + Math.random() * 10);
+  }, 8000);
+</script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volunteer Rewards — FoodRescue</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .reward-voucher-card {
+      background: var(--dash-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+    .reward-voucher-card:hover {
+      border-color: var(--saffron-400);
+      transform: translateY(-2px);
+    }
+    .voucher-cutout-left, .voucher-cutout-right {
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      background: var(--dash-bg);
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+    .voucher-cutout-left { left: -8px; }
+    .voucher-cutout-right { right: -8px; }
+  </style>
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">
+        <i class="bi bi-person"></i>
+      </div>
+      <div>
+        <div class="sidebar-user-name">Ramesh Kumar</div>
+        <div class="sidebar-user-role">
+          <span class="verified-dot"></span>
+          <span>🌱 Seedling</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"   class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Dashboard</a>
+    <a href="tasks.html"   class="sidebar-nav-link"><i class="bi bi-lightning-charge"></i> My Tasks <span class="nav-badge" id="taskBadge">0</span></a>
+    <a href="scan.html"    class="sidebar-nav-link"><i class="bi bi-qr-code-scan"></i> Scan QR</a>
+    <a href="history.html" class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="rewards.html" class="sidebar-nav-link active"><i class="bi bi-trophy"></i> Rewards</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html" class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">Rewards Portal</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+    
+    <!-- Balance Banner -->
+    <div class="dash-chart-card mb-4" style="background:rgba(245,146,30,0.08); border-color:rgba(245,146,30,0.25);">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+          <div style="font-family:var(--font-heading); font-weight:700; color:var(--white); font-size:1.25rem;">My Reward Balance</div>
+          <div style="font-size:var(--text-xs); color:var(--dash-muted);">Accumulate points on every successful food delivery run.</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:2rem;">🪙</span>
+          <span style="font-family:var(--font-display); font-size:2.5rem; font-weight:800; color:var(--saffron-400);" id="ptsBalance">1,240</span>
+          <span style="font-size:var(--text-xs); color:var(--dash-muted); font-weight:700; text-transform:uppercase;">pts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Offers -->
+    <h3 style="font-family:var(--font-heading); font-weight:700; color:var(--white); font-size:1.15rem; margin-bottom:1.5rem;">Redeem Vouchers & Awards</h3>
+    <div class="row g-4">
+      
+      <div class="col-md-6 col-lg-4">
+        <div class="reward-voucher-card h-100 d-flex flex-direction-column justify-content-between">
+          <div class="voucher-cutout-left"></div>
+          <div class="voucher-cutout-right"></div>
+          <div>
+            <div style="font-size:1.5rem; margin-bottom:0.75rem;">🚲</div>
+            <h4 style="font-family:var(--font-heading); font-weight:700; color:var(--white); font-size:var(--text-sm);">Bicycle Service Discount</h4>
+            <p style="font-size:var(--text-xs); color:var(--dash-muted); margin-bottom:1.5rem;">Flat 30% discount coupon on service runs at partner bicycle shops.</p>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span style="font-family:var(--font-display); font-weight:800; color:var(--saffron-300);">300 pts</span>
+            <button class="btn btn-green btn-sm" onclick="redeemVoucher('300', 'Bicycle Service Code')">Redeem</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="reward-voucher-card h-100 d-flex flex-direction-column justify-content-between">
+          <div class="voucher-cutout-left"></div>
+          <div class="voucher-cutout-right"></div>
+          <div>
+            <div style="font-size:1.5rem; margin-bottom:0.75rem;">🏪</div>
+            <h4 style="font-family:var(--font-heading); font-weight:700; color:var(--white); font-size:var(--text-sm);">Patel's Dhaba Meal Coupon</h4>
+            <p style="font-size:var(--text-xs); color:var(--dash-muted); margin-bottom:1.5rem;">One free breakfast platter coupon. Sponsored directly by our donor partner.</p>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span style="font-family:var(--font-display); font-weight:800; color:var(--saffron-300);">500 pts</span>
+            <button class="btn btn-green btn-sm" onclick="redeemVoucher('500', 'Free Breakfast Platter')">Redeem</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="reward-voucher-card h-100 d-flex flex-direction-column justify-content-between">
+          <div class="voucher-cutout-left"></div>
+          <div class="voucher-cutout-right"></div>
+          <div>
+            <div style="font-size:1.5rem; margin-bottom:0.75rem;">👕</div>
+            <h4 style="font-family:var(--font-heading); font-weight:700; color:var(--white); font-size:var(--text-sm);">FoodRescue Official T-Shirt</h4>
+            <p style="font-size:var(--text-xs); color:var(--dash-muted); margin-bottom:1.5rem;">Resilient fabric t-shirt showing FoodRescue emblem for outreach identification.</p>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span style="font-family:var(--font-display); font-weight:800; color:var(--saffron-300);">1,000 pts</span>
+            <button class="btn btn-green btn-sm" onclick="redeemVoucher('1000', 'Emblem T-Shirt Size: M')">Redeem</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  let balance = 1240;
+
+  window.redeemVoucher = function(costStr, itemName) {
+    const cost = parseInt(costStr.replace(/,/g, ''));
+    if (balance < cost) {
+      showToast('Insufficient Balance', "You don't have enough reward points for this item yet.", 'error');
+      return;
+    }
+    balance -= cost;
+    document.getElementById('ptsBalance').textContent = balance.toLocaleString('en-IN');
+    showToast('Voucher Redeemed!', `You successfully redeemed: "${itemName}". Code sent to registered mobile.`, 'success');
+  };
+</script>
+
+</body>
+</html>

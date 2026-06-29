@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Mobilization Panel — FoodRescue</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:var(--emergency);"><i class="bi bi-shield-fill"></i></div>
+      <div><div class="sidebar-user-name">Platform Admin</div><div class="sidebar-user-role"><span class="verified-dot"></span> Super Admin</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Control Panel</div>
+    <a href="index.html"         class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="verifications.html" class="sidebar-nav-link"><i class="bi bi-shield-check"></i> Verifications <span class="nav-badge" id="pendingBadge">0</span></a>
+    <a href="users.html"         class="sidebar-nav-link"><i class="bi bi-people"></i> All Users</a>
+    <a href="donations.html"     class="sidebar-nav-link"><i class="bi bi-box-seam"></i> All Donations</a>
+    <a href="reports.html"       class="sidebar-nav-link"><i class="bi bi-flag"></i> Reports</a>
+    <a href="emergency.html"     class="sidebar-nav-link active"><i class="bi bi-exclamation-triangle"></i> Emergency Mode</a>
+    <a href="analytics.html"     class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+    <a href="settings.html"      class="sidebar-nav-link"><i class="bi bi-gear"></i> Settings</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"       class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Admin Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">Emergency Dispatch Controls</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+    <div class="row g-4">
+      
+      <!-- Mobilization Config -->
+      <div class="col-lg-6">
+        <div class="dash-chart-card h-100">
+          <div class="dash-chart-title" style="color:var(--emergency); font-weight:700;"><i class="bi bi-exclamation-triangle-fill"></i> Trigger Platform Emergency</div>
+          <p style="font-size:var(--text-xs); color:var(--dash-muted); margin-bottom:1.5rem;">
+            Activating emergency mode suspends general logistics matching restrictions. Push alerts are broadcast to all local riders/NGOs in Surat.
+          </p>
+
+          <form id="emergencySetupForm" onsubmit="handleEmergencyTrigger(event)">
+            
+            <div class="form-field">
+              <label class="form-label">Emergency Category</label>
+              <select id="emergencyCat" class="form-input">
+                <option value="Flood Relief">🌊 Heavy Flooding / Waterlogging</option>
+                <option value="Storm / Cyclone">🌪️ Cyclone Alert / Storm Damage</option>
+                <option value="Heatwave Alert">☀️ Severe Heatwave Warning</option>
+                <option value="Disaster Shelter Needs">🏚️ Shelter Mobilization</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="emergencyLoc">Target Impact Area</label>
+              <input type="text" id="emergencyLoc" class="form-input" placeholder="e.g. Adajan and Rander, Surat" required>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="emergencyMsg">Broadcast Dispatch Instructions</label>
+              <textarea id="emergencyMsg" class="form-input" rows="3" placeholder="e.g. 500 meals needed at Adajan Community Shelter. Suspended distance limits. Accept all packages." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-lg w-100" style="background:var(--emergency); color:white; font-family:var(--font-heading); font-weight:700;" id="triggerEmergencyBtn">
+              🚨 Trigger Emergency Broadcast
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- Active Broadcast Status -->
+      <div class="col-lg-6">
+        <div class="dash-chart-card h-100">
+          <div class="dash-chart-title">Current Active Emergencies</div>
+          <div id="activeEmergenciesList" style="padding:1rem 0;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const activeEmergencies = [
+    { id: 'em1', title: 'Flood Relief', location: 'Surat East Slums', msg: 'Waterlogging reported. Food delivery trucks blocked. Mobilize bicycle/motorcycle volunteers to reach shelters.', date: '3 hours ago' }
+  ];
+
+  function renderEmergencies() {
+    const list = document.getElementById('activeEmergenciesList');
+    if(activeEmergencies.length === 0) {
+      list.innerHTML = `<div style="text-align:center; color:var(--dash-muted); padding:2rem;">No active emergency mobilizations at this time.</div>`;
+      return;
+    }
+
+    list.innerHTML = activeEmergencies.map(e => `
+      <div style="background:rgba(204,38,38,0.06); border:1px solid rgba(204,38,38,0.2); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem; position:relative;">
+        <div style="font-family:var(--font-heading); font-weight:700; color:var(--emergency); font-size:var(--text-sm); margin-bottom:4px;">🚨 ${e.title}</div>
+        <div style="font-size:0.7rem; color:var(--dash-muted); margin-bottom:0.5rem;">📍 ${e.location} • ${e.date}</div>
+        <p style="font-size:var(--text-xs); color:var(--dash-text); margin-bottom:1rem; line-height:1.6;">${e.msg}</p>
+        <button class="btn btn-outline-green btn-sm" onclick="deactivateEmergency('${e.id}')">Deactivate Broadcast</button>
+      </div>
+    `).join('');
+  }
+
+  window.handleEmergencyTrigger = function(event) {
+    event.preventDefault();
+    const cat = document.getElementById('emergencyCat').value;
+    const loc = document.getElementById('emergencyLoc').value;
+    const msg = document.getElementById('emergencyMsg').value;
+
+    const btn = document.getElementById('triggerEmergencyBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Dispatching Alerts...';
+
+    setTimeout(() => {
+      activeEmergencies.push({
+        id: 'em' + (activeEmergencies.length + 1),
+        title: cat,
+        location: loc,
+        msg: msg,
+        date: 'Just now'
+      });
+      document.getElementById('emergencySetupForm').reset();
+      btn.disabled = false;
+      btn.innerHTML = '🚨 Trigger Emergency Broadcast';
+      
+      renderEmergencies();
+      showToast('🚨 EMERGENCY DISPATCHED', 'Push alerts broadcasted to all active units.', 'emergency', 0);
+    }, 1500);
+  };
+
+  window.deactivateEmergency = function(id) {
+    const index = activeEmergencies.findIndex(e => e.id === id);
+    if(index > -1) {
+      activeEmergencies.splice(index, 1);
+    }
+    renderEmergencies();
+    showToast('Broadcast Deactivated', 'Emergency mobilization limits restored to standard guidelines.', 'success');
+  };
+
+  renderEmergencies();
+</script>
+
+</body>
+</html>

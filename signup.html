@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — FoodRescue</title>
+  <meta name="description" content="Join FoodRescue as a food donor, NGO, or volunteer. India's first real-time food rescue platform.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body style="background:var(--ink-50);min-height:100vh;">
+
+<div id="toast-container"></div>
+
+<div class="auth-wrapper">
+  <!-- Left Panel -->
+  <div class="auth-left">
+    <div class="auth-pattern"></div>
+    <a href="index.html" style="color:var(--white);text-decoration:none;display:flex;align-items:center;gap:10px;margin-bottom:2rem;">
+      <div class="logo-icon" style="width:36px;height:36px;background:var(--green-500);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🍃</div>
+      <span style="font-family:var(--font-heading);font-weight:700;font-size:1.2rem;">FoodRescue</span>
+    </a>
+    <h2 style="font-family:var(--font-display);font-weight:800;color:var(--white);font-size:1.75rem;line-height:1.2;margin-bottom:0.75rem;">
+      Start Rescuing<br><span style="color:var(--green-300);">Food Today.</span>
+    </h2>
+    <p style="color:var(--green-200);font-size:var(--text-sm);margin-bottom:2rem;line-height:1.6;">
+      Join 2,200+ stakeholders making food rescue a daily reality across Gujarat.
+    </p>
+    <div class="auth-bullet"><i class="bi bi-person-check-fill"></i> Verify once, donate forever</div>
+    <div class="auth-bullet"><i class="bi bi-bell-fill"></i> Real-time push notifications</div>
+    <div class="auth-bullet"><i class="bi bi-shield-fill-check"></i> FSSAI-compliant food safety</div>
+    <div class="auth-bullet"><i class="bi bi-graph-up-arrow"></i> Automated impact reports & certificates</div>
+
+    <!-- Progress indicator (desktop only) -->
+    <div style="margin-top:3rem;">
+      <div style="font-size:var(--text-xs);color:var(--green-300);font-family:var(--font-heading);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:0.75rem;">Registration takes ~3 minutes</div>
+      <div style="display:flex;gap:6px;">
+        <div id="lprog1" style="height:4px;flex:1;background:var(--green-400);border-radius:2px;"></div>
+        <div id="lprog2" style="height:4px;flex:1;background:rgba(255,255,255,0.15);border-radius:2px;"></div>
+        <div id="lprog3" style="height:4px;flex:1;background:rgba(255,255,255,0.15);border-radius:2px;"></div>
+        <div id="lprog4" style="height:4px;flex:1;background:rgba(255,255,255,0.15);border-radius:2px;"></div>
+        <div id="lprog5" style="height:4px;flex:1;background:rgba(255,255,255,0.15);border-radius:2px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Multi-step Form -->
+  <div class="auth-right" style="align-items:flex-start;padding-top:3rem;">
+    <div class="auth-form-container">
+
+      <!-- Step Progress Bar -->
+      <div class="step-progress mb-4" id="stepProgress">
+        <div class="step-indicator active" data-step="1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Role</div>
+        </div>
+        <div class="step-indicator" data-step="2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Info</div>
+        </div>
+        <div class="step-indicator" data-step="3">
+          <div class="step-circle">3</div>
+          <div class="step-label">Details</div>
+        </div>
+        <div class="step-indicator" data-step="4">
+          <div class="step-circle">4</div>
+          <div class="step-label">Photo</div>
+        </div>
+        <div class="step-indicator" data-step="5">
+          <div class="step-circle">5</div>
+          <div class="step-label">Verify</div>
+        </div>
+      </div>
+
+      <form id="signupForm" class="step-wizard-form" novalidate>
+
+        <!-- ── STEP 1: Choose Role ─────────────────────────── -->
+        <div class="wizard-step active" id="step1">
+          <h3 style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:0.25rem;">Who are you?</h3>
+          <p style="font-size:var(--text-sm);color:var(--ink-300);margin-bottom:1.5rem;">Select your role in the food rescue network</p>
+
+          <div class="role-selector-grid" id="roleSelectorGrid">
+            <div class="role-selector-card" data-role="restaurant" onclick="selectRole('restaurant')">
+              <div class="role-selector-icon">🏪</div>
+              <div class="role-selector-label">Restaurant / Hotel</div>
+              <div style="font-size:.7rem;color:var(--ink-300);margin-top:4px;">Caterer, Bakery, Cloud Kitchen</div>
+            </div>
+            <div class="role-selector-card" data-role="ngo" onclick="selectRole('ngo')">
+              <div class="role-selector-icon">🏢</div>
+              <div class="role-selector-label">NGO / Shelter</div>
+              <div style="font-size:.7rem;color:var(--ink-300);margin-top:4px;">Orphanage, Old Age Home</div>
+            </div>
+            <div class="role-selector-card" data-role="volunteer" onclick="selectRole('volunteer')">
+              <div class="role-selector-icon">🛵</div>
+              <div class="role-selector-label">Volunteer Rider</div>
+              <div style="font-size:.7rem;color:var(--ink-300);margin-top:4px;">Deliver food to communities</div>
+            </div>
+            <div class="role-selector-card" data-role="admin" onclick="selectRole('admin')">
+              <div class="role-selector-icon">🔑</div>
+              <div class="role-selector-label">Platform Admin</div>
+              <div style="font-size:.7rem;color:var(--ink-300);margin-top:4px;">Invite only</div>
+            </div>
+          </div>
+          <div class="form-error" id="roleErr" style="margin-bottom:1rem;"></div>
+
+          <button type="button" class="btn btn-green w-100 btn-lg wizard-next" onclick="goNext(1)">
+            Continue <i class="bi bi-arrow-right"></i>
+          </button>
+          <p style="text-align:center;font-size:var(--text-sm);color:var(--ink-500);margin-top:1rem;">
+            Already have an account? <a href="login.html" style="color:var(--green-600);font-weight:700;text-decoration:none;">Login →</a>
+          </p>
+        </div>
+
+        <!-- ── STEP 2: Basic Info ──────────────────────────── -->
+        <div class="wizard-step" id="step2" style="display:none;">
+          <h3 style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:0.25rem;">Your Information</h3>
+          <p style="font-size:var(--text-sm);color:var(--ink-300);margin-bottom:1.5rem;">All fields marked <span style="color:var(--danger);">*</span> are required</p>
+
+          <div class="form-field">
+            <label class="form-label" for="fullName">Full Name <span class="required">*</span></label>
+            <input type="text" id="fullName" class="form-input" placeholder="Ravi Patel" required>
+            <div class="form-error" id="fullNameErr"></div>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="signupEmail">Email Address <span class="required">*</span></label>
+            <input type="email" id="signupEmail" class="form-input" placeholder="you@email.com" required>
+            <div class="form-error" id="emailErr2"></div>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="signupPhone">Mobile Number <span class="required">*</span></label>
+            <div style="display:flex;gap:8px;">
+              <span style="padding:12px 14px;background:var(--ink-50);border:1.5px solid var(--ink-100);border-radius:var(--radius-md);font-size:var(--text-sm);white-space:nowrap;color:var(--ink-500);">🇮🇳 +91</span>
+              <input type="tel" id="signupPhone" class="form-input" placeholder="98765 43210" maxlength="10" required>
+            </div>
+            <div class="form-error" id="phoneErr"></div>
+          </div>
+          <div class="form-field" style="position:relative;">
+            <label class="form-label" for="signupPass">Password <span class="required">*</span></label>
+            <input type="password" id="signupPass" class="form-input" placeholder="Min. 8 characters" required minlength="8">
+            <div class="password-strength mt-2">
+              <div class="strength-bars">
+                <div class="strength-bar" id="sb1"></div>
+                <div class="strength-bar" id="sb2"></div>
+                <div class="strength-bar" id="sb3"></div>
+                <div class="strength-bar" id="sb4"></div>
+              </div>
+              <div class="strength-label" id="strengthLabel">Enter a password</div>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="signupPassConfirm">Confirm Password <span class="required">*</span></label>
+            <input type="password" id="signupPassConfirm" class="form-input" placeholder="Repeat password" required>
+            <div class="form-error" id="confirmPassErr"></div>
+          </div>
+
+          <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+            <button type="button" class="btn btn-outline-green flex-1" onclick="goBack(2)"><i class="bi bi-arrow-left"></i> Back</button>
+            <button type="button" class="btn btn-green flex-1" onclick="goNext(2)">Continue <i class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- ── STEP 3: Role-Specific Info ─────────────────── -->
+        <div class="wizard-step" id="step3" style="display:none;">
+          <h3 style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:0.25rem;">Business Details</h3>
+          <p style="font-size:var(--text-sm);color:var(--ink-300);margin-bottom:1.5rem;">This information is used for verification</p>
+
+          <!-- Restaurant fields -->
+          <div id="restaurantFields">
+            <div class="form-field">
+              <label class="form-label" for="bizName">Business Name <span class="required">*</span></label>
+              <input type="text" id="bizName" class="form-input" placeholder="Patel's Hotel & Restaurant">
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="fssaiNum">FSSAI License Number <span class="required">*</span></label>
+              <input type="text" id="fssaiNum" class="form-input" placeholder="14-digit FSSAI number" maxlength="14">
+              <div class="form-hint">14-digit license issued by FSSAI authority</div>
+              <div class="form-error" id="fssaiErr"></div>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="bizType">Business Type <span class="required">*</span></label>
+              <select id="bizType" class="form-input">
+                <option value="">Select type...</option>
+                <option value="restaurant">Restaurant</option>
+                <option value="hotel">Hotel</option>
+                <option value="caterer">Caterer</option>
+                <option value="bakery">Bakery</option>
+                <option value="cloud_kitchen">Cloud Kitchen</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="bizAddress">Business Address <span class="required">*</span></label>
+              <textarea id="bizAddress" class="form-input" rows="2" placeholder="Full address with city, PIN..."></textarea>
+            </div>
+          </div>
+
+          <!-- NGO fields -->
+          <div id="ngoFields" style="display:none;">
+            <div class="form-field">
+              <label class="form-label" for="orgName">Organization Name <span class="required">*</span></label>
+              <input type="text" id="orgName" class="form-input" placeholder="Asha Foundation">
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="ngoRegNum">NGO Registration Number <span class="required">*</span></label>
+              <input type="text" id="ngoRegNum" class="form-input" placeholder="As per Societies/Trust Act">
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="ngoPAN">PAN Number <span class="required">*</span></label>
+              <input type="text" id="ngoPAN" class="form-input" placeholder="AAAAA9999A" maxlength="10">
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="trust12A">Trust 12A / 80G Number</label>
+              <input type="text" id="trust12A" class="form-input" placeholder="Optional — for tax exemption">
+            </div>
+          </div>
+
+          <!-- Volunteer fields -->
+          <div id="volunteerFields" style="display:none;">
+            <div class="form-field">
+              <label class="form-label">Vehicle Type <span class="required">*</span></label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--ink-100);border-radius:var(--radius-md);cursor:pointer;font-size:var(--text-sm);">
+                  <input type="radio" name="vehicle" value="bicycle"> 🚲 Bicycle
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--ink-100);border-radius:var(--radius-md);cursor:pointer;font-size:var(--text-sm);">
+                  <input type="radio" name="vehicle" value="motorcycle"> 🏍️ Motorcycle
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--ink-100);border-radius:var(--radius-md);cursor:pointer;font-size:var(--text-sm);">
+                  <input type="radio" name="vehicle" value="car"> 🚗 Car
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--ink-100);border-radius:var(--radius-md);cursor:pointer;font-size:var(--text-sm);">
+                  <input type="radio" name="vehicle" value="auto"> 🛺 Auto
+                </label>
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Government ID Type <span class="required">*</span></label>
+              <select id="govtIdType" class="form-input">
+                <option value="">Select ID type...</option>
+                <option value="aadhaar">Aadhaar Card</option>
+                <option value="passport">Passport</option>
+                <option value="driving_license">Driving License</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Upload ID Photo <span class="required">*</span></label>
+              <input type="file" id="govtIdFile" accept="image/*" class="form-input" style="padding:8px;">
+              <div class="form-hint">JPG/PNG, max 5MB. Must be clearly readable.</div>
+            </div>
+            <div style="background:var(--saffron-50);border:1px solid var(--saffron-200);border-radius:var(--radius-md);padding:1rem;margin-bottom:1rem;">
+              <div style="font-family:var(--font-heading);font-weight:700;font-size:var(--text-sm);color:var(--saffron-700);margin-bottom:0.5rem;">
+                🎓 Food Safety Training Required
+              </div>
+              <p style="font-size:var(--text-xs);color:var(--ink-500);margin-bottom:0.75rem;">
+                All volunteers must complete a 1-hour food safety module and pass a quiz with 70% minimum score before first delivery.
+              </p>
+              <label style="display:flex;align-items:center;gap:8px;font-size:var(--text-sm);cursor:pointer;">
+                <input type="checkbox" id="safetyAck" style="accent-color:var(--green-500);"> I understand and agree to complete the food safety training
+              </label>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+            <button type="button" class="btn btn-outline-green flex-1" onclick="goBack(3)"><i class="bi bi-arrow-left"></i> Back</button>
+            <button type="button" class="btn btn-green flex-1" onclick="goNext(3)">Continue <i class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- ── STEP 4: Profile Photo ───────────────────────── -->
+        <div class="wizard-step" id="step4" style="display:none;">
+          <h3 style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:0.25rem;">Profile Photo</h3>
+          <p style="font-size:var(--text-sm);color:var(--ink-300);margin-bottom:1.5rem;">Upload a clear photo — helps NGOs and volunteers recognize you</p>
+
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;">
+            <div id="profilePhotoZone" style="width:160px;height:160px;border-radius:50%;border:3px dashed var(--green-300);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:var(--green-50);position:relative;overflow:hidden;transition:all var(--transition-base);">
+              <img id="profilePhotoPreview" src="" alt="Preview" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;display:none;">
+              <i class="bi bi-camera" style="font-size:2rem;color:var(--green-400);" id="profileCameraIcon"></i>
+              <div style="font-size:.7rem;color:var(--ink-300);margin-top:8px;text-align:center;padding:0 1rem;" id="profileUploadHint">Click to upload</div>
+            </div>
+            <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+            <div style="text-align:center;">
+              <button type="button" class="btn btn-outline-green btn-sm" onclick="document.getElementById('profilePhotoInput').click()">
+                <i class="bi bi-upload"></i> Choose Photo
+              </button>
+              <div style="font-size:var(--text-xs);color:var(--ink-300);margin-top:6px;">JPG/PNG, max 5MB. Circular crop preview shown.</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:0.75rem;margin-top:2rem;">
+            <button type="button" class="btn btn-outline-green flex-1" onclick="goBack(4)"><i class="bi bi-arrow-left"></i> Back</button>
+            <button type="button" class="btn btn-green flex-1" onclick="goNext(4)">Continue <i class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- ── STEP 5: OTP Verification ───────────────────── -->
+        <div class="wizard-step" id="step5" style="display:none;">
+          <h3 style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:0.25rem;">Verify Your Account</h3>
+          <p style="font-size:var(--text-sm);color:var(--ink-300);margin-bottom:0.5rem;">A 6-digit OTP was sent to your registered email/phone</p>
+
+          <div style="background:var(--green-50);border:1px solid var(--green-200);border-radius:var(--radius-md);padding:12px 16px;margin-bottom:1.5rem;font-size:var(--text-sm);color:var(--green-700);display:flex;align-items:center;gap:8px;">
+            <i class="bi bi-envelope-check"></i> Code sent to <strong id="verifyEmail"></strong>
+          </div>
+
+          <div class="otp-inputs" id="signupOTPInputs">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric">
+          </div>
+
+          <div style="text-align:center;margin-bottom:1.5rem;">
+            <button type="button" id="signupResendBtn" class="btn btn-ghost btn-sm" disabled>Resend in 60s</button>
+          </div>
+
+          <button type="button" class="btn btn-green w-100 btn-lg mb-3" id="finalSubmitBtn" onclick="handleFinalSubmit()">
+            <i class="bi bi-check-circle"></i> Create Account & Continue
+          </button>
+          <button type="button" class="btn btn-outline-green w-100" onclick="goBack(5)">
+            <i class="bi bi-arrow-left"></i> Back
+          </button>
+
+          <p style="text-align:center;font-size:.7rem;color:var(--ink-300);margin-top:1rem;">
+            By creating an account, you agree to FoodRescue's <a href="#" style="color:var(--ink-500);">Terms of Service</a> and <a href="#" style="color:var(--ink-500);">Privacy Policy</a>
+          </p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { signUpWithEmail } from './assets/js/auth.js';
+  import { showToast } from './assets/js/notifications.js';
+  import { initOTPInputs, getOTPValue, startResendCountdown, initPasswordStrength, validateIndianPhone, validateFSSAI } from './assets/js/ui.js';
+
+  initPasswordStrength('signupPass');
+  initOTPInputs('#signupOTPInputs');
+
+  let currentStep = 1;
+  let selectedRole = null;
+  let formData = {};
+
+  // Pre-select role from URL param
+  const urlRole = new URLSearchParams(window.location.search).get('role');
+  if (urlRole) { selectRole(urlRole); }
+
+  window.selectRole = function(role) {
+    selectedRole = role;
+    document.querySelectorAll('.role-selector-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.role === role);
+    });
+    // Update left panel progress
+    updateLeftProgress(1);
+  };
+
+  function updateLeftProgress(step) {
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById('lprog' + i);
+      if (el) el.style.background = i <= step ? 'var(--green-400)' : 'rgba(255,255,255,0.15)';
+    }
+  }
+
+  function updateStepIndicators(step) {
+    document.querySelectorAll('.step-indicator').forEach((ind, i) => {
+      ind.classList.remove('active', 'completed');
+      if (i + 1 < step)  ind.classList.add('completed');
+      if (i + 1 === step) ind.classList.add('active');
+    });
+    updateLeftProgress(step);
+  }
+
+  window.goNext = function(step) {
+    if (step === 1) {
+      if (!selectedRole) {
+        const err = document.getElementById('roleErr');
+        err.textContent = 'Please select a role to continue.';
+        err.classList.add('visible');
+        return;
+      }
+      document.getElementById('roleErr').classList.remove('visible');
+      // Show appropriate fields for step 3
+      document.getElementById('restaurantFields').style.display = selectedRole === 'restaurant' ? 'block' : 'none';
+      document.getElementById('ngoFields').style.display = selectedRole === 'ngo' ? 'block' : 'none';
+      document.getElementById('volunteerFields').style.display = selectedRole === 'volunteer' ? 'block' : 'none';
+    }
+    if (step === 2) {
+      const name  = document.getElementById('fullName').value;
+      const email = document.getElementById('signupEmail').value;
+      const phone = document.getElementById('signupPhone').value;
+      const pass  = document.getElementById('signupPass').value;
+      const conf  = document.getElementById('signupPassConfirm').value;
+      if (!name || !email || !phone || !pass || !conf) { showToast('Required Fields', 'Please fill all required fields.', 'warn'); return; }
+      if (!validateIndianPhone(phone)) { showToast('Invalid Phone', 'Please enter a valid Indian mobile number.', 'error'); return; }
+      if (pass.length < 8) { showToast('Weak Password', 'Password must be at least 8 characters.', 'warn'); return; }
+      if (pass !== conf)   { showToast('Password Mismatch', 'Passwords do not match.', 'error'); return; }
+      formData = { ...formData, name, email, phone, password: pass };
+    }
+    if (step === 5) {
+      document.getElementById('verifyEmail').textContent = formData.email || 'your email';
+      startResendCountdown('signupResendBtn', 60);
+    }
+    const curr = document.getElementById('step' + step);
+    const next = document.getElementById('step' + (step + 1));
+    if (curr) curr.style.display = 'none';
+    if (next) next.style.display = 'block';
+    currentStep = step + 1;
+    updateStepIndicators(currentStep);
+  };
+
+  window.goBack = function(step) {
+    const curr = document.getElementById('step' + step);
+    const prev = document.getElementById('step' + (step - 1));
+    if (curr) curr.style.display = 'none';
+    if (prev) prev.style.display = 'block';
+    currentStep = step - 1;
+    updateStepIndicators(currentStep);
+  };
+
+  window.handleFinalSubmit = async function() {
+    const otp = getOTPValue('#signupOTPInputs');
+    if (otp.length < 6) { showToast('Enter OTP', 'Please enter the full 6-digit code.', 'warn'); return; }
+
+    const btn = document.getElementById('finalSubmitBtn');
+    btn.innerHTML = '<span class="spinner"></span> Creating account...';
+    btn.disabled = true;
+
+    const extraData = {
+      businessName: document.getElementById('bizName')?.value || '',
+      fssaiNumber:  document.getElementById('fssaiNum')?.value || '',
+      businessType: document.getElementById('bizType')?.value || '',
+      orgName:      document.getElementById('orgName')?.value || '',
+      regNumber:    document.getElementById('ngoRegNum')?.value || '',
+      panNumber:    document.getElementById('ngoPAN')?.value || '',
+      trust12A:     document.getElementById('trust12A')?.value || '',
+      vehicleType:  document.querySelector('input[name="vehicle"]:checked')?.value || '',
+      govtIdType:   document.getElementById('govtIdType')?.value || ''
+    };
+
+    await signUpWithEmail({
+      email:     formData.email,
+      password:  formData.password,
+      name:      formData.name,
+      phone:     formData.phone,
+      role:      selectedRole,
+      extraData
+    });
+
+    btn.innerHTML = '<i class="bi bi-check-circle"></i> Create Account & Continue';
+    btn.disabled = false;
+  };
+
+  // Profile photo preview
+  document.getElementById('profilePhotoInput')?.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const preview = document.getElementById('profilePhotoPreview');
+      const icon    = document.getElementById('profileCameraIcon');
+      const hint    = document.getElementById('profileUploadHint');
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      if (icon) icon.style.display = 'none';
+      if (hint) hint.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('profilePhotoZone')?.addEventListener('click', () => {
+    document.getElementById('profilePhotoInput').click();
+  });
+</script>
+</body>
+</html>

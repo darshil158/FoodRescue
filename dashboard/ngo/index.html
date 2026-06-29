@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NGO Dashboard — FoodRescue</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="dash-body">
+<div id="toast-container"></div>
+<button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar"><i class="bi bi-building"></i></div>
+      <div><div class="sidebar-user-name" id="sidebarName">Asha Foundation</div><div class="sidebar-user-role"><span class="verified-dot"></span> Registered NGO</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"    class="sidebar-nav-link active"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="incoming.html" class="sidebar-nav-link"><i class="bi bi-inbox"></i> Incoming <span class="nav-badge" id="incomingBadge">3</span></a>
+    <a href="active.html"   class="sidebar-nav-link"><i class="bi bi-lightning-charge"></i> Active</a>
+    <a href="history.html"  class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="beneficiaries.html" class="sidebar-nav-link"><i class="bi bi-people"></i> Beneficiaries</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"  class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Profile</a>
+  </nav>
+  <div class="sidebar-footer"><button class="sidebar-logout" data-logout><i class="bi bi-box-arrow-left"></i> Logout</button></div>
+</aside>
+<main class="dash-main">
+  <div class="dash-topbar">
+    <div><div class="dash-greeting" id="greetingText">Good morning 👋</div><div class="dash-date" id="dateText"></div></div>
+    <div class="dash-topbar-actions">
+      <button class="dash-topbar-btn"><i class="bi bi-bell"></i><div class="notif-dot"></div></button>
+    </div>
+  </div>
+  <div class="dash-content">
+
+    <!-- Capacity Banner -->
+    <div class="dash-chart-card mb-4" style="background:rgba(245,146,30,0.12);border-color:rgba(245,146,30,0.3);">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--white);margin-bottom:4px;">Today's Capacity</div>
+          <div style="font-size:var(--text-xs);color:var(--saffron-400);">Track how much more food you can accept today</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1.5rem;">
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--white);">75</div>
+            <div style="font-size:.65rem;color:var(--dash-muted);">Current Load (servings)</div>
+          </div>
+          <div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div>
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--green-300);">120</div>
+            <div style="font-size:.65rem;color:var(--dash-muted);">Capacity (servings/day)</div>
+          </div>
+          <div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div>
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--saffron-400);">45</div>
+            <div style="font-size:.65rem;color:var(--dash-muted);">Remaining slots</div>
+          </div>
+        </div>
+        <button class="btn btn-green btn-sm" onclick="updateCapacity()"><i class="bi bi-pencil"></i> Update Capacity</button>
+      </div>
+      <div style="margin-top:1rem;background:rgba(255,255,255,0.1);border-radius:var(--radius-full);height:8px;">
+        <div style="background:var(--green-400);height:8px;border-radius:var(--radius-full);width:62%;transition:width 0.6s ease;"></div>
+      </div>
+      <div style="font-size:.65rem;color:var(--dash-muted);margin-top:4px;">62% capacity used</div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards-row mb-4">
+      <div class="stat-card"><div class="stat-icon"><i class="bi bi-box-seam"></i></div><div class="stat-number">156</div><div class="stat-label">Total Received</div><div class="stat-trend up"><i class="bi bi-arrow-up"></i> 9%</div></div>
+      <div class="stat-card accent-saffron"><div class="stat-icon"><i class="bi bi-people"></i></div><div class="stat-number">12,480</div><div class="stat-label">People Fed</div><div class="stat-trend up"><i class="bi bi-arrow-up"></i> 11%</div></div>
+      <div class="stat-card"><div class="stat-icon"><i class="bi bi-stopwatch"></i></div><div class="stat-number">14 min</div><div class="stat-label">Avg Response Time</div><div class="stat-trend up"><i class="bi bi-arrow-down"></i> 3m</div></div>
+      <div class="stat-card accent-saffron"><div class="stat-icon"><i class="bi bi-star"></i></div><div class="stat-number">98%</div><div class="stat-label">Reliability Score</div></div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Available Donations Feed -->
+      <div class="col-lg-7">
+        <div class="dash-table-card">
+          <div class="dash-table-header">
+            <div class="dash-table-title">Available Donations Near You</div>
+            <a href="incoming.html" style="font-size:var(--text-xs);color:var(--dash-muted);">View all →</a>
+          </div>
+          <div id="availableFeed">
+            <!-- Donation cards -->
+            <div class="donation-feed-card" style="border-left:3px solid var(--emergency);">
+              <div class="donation-food-img">🍛</div>
+              <div style="flex:1;">
+                <div class="donation-feed-title">🚨 EMERGENCY: Veg Biryani</div>
+                <div class="donation-feed-meta">
+                  <span><i class="bi bi-box-seam"></i>80 kg</span>
+                  <span>👥 ~120 people</span>
+                  <span>📍 1.2 km · Patel's Hotel</span>
+                </div>
+                <div><span class="status-badge" style="background:var(--emergency);color:white;">Emergency</span></div>
+                <div style="font-size:var(--text-xs);color:var(--emergency);margin-top:4px;font-weight:700;">⏱️ 1h 22m remaining · Safety Score: 91/100</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <button class="btn btn-primary btn-sm" onclick="acceptDonation('d1')"><i class="bi bi-check-circle"></i> Accept</button>
+                <button class="btn btn-ghost btn-sm" style="font-size:.7rem;color:var(--dash-muted);" onclick="rejectDonation('d1')">Decline</button>
+              </div>
+            </div>
+
+            <div class="donation-feed-card">
+              <div class="donation-food-img">🍞</div>
+              <div style="flex:1;">
+                <div class="donation-feed-title">Bread Rolls + Butter</div>
+                <div class="donation-feed-meta">
+                  <span><i class="bi bi-box-seam"></i>25 boxes</span>
+                  <span>👥 ~60 people</span>
+                  <span>📍 2.8 km · Green Bakery</span>
+                </div>
+                <div><span class="status-badge status-posted">Available</span></div>
+                <div style="font-size:var(--text-xs);color:var(--dash-muted);margin-top:4px;">⏱️ 2h 45m remaining · Safety Score: 85/100</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <button class="btn btn-green btn-sm" onclick="acceptDonation('d2')"><i class="bi bi-check-circle"></i> Accept</button>
+                <button class="btn btn-ghost btn-sm" style="font-size:.7rem;color:var(--dash-muted);" onclick="rejectDonation('d2')">Decline</button>
+              </div>
+            </div>
+
+            <div class="donation-feed-card">
+              <div class="donation-food-img">🍗</div>
+              <div style="flex:1;">
+                <div class="donation-feed-title">Chicken Biryani</div>
+                <div class="donation-feed-meta">
+                  <span><i class="bi bi-box-seam"></i>40 kg</span>
+                  <span>👥 ~55 people</span>
+                  <span>📍 4.1 km · Imperial Hotel</span>
+                </div>
+                <div><span class="status-badge status-posted">Available</span></div>
+                <div style="font-size:var(--text-xs);color:var(--dash-muted);margin-top:4px;">⏱️ 3h 10m remaining · Safety Score: 88/100</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <button class="btn btn-green btn-sm" onclick="acceptDonation('d3')"><i class="bi bi-check-circle"></i> Accept</button>
+                <button class="btn btn-ghost btn-sm" style="font-size:.7rem;color:var(--dash-muted);" onclick="rejectDonation('d3')">Decline</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts + Stats -->
+      <div class="col-lg-5">
+        <div class="dash-chart-card mb-3">
+          <div class="dash-chart-title">Daily Meals Received <span class="dash-chart-subtitle">This week</span></div>
+          <div class="chart-container" style="height:180px;"><canvas id="ngoBarChart"></canvas></div>
+        </div>
+        <div class="notif-panel">
+          <div class="notif-header">
+            <span style="font-family:var(--font-heading);font-weight:700;font-size:var(--text-sm);color:var(--white);">Recent Activity</span>
+          </div>
+          <div class="notif-list">
+            <div class="notif-item unread">
+              <div class="notif-dot"></div>
+              <div><div class="notif-content-title">🚨 Emergency Donation</div><div class="notif-content-body">Patel's Hotel — 80 kg Biryani needs urgent pickup</div></div>
+              <div class="notif-time">2m</div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-dot"></div>
+              <div><div class="notif-content-title">❤️ Volunteer Delivered</div><div class="notif-content-body">Ramesh Kumar completed delivery from Green Bakery</div></div>
+              <div class="notif-time">1h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Accept Modal -->
+<div class="confirm-modal-overlay" id="acceptModal">
+  <div class="confirm-modal">
+    <h4 style="font-family:var(--font-heading);font-weight:700;margin-bottom:1rem;">Accept Donation</h4>
+    <p style="font-size:var(--text-sm);color:var(--ink-500);margin-bottom:1.5rem;">
+      Confirm pickup window. A volunteer will be assigned automatically based on proximity.
+    </p>
+    <div class="row g-3 mb-4">
+      <div class="col-6">
+        <label class="form-label">Pickup From</label>
+        <input type="time" class="form-input" id="pickupFrom" value="19:00">
+      </div>
+      <div class="col-6">
+        <label class="form-label">Pickup By</label>
+        <input type="time" class="form-input" id="pickupBy" value="21:00">
+      </div>
+    </div>
+    <div style="display:flex;gap:1rem;">
+      <button class="btn btn-outline-green flex-1" onclick="closeAcceptModal()">Cancel</button>
+      <button class="btn btn-green flex-1" onclick="confirmAccept()"><i class="bi bi-check-circle"></i> Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { initNGOCharts } from '../../assets/js/analytics.js';
+  import { showToast } from '../../assets/js/notifications.js';
+  initDashboardSidebar(); initLogout();
+  initNGOCharts();
+  const h = new Date().getHours();
+  document.getElementById('greetingText').textContent = (h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening') + ' 👋';
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+
+  let pendingId = null;
+  window.acceptDonation = (id) => { pendingId = id; document.getElementById('acceptModal').classList.add('open'); };
+  window.rejectDonation = (id) => showToast('Declined', 'Donation declined. It will be offered to the next NGO.', 'warn');
+  window.closeAcceptModal = () => document.getElementById('acceptModal').classList.remove('open');
+  window.confirmAccept = () => {
+    document.getElementById('acceptModal').classList.remove('open');
+    showToast('✅ Accepted!', 'Volunteer will be assigned for pickup within 15 minutes.', 'success');
+  };
+  window.updateCapacity = () => showToast('Capacity', 'Update capacity via your Profile page.', 'info');
+</script>
+</body>
+</html>

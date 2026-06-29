@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Analytics — Admin Dashboard</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:var(--emergency);"><i class="bi bi-shield-fill"></i></div>
+      <div><div class="sidebar-user-name">Platform Admin</div><div class="sidebar-user-role"><span class="verified-dot"></span> Super Admin</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Control Panel</div>
+    <a href="index.html"         class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="verifications.html" class="sidebar-nav-link"><i class="bi bi-shield-check"></i> Verifications <span class="nav-badge" id="pendingBadge">0</span></a>
+    <a href="users.html"         class="sidebar-nav-link"><i class="bi bi-people"></i> All Users</a>
+    <a href="donations.html"     class="sidebar-nav-link"><i class="bi bi-box-seam"></i> All Donations</a>
+    <a href="reports.html"       class="sidebar-nav-link"><i class="bi bi-flag"></i> Reports</a>
+    <a href="emergency.html"     class="sidebar-nav-link"><i class="bi bi-exclamation-triangle"></i> Emergency Mode</a>
+    <a href="analytics.html"     class="sidebar-nav-link active"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+    <a href="settings.html"      class="sidebar-nav-link"><i class="bi bi-gear"></i> Settings</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"       class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Admin Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">Global Platform Analytics</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+    
+    <!-- Big Stats -->
+    <div class="stat-cards-row mb-4">
+      <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-number">320,000</div><div class="stat-label">Meals Rescued</div></div>
+      <div class="stat-card accent-saffron"><div class="stat-icon">🌱</div><div class="stat-number">62,000 kg</div><div class="stat-label">CO₂ Prevented</div></div>
+      <div class="stat-card"><div class="stat-icon">💧</div><div class="stat-number">180,000 L</div><div class="stat-label">Water Saved</div></div>
+    </div>
+
+    <!-- Multi Charts -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-6">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">Global Activity Trend <span class="dash-chart-subtitle">Last 6 Months</span></div>
+          <div class="chart-container"><canvas id="adminGlobalLineChart"></canvas></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">Stakeholder Distribution</div>
+          <div class="chart-container"><canvas id="adminGlobalDoughnutChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">Rescued Food Categories Volume (kg)</div>
+          <div class="chart-container" style="height:280px;"><canvas id="adminGlobalBarChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { buildLineChart, buildDoughnutChart, buildBarChart, getDemoLineData, getDemoDoughnutData, getDemoBarData } from '../../assets/js/analytics.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  // Load Charts
+  const lineData = getDemoLineData();
+  buildLineChart('adminGlobalLineChart', lineData.labels, lineData.datasets, 'dark', 'Meals Saved Progress');
+
+  buildDoughnutChart('adminGlobalDoughnutChart', ['Restaurants', 'NGOs', 'Volunteers'], [850, 280, 1100], ['#f5921e', '#3da668', '#93d9ac'], 'dark');
+
+  const barData = getDemoBarData();
+  buildBarChart('adminGlobalBarChart', barData.labels, barData.datasets, 'dark');
+</script>
+
+</body>
+</html>

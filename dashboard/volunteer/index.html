@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volunteer Dashboard — FoodRescue</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="dash-body">
+<div id="toast-container"></div>
+<button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar"><i class="bi bi-person"></i></div>
+      <div><div class="sidebar-user-name" id="sidebarName">Ramesh Kumar</div>
+      <div class="sidebar-user-role"><span class="verified-dot"></span> <span id="volTier">🌱 Seedling</span></div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"   class="sidebar-nav-link active"><i class="bi bi-grid-3x3-gap"></i> Dashboard</a>
+    <a href="tasks.html"   class="sidebar-nav-link"><i class="bi bi-lightning-charge"></i> My Tasks <span class="nav-badge" id="taskBadge">1</span></a>
+    <a href="scan.html"    class="sidebar-nav-link"><i class="bi bi-qr-code-scan"></i> Scan QR</a>
+    <a href="history.html" class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="rewards.html" class="sidebar-nav-link"><i class="bi bi-trophy"></i> Rewards</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html" class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Profile</a>
+  </nav>
+  <div class="sidebar-footer"><button class="sidebar-logout" data-logout><i class="bi bi-box-arrow-left"></i> Logout</button></div>
+</aside>
+<main class="dash-main">
+  <div class="dash-topbar">
+    <div><div class="dash-greeting" id="greetingText">Good morning 👋</div><div class="dash-date" id="dateText"></div></div>
+    <div class="dash-topbar-actions">
+      <!-- Availability Toggle -->
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:var(--text-xs);color:var(--dash-muted);">Available</span>
+        <button id="availToggle" onclick="toggleAvailability()" style="width:48px;height:24px;border-radius:12px;border:none;background:var(--green-500);cursor:pointer;position:relative;transition:all var(--transition-base);">
+          <div id="availKnob" style="width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;right:3px;transition:all var(--transition-base);"></div>
+        </button>
+      </div>
+      <button class="dash-topbar-btn"><i class="bi bi-bell"></i></button>
+    </div>
+  </div>
+  <div class="dash-content">
+
+    <!-- Current Task Banner (if active) -->
+    <div class="dash-chart-card mb-4" id="activeTaskBanner" style="background:rgba(61,166,104,0.12);border:1.5px solid rgba(61,166,104,0.4);">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <div style="width:48px;height:48px;background:var(--green-600);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">🛵</div>
+          <div>
+            <div style="font-family:var(--font-heading);font-weight:700;color:var(--white);">Active Task: Veg Biryani Pickup</div>
+            <div style="font-size:var(--text-xs);color:var(--green-300);">From: Patel's Hotel • To: Asha Foundation • 2.4 km</div>
+            <span class="status-badge status-assigned">pickup_en_route</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.75rem;">
+          <a href="scan.html" class="btn btn-primary btn-sm"><i class="bi bi-qr-code-scan"></i> Scan Pickup QR</a>
+          <a href="tasks.html" class="btn btn-outline-green btn-sm"><i class="bi bi-geo-alt"></i> Navigate</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards-row mb-4">
+      <div class="stat-card"><div class="stat-icon">🚗</div><div class="stat-number">48</div><div class="stat-label">Deliveries</div><div class="stat-trend up"><i class="bi bi-arrow-up"></i> 5</div></div>
+      <div class="stat-card accent-saffron"><div class="stat-icon">🏆</div><div class="stat-number">1,240</div><div class="stat-label">Reward Points</div><div class="stat-trend up"><i class="bi bi-arrow-up"></i> 50</div></div>
+      <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-number">4.9</div><div class="stat-label">Rating</div></div>
+      <div class="stat-card accent-saffron"><div class="stat-icon">🌿</div><div class="stat-number">2,880</div><div class="stat-label">Meals Delivered</div></div>
+    </div>
+
+    <!-- Points Tier Progress -->
+    <div class="dash-chart-card mb-4">
+      <div class="dash-chart-title">🏅 Reward Tier Progress</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <div style="width:56px;height:56px;background:var(--green-700);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.75rem;">🌱</div>
+          <div>
+            <div style="font-family:var(--font-heading);font-weight:700;color:var(--white);">Sapling Tier</div>
+            <div style="font-size:var(--text-xs);color:var(--green-300);">1,240 / 2,000 points to Guardian</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:var(--saffron-400);">760</div>
+          <div style="font-size:.65rem;color:var(--dash-muted);">points to next tier</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.1);border-radius:var(--radius-full);height:10px;margin-bottom:0.5rem;">
+        <div style="background:linear-gradient(90deg,var(--green-500),var(--saffron-400));height:10px;border-radius:var(--radius-full);width:62%;transition:width 0.8s ease;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--dash-muted);">
+        <span>🌱 Seedling (0)</span>
+        <span>🪴 Sapling (500)</span>
+        <span>🛡️ Guardian (2000)</span>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Nearby Available Tasks -->
+      <div class="col-lg-7">
+        <div class="dash-table-card">
+          <div class="dash-table-header">
+            <div class="dash-table-title">Nearby Available Tasks</div>
+            <span style="font-size:var(--text-xs);color:var(--dash-muted);">Within 5 km</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;">
+            <div class="donation-feed-card">
+              <div class="donation-food-img">🍛</div>
+              <div style="flex:1;">
+                <div class="donation-feed-title">Paneer Tikka Masala</div>
+                <div class="donation-feed-meta">
+                  <span>📍 3.2 km</span>
+                  <span>🏢 Seva Ashram</span>
+                  <span>⏱️ 2h 15m</span>
+                </div>
+                <div style="font-size:var(--text-xs);color:var(--saffron-400);">+50 points on delivery</div>
+              </div>
+              <button class="btn btn-green btn-sm" onclick="acceptTask('t1')"><i class="bi bi-check-circle"></i> Accept</button>
+            </div>
+            <div class="donation-feed-card">
+              <div class="donation-food-img">🍱</div>
+              <div style="flex:1;">
+                <div class="donation-feed-title">Mixed Lunch Boxes</div>
+                <div class="donation-feed-meta">
+                  <span>📍 1.8 km</span>
+                  <span>🏢 Annapurna Trust</span>
+                  <span>⏱️ 3h 40m</span>
+                </div>
+                <div style="font-size:var(--text-xs);color:var(--saffron-400);">+40 points on delivery</div>
+              </div>
+              <button class="btn btn-green btn-sm" onclick="acceptTask('t2')"><i class="bi bi-check-circle"></i> Accept</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick QR Scan + Map -->
+      <div class="col-lg-5">
+        <div class="dash-chart-card mb-3">
+          <div class="dash-chart-title">Quick Actions</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <a href="scan.html" style="text-decoration:none;">
+              <div style="background:rgba(61,166,104,0.12);border:1.5px solid rgba(61,166,104,0.3);border-radius:var(--radius-md);padding:1rem;text-align:center;cursor:pointer;transition:all var(--transition-base);" onmouseover="this.style.borderColor='var(--green-400)'" onmouseout="this.style.borderColor='rgba(61,166,104,0.3)'">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">📷</div>
+                <div style="font-family:var(--font-heading);font-size:.75rem;font-weight:700;color:var(--white);">Scan Pickup QR</div>
+              </div>
+            </a>
+            <a href="scan.html?type=delivery" style="text-decoration:none;">
+              <div style="background:rgba(245,146,30,0.12);border:1.5px solid rgba(245,146,30,0.3);border-radius:var(--radius-md);padding:1rem;text-align:center;cursor:pointer;transition:all var(--transition-base);" onmouseover="this.style.borderColor='var(--saffron-400)'" onmouseout="this.style.borderColor='rgba(245,146,30,0.3)'">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">✅</div>
+                <div style="font-family:var(--font-heading);font-size:.75rem;font-weight:700;color:var(--white);">Scan Delivery QR</div>
+              </div>
+            </a>
+            <a href="history.html" style="text-decoration:none;">
+              <div style="background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:1rem;text-align:center;cursor:pointer;transition:all var(--transition-base);">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">📋</div>
+                <div style="font-family:var(--font-heading);font-size:.75rem;font-weight:700;color:var(--white);">Delivery Log</div>
+              </div>
+            </a>
+            <a href="rewards.html" style="text-decoration:none;">
+              <div style="background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:1rem;text-align:center;cursor:pointer;transition:all var(--transition-base);">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">🏆</div>
+                <div style="font-family:var(--font-heading);font-size:.75rem;font-weight:700;color:var(--white);">My Rewards</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { updateVolunteerAvailability } from '../../assets/js/firestore.js';
+  import { showToast } from '../../assets/js/notifications.js';
+  initDashboardSidebar(); initLogout();
+  const h = new Date().getHours();
+  document.getElementById('greetingText').textContent = (h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening') + ' 👋';
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+
+  let isAvailable = true;
+  window.toggleAvailability = async function() {
+    isAvailable = !isAvailable;
+    const toggle = document.getElementById('availToggle');
+    const knob   = document.getElementById('availKnob');
+    toggle.style.background = isAvailable ? 'var(--green-500)' : 'var(--ink-300)';
+    knob.style.right = isAvailable ? '3px' : '27px';
+    showToast(isAvailable ? '🟢 You are Available' : '🔴 You are Offline', isAvailable ? 'Tasks will now be assigned to you.' : 'No tasks will be assigned while offline.', 'info');
+    try { await updateVolunteerAvailability('demo_vol_id', isAvailable); } catch(e) {}
+  };
+
+  window.acceptTask = function(id) {
+    showToast('Task Accepted!', 'Navigate to pickup location. Donor has been notified.', 'success');
+    setTimeout(() => window.location.href = 'tasks.html', 1500);
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "FoodRescue",
+  "short_name": "FoodRescue",
+  "description": "India's first real-time food rescue platform — rescuing surplus food, feeding lives.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b2a1a",
+  "theme_color": "#0b2a1a",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "assets/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "categories": ["food", "social", "utilities"],
+  "lang": "en-IN",
+  "dir": "ltr"
+}

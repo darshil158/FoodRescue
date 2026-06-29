@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifications Center — Admin Dashboard</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:var(--emergency);"><i class="bi bi-shield-fill"></i></div>
+      <div><div class="sidebar-user-name">Platform Admin</div><div class="sidebar-user-role"><span class="verified-dot"></span> Super Admin</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Control Panel</div>
+    <a href="index.html"         class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="verifications.html" class="sidebar-nav-link active"><i class="bi bi-shield-check"></i> Verifications <span class="nav-badge" id="pendingBadge">12</span></a>
+    <a href="users.html"         class="sidebar-nav-link"><i class="bi bi-people"></i> All Users</a>
+    <a href="donations.html"     class="sidebar-nav-link"><i class="bi bi-box-seam"></i> All Donations</a>
+    <a href="reports.html"       class="sidebar-nav-link"><i class="bi bi-flag"></i> Reports</a>
+    <a href="emergency.html"     class="sidebar-nav-link"><i class="bi bi-exclamation-triangle"></i> Emergency Mode</a>
+    <a href="analytics.html"     class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+    <a href="settings.html"      class="sidebar-nav-link"><i class="bi bi-gear"></i> Settings</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"       class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Admin Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">Audits & Verification</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+    <div class="dash-table-card">
+      <div class="dash-table-header">
+        <div class="dash-table-title">Incoming Verification Requests</div>
+      </div>
+      
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>Applicant Name</th>
+              <th>Role Type</th>
+              <th>Govt / License Key</th>
+              <th>Submitted Date</th>
+              <th>Action Panel</th>
+            </tr>
+          </thead>
+          <tbody id="adminVerificationTbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Details Modal -->
+<div class="confirm-modal-overlay" id="verifyDetailsModal">
+  <div class="confirm-modal">
+    <h4 style="font-family:var(--font-heading); font-weight:700; margin-bottom:1rem;" id="modalApplicantName">Audit Applicant</h4>
+    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius-md); padding:1rem; margin-bottom:1.5rem; font-size:var(--text-xs); color:var(--dash-text);" id="modalDetailsBox">
+      <!-- Info filled here -->
+    </div>
+    
+    <div class="form-field">
+      <label class="form-label" for="verifyNotes">Approval/Rejection Note</label>
+      <input type="text" id="verifyNotes" class="form-input" placeholder="e.g. FSSAI record confirmed. Ready to post.">
+    </div>
+
+    <div style="display:flex; gap:1rem; margin-top:2rem;">
+      <button class="btn btn-outline-green flex-1" onclick="closeDetailsModal()">Cancel</button>
+      <button class="btn btn-danger flex-1" onclick="handleAudit(false)">Reject Application</button>
+      <button class="btn btn-green flex-1" onclick="handleAudit(true)">Approve & Verify</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const applicants = [
+    { id: 'app1', name: 'Raj Sweets & Catering', role: 'restaurant', key: 'FSSAI-1229045', date: '2 hours ago', extra: 'Registered address: NANPURA CHOWK, SURAT. Catering permit active.' },
+    { id: 'app2', name: 'Kavita Shelter Home', role: 'ngo', key: 'NGO-PAN-998A', date: '1 day ago', extra: '12A registration documents match society filings.' },
+    { id: 'app3', name: 'Suresh Mehta', role: 'volunteer', key: 'AADHAAR-887X', date: '4 hours ago', extra: 'Aadhaar ID scan matches facial upload profile photo.' }
+  ];
+
+  let selectedApplicantId = null;
+
+  function renderApplicants() {
+    const tbody = document.getElementById('adminVerificationTbody');
+    tbody.innerHTML = applicants.map(a => `
+      <tr id="row_${a.id}">
+        <td><div class="food-name">${a.name}</div></td>
+        <td><span class="status-badge ${a.role === 'restaurant' ? 'status-posted' : a.role === 'ngo' ? 'status-accepted' : 'status-assigned'}">${a.role}</span></td>
+        <td class="font-monospace">${a.key}</td>
+        <td style="font-size:var(--text-xs); color:var(--dash-muted);">${a.date}</td>
+        <td>
+          <button class="btn btn-green btn-sm" onclick="openDetailsModal('${a.id}')"><i class="bi bi-search"></i> Audit File</button>
+        </td>
+      </tr>
+    `).join('');
+    
+    document.getElementById('pendingBadge').textContent = applicants.length;
+  }
+
+  window.openDetailsModal = function(id) {
+    selectedApplicantId = id;
+    const applicant = applicants.find(a => a.id === id);
+    if (!applicant) return;
+
+    document.getElementById('modalApplicantName').textContent = `Audit: ${applicant.name}`;
+    document.getElementById('modalDetailsBox').innerHTML = `
+      <strong>Role Type:</strong> ${applicant.role.toUpperCase()}<br>
+      <strong>Verification Key:</strong> ${applicant.key}<br>
+      <strong>Submission Time:</strong> ${applicant.date}<br><br>
+      <strong>Verification Notes:</strong><br>
+      ${applicant.extra}
+    `;
+    document.getElementById('verifyNotes').value = '';
+    document.getElementById('verifyDetailsModal').classList.add('open');
+  };
+
+  window.closeDetailsModal = function() {
+    document.getElementById('verifyDetailsModal').classList.remove('open');
+  };
+
+  window.handleAudit = function(approved) {
+    const applicant = applicants.find(a => a.id === selectedApplicantId);
+    if (!applicant) return;
+    
+    // Remove applicant from database list
+    const index = applicants.findIndex(a => a.id === selectedApplicantId);
+    if(index > -1) {
+      applicants.splice(index, 1);
+    }
+    
+    closeDetailsModal();
+    renderApplicants();
+
+    if(approved) {
+      showToast('✅ Account Approved', `${applicant.name} is now verified and active.`, 'success');
+    } else {
+      showToast('❌ Rejected Application', `Decline status registered for ${applicant.name}.`, 'error');
+    }
+  };
+
+  renderApplicants();
+</script>
+
+</body>
+</html>

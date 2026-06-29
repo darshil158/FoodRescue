@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About FoodRescue — Rescuing Surplus Food, Feeding Lives</title>
+  <meta name="description" content="FoodRescue was built from real-world research — 31 stakeholder interviews, 10 field days across Gujarat. Learn about our mission, team, and the GTU Societal Internship research behind the platform.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body>
+<div id="toast-container"></div>
+<nav class="fr-nav" id="mainNav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="nav-links">
+      <a href="how-it-works.html" class="nav-link">How It Works</a>
+      <a href="about.html" class="nav-link active">About</a>
+      <a href="impact.html" class="nav-link">Impact</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="faq.html" class="nav-link">FAQ</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-login">Login</a>
+      <a href="signup.html" class="nav-cta">Donate Food →</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mob-close" id="mobClose">&times;</button>
+  <a href="how-it-works.html" class="mob-link">How It Works</a>
+  <a href="about.html" class="mob-link">About</a>
+  <a href="impact.html" class="mob-link">Impact</a>
+  <a href="features.html" class="mob-link">Features</a>
+  <a href="faq.html" class="mob-link">FAQ</a>
+  <a href="login.html" class="mob-link">Login</a>
+  <a href="signup.html" class="btn btn-primary mt-3">Donate Food →</a>
+</div>
+
+<!-- Hero -->
+<section style="background:linear-gradient(135deg,var(--green-900),var(--green-800));padding:6rem 0 4rem;text-align:center;">
+  <div class="container">
+    <span class="section-eyebrow" style="color:var(--green-300);">Our Story</span>
+    <h1 style="font-family:var(--font-display);font-size:var(--text-display);font-weight:800;color:var(--white);margin:0.5rem 0 1rem;">
+      Built from the Ground Up
+    </h1>
+    <p style="font-size:var(--text-lead);color:var(--green-200);max-width:640px;margin:0 auto;">
+      FoodRescue wasn't designed in a boardroom. It was built from 10 days of field research, 31 face-to-face interviews, and one unforgettable night watching 120 kg of food get discarded.
+    </p>
+  </div>
+</section>
+
+<!-- Origin Story -->
+<section class="section" style="background:var(--white);">
+  <div class="container">
+    <div class="row gy-5 align-items-center">
+      <div class="col-lg-6 reveal-on-scroll">
+        <span class="section-eyebrow">The Origin Story</span>
+        <h2 class="section-title">The Night That Started Everything</h2>
+        <p style="font-size:var(--text-md);color:var(--ink-500);margin-bottom:1.5rem;line-height:1.75;">
+          During a GTU Societal Internship field visit to Surat in 2024, our team witnessed a 5-star hotel discard over <strong>120 kg of cooked food</strong> at 11 PM — not because they were careless, but because they had no legal, logistic, or operational system to give it away safely.
+        </p>
+        <p style="font-size:var(--text-md);color:var(--ink-500);margin-bottom:1.5rem;line-height:1.75;">
+          Two hours later, the same night, we visited an NGO running a shelter for 80 families. They had received no food donation that week. They were surviving on rationed grain.
+        </p>
+        <p style="font-size:var(--text-md);color:var(--ink-500);line-height:1.75;">
+          The food existed. The need existed. What was missing was the <strong>real-time digital bridge</strong> between them. That's why we built FoodRescue.
+        </p>
+      </div>
+      <div class="col-lg-6 reveal-on-scroll">
+        <div style="background:var(--ink-900);border-radius:var(--radius-xl);padding:2rem;color:var(--green-200);">
+          <div style="font-size:3rem;margin-bottom:1rem;">📊</div>
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--white);margin-bottom:1.5rem;">Field Research Summary</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:rgba(61,166,104,0.12);border-radius:var(--radius-md);padding:1rem;text-align:center;">
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--green-300);">31</div>
+              <div style="font-size:var(--text-xs);color:rgba(197,236,211,0.7);">Stakeholder Interviews</div>
+            </div>
+            <div style="background:rgba(61,166,104,0.12);border-radius:var(--radius-md);padding:1rem;text-align:center;">
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--green-300);">10</div>
+              <div style="font-size:var(--text-xs);color:rgba(197,236,211,0.7);">Field Days</div>
+            </div>
+            <div style="background:rgba(61,166,104,0.12);border-radius:var(--radius-md);padding:1rem;text-align:center;">
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--saffron-400);">2</div>
+              <div style="font-size:var(--text-xs);color:rgba(197,236,211,0.7);">Cities (Surat, Ahmedabad)</div>
+            </div>
+            <div style="background:rgba(61,166,104,0.12);border-radius:var(--radius-md);padding:1rem;text-align:center;">
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--saffron-400);">120 kg</div>
+              <div style="font-size:var(--text-xs);color:rgba(197,236,211,0.7);">Food Waste Witnessed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission / Vision / Values -->
+<section class="section" style="background:var(--ink-50);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow reveal-on-scroll">Our Foundation</span>
+      <h2 class="section-title text-center reveal-on-scroll">Mission, Vision & Values</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Mission</div>
+          <div class="feature-desc">
+            To build India's first real-time, FSSAI-compliant food rescue platform that eliminates the friction between surplus food and community need — in under 5 minutes, every day.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <div class="feature-title">Vision</div>
+          <div class="feature-desc">
+            A future where every kilogram of edible surplus food is rescued before it becomes waste — across every city, town, and village in India. Zero hunger. Zero waste.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card">
+          <div class="feature-icon">❤️</div>
+          <div class="feature-title">Values</div>
+          <div class="feature-desc">
+            Dignity in giving. Safety in every bite. Transparency in every handoff. Recognition for every volunteer. We believe in food rescue done right — not just fast.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Research Methodology -->
+<section class="section" style="background:var(--white);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow reveal-on-scroll">Research-Driven</span>
+      <h2 class="section-title text-center reveal-on-scroll">Every Feature Has a Source</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 reveal-on-scroll">
+        <div style="border:1.5px solid var(--green-200);border-radius:var(--radius-xl);padding:2rem;">
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--green-700);margin-bottom:1rem;">🏪 What Restaurants Told Us</div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div style="font-size:var(--text-sm);color:var(--ink-500);border-left:3px solid var(--green-300);padding-left:1rem;font-style:italic;">"We discard 40–80 kg of food every day. We want to donate but fear FSSAI liability." — Hotel Ashoka, Surat</div>
+            <div style="font-size:var(--text-sm);color:var(--ink-500);border-left:3px solid var(--green-300);padding-left:1rem;font-style:italic;">"Nobody comes at 11 PM. No system, no volunteers, no coordination." — Golden Gate Hotel</div>
+            <div style="font-size:var(--text-sm);color:var(--ink-500);border-left:3px solid var(--green-300);padding-left:1rem;font-style:italic;">"We would donate daily if there was a verified, tracked system." — Patel's Banquet</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 reveal-on-scroll">
+        <div style="border:1.5px solid var(--green-200);border-radius:var(--radius-xl);padding:2rem;">
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--green-700);margin-bottom:1rem;">🏢 What NGOs Told Us</div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div style="font-size:var(--text-sm);color:var(--ink-500);border-left:3px solid var(--saffron-400);padding-left:1rem;font-style:italic;">"We spend 2–3 hours a day calling hotels. 70% say yes but don't have food ready." — Asha Foundation</div>
+            <div style="font-size:var(--text-sm);color:var(--ink-500);border-left:3px solid var(--saffron-400);padding-left:1rem;font-style:italic;">"We need to know quantity and food safety BEFORE sending our van. We can't risk bad food." — Shelter Trust</div>
+            <div style="font-size:var(--text-sm);color:var(--ink-500);border-left:3px solid var(--saffron-400);padding-left:1rem;font-style:italic;">"A real-time notification system with verified photos would change everything." — Annapurna NGO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Problem Data -->
+<section class="impact-section section">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow" style="color:var(--green-300);">The Problem</span>
+      <h2 class="section-title" style="color:var(--white);">The Gap We Are Closing</h2>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-item">
+        <div class="impact-number">68.7M T</div>
+        <div class="impact-label">Food wasted in India/year (UNEP 2021)</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-number">190M</div>
+        <div class="impact-label">Go to bed hungry each night (FAO 2023)</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-number">₹92,000 Cr</div>
+        <div class="impact-label">Value of edible food wasted annually</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-number">40%</div>
+        <div class="impact-label">Food wasted comes from hotels & restaurants</div>
+      </div>
+    </div>
+    <blockquote style="text-align:center;margin-top:3rem;font-size:var(--text-lead);color:var(--green-200);font-style:italic;max-width:700px;margin-left:auto;margin-right:auto;">
+      "The barrier is not lack of food. It is lack of a reliable, real-time digital bridge between those who have food and those who need it."
+      <footer style="font-size:var(--text-sm);color:var(--green-300);margin-top:0.5rem;">— GTU Societal Internship Research Report, 2024</footer>
+    </blockquote>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:linear-gradient(135deg,var(--green-900),var(--green-800));padding:5rem 0;text-align:center;">
+  <div class="container">
+    <h2 style="font-family:var(--font-display);font-size:var(--text-display);font-weight:800;color:var(--white);margin-bottom:1rem;">Be Part of the Solution</h2>
+    <p style="color:var(--green-200);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;">Join the network rescuing food and feeding communities across India.</p>
+    <a href="signup.html" class="hero-cta-primary">Get Started →</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;">
+      <div class="footer-bottom-text">© 2025 FoodRescue Foundation. Made with 💚 in India.</div>
+      <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initScrollReveal, initNavbar, setActiveNavLink } from './assets/js/ui.js';
+  initNavbar(); setActiveNavLink(); initScrollReveal();
+</script>
+</body>
+</html>

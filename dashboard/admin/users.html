@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Users — Admin Dashboard</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:var(--emergency);"><i class="bi bi-shield-fill"></i></div>
+      <div><div class="sidebar-user-name">Platform Admin</div><div class="sidebar-user-role"><span class="verified-dot"></span> Super Admin</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Control Panel</div>
+    <a href="index.html"         class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="verifications.html" class="sidebar-nav-link"><i class="bi bi-shield-check"></i> Verifications <span class="nav-badge" id="pendingBadge">0</span></a>
+    <a href="users.html"         class="sidebar-nav-link active"><i class="bi bi-people"></i> All Users</a>
+    <a href="donations.html"     class="sidebar-nav-link"><i class="bi bi-box-seam"></i> All Donations</a>
+    <a href="reports.html"       class="sidebar-nav-link"><i class="bi bi-flag"></i> Reports</a>
+    <a href="emergency.html"     class="sidebar-nav-link"><i class="bi bi-exclamation-triangle"></i> Emergency Mode</a>
+    <a href="analytics.html"     class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+    <a href="settings.html"      class="sidebar-nav-link"><i class="bi bi-gear"></i> Settings</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"       class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Admin Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">Platform Users Directory</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+    
+    <!-- Search Bar & Filters -->
+    <div class="dash-chart-card mb-4" style="padding:1rem;">
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-end;">
+        <div style="flex:1; min-width:240px;">
+          <div class="form-label-dark" style="color:var(--dash-muted); font-size:.65rem; margin-bottom:4px;">SEARCH NAME OR EMAIL</div>
+          <input type="text" id="userSearchInput" placeholder="Search..." oninput="filterUsers()" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.1); border-radius:var(--radius-md); padding:8px 12px; color:var(--white); font-size:var(--text-sm); outline:none; width:100%;">
+        </div>
+        <div>
+          <div class="form-label-dark" style="color:var(--dash-muted); font-size:.65rem; margin-bottom:4px;">ROLE</div>
+          <select id="roleFilter" onchange="filterUsers()" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.1); border-radius:var(--radius-md); padding:8px 12px; color:var(--white); font-size:var(--text-sm); outline:none;">
+            <option value="">All Roles</option>
+            <option value="restaurant">Restaurant</option>
+            <option value="ngo">NGO</option>
+            <option value="volunteer">Volunteer</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="dash-table-card">
+      <div class="dash-table-header">
+        <div class="dash-table-title">Registered Stakeholders</div>
+      </div>
+      
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="usersTbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const usersList = [
+    { id: 'u1', name: "Patel's Dhaba", email: 'ravi@pateldhaba.com', phone: '9876543210', role: 'restaurant', status: 'verified' },
+    { id: 'u2', name: 'Asha Foundation', email: 'contact@ashafoundation.org', phone: '9876543221', role: 'ngo', status: 'verified' },
+    { id: 'u3', name: 'Ramesh Kumar', email: 'ramesh@gmail.com', phone: '9876543210', role: 'volunteer', status: 'verified' },
+    { id: 'u4', name: 'Suresh Mehta', email: 'suresh@gmail.com', phone: '9876543215', role: 'volunteer', status: 'pending' },
+    { id: 'u5', name: 'Al-Naimat Restaurant', email: 'alnaimat@gmail.com', phone: '9876543299', role: 'restaurant', status: 'suspended' }
+  ];
+
+  function renderUsers(list) {
+    const tbody = document.getElementById('usersTbody');
+    tbody.innerHTML = list.map(u => `
+      <tr>
+        <td><div class="food-name">${u.name}</div></td>
+        <td>${u.email}</td>
+        <td>${u.phone}</td>
+        <td><span class="status-badge ${u.role === 'restaurant' ? 'status-posted' : u.role === 'ngo' ? 'status-accepted' : 'status-assigned'}">${u.role}</span></td>
+        <td><span class="status-badge ${u.status === 'verified' ? 'status-completed' : u.status === 'pending' ? 'status-assigned' : 'status-delivering'}">${u.status}</span></td>
+        <td>
+          <button class="btn btn-ghost btn-sm" onclick="toggleUserStatus('${u.id}')" style="color: ${u.status === 'suspended' ? 'var(--green-400)' : 'var(--emergency)'}; font-size: 0.75rem;">
+            ${u.status === 'suspended' ? 'Re-activate' : 'Suspend'}
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  window.toggleUserStatus = function(id) {
+    const user = usersList.find(u => u.id === id);
+    if (!user) return;
+
+    if (user.status === 'suspended') {
+      user.status = 'verified';
+      showToast('User Re-activated', `${user.name} access restored.`, 'success');
+    } else {
+      user.status = 'suspended';
+      showToast('User Suspended', `${user.name} access revoked.`, 'warn');
+    }
+    filterUsers();
+  };
+
+  window.filterUsers = function() {
+    const searchVal = document.getElementById('userSearchInput').value.toLowerCase().trim();
+    const roleVal = document.getElementById('roleFilter').value;
+
+    const filtered = usersList.filter(u => {
+      const matchSearch = u.name.toLowerCase().includes(searchVal) || u.email.toLowerCase().includes(searchVal);
+      const matchRole = roleVal ? u.role === roleVal : true;
+      return matchSearch && matchRole;
+    });
+
+    renderUsers(filtered);
+  };
+
+  renderUsers(usersList);
+</script>
+
+</body>
+</html>

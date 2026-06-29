@@ -1,0 +1,108 @@
+/* ============================================================
+   FoodRescue — Design Tokens & CSS Custom Properties
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+
+:root {
+  /* ── Primary — Deep Forest Green ─────────────────────── */
+  --green-950: #071a10;
+  --green-900: #0b2a1a;
+  --green-800: #133d26;
+  --green-700: #1a5233;
+  --green-600: #226940;
+  --green-500: #2d8653;
+  --green-400: #3da668;
+  --green-300: #5ec285;
+  --green-200: #93d9ac;
+  --green-100: #c5ecd3;
+  --green-50:  #edf7f1;
+
+  /* ── Accent — Warm Saffron ────────────────────────────── */
+  --saffron-900: #7a3a00;
+  --saffron-700: #bf5c00;
+  --saffron-500: #f5921e;
+  --saffron-400: #f7aa4a;
+  --saffron-200: #fcd8a8;
+  --saffron-50:  #fff5e9;
+
+  /* ── Neutrals / Ink ───────────────────────────────────── */
+  --ink-900: #0f1813;
+  --ink-700: #273325;
+  --ink-500: #506050;
+  --ink-300: #8fa08f;
+  --ink-100: #d8e2d8;
+  --ink-50:  #f4f7f4;
+  --white:   #ffffff;
+
+  /* ── Semantic Colors ─────────────────────────────────── */
+  --success:   #2d8653;
+  --warning:   #f5921e;
+  --danger:    #d44c4c;
+  --info:      #3578d4;
+  --emergency: #cc2626;
+
+  /* ── Glassmorphism ────────────────────────────────────── */
+  --glass-bg:     rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-blur:   16px;
+
+  /* ── Dashboard Dark Theme ─────────────────────────────── */
+  --dash-bg:      #0b2a1a;
+  --dash-sidebar: #071a10;
+  --dash-card:    #133d26;
+  --dash-card-2:  #1a5233;
+  --dash-text:    #c5ecd3;
+  --dash-muted:   #5ec285;
+
+  /* ── Typography ───────────────────────────────────────── */
+  --font-display: 'Syne', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body:    'Inter', sans-serif;
+
+  --text-hero:    clamp(2.8rem, 7vw, 5.5rem);
+  --text-display: clamp(2rem, 4vw, 3.2rem);
+  --text-title:   1.5rem;
+  --text-lead:    1.125rem;
+  --text-body:    1rem;
+  --text-sm:      0.875rem;
+  --text-xs:      0.75rem;
+
+  /* ── Spacing ─────────────────────────────────────────── */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ── Border Radius ───────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-xl:   32px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ─────────────────────────────────────────── */
+  --shadow-card:  0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-float: 0 12px 48px rgba(0, 0, 0, 0.14);
+  --shadow-glow:  0 0 32px rgba(45, 134, 83, 0.25);
+  --shadow-saffron: 0 0 24px rgba(245, 146, 30, 0.3);
+
+  /* ── Transitions ─────────────────────────────────────── */
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* ── Z-index ─────────────────────────────────────────── */
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-modal:    300;
+  --z-toast:    400;
+}

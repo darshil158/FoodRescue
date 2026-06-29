@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Donation — FoodRescue Restaurant</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    /* Post page uses white left column, dark right preview */
+    .post-layout { display: grid; grid-template-columns: 1fr 380px; gap: 2rem; min-height: 100vh; }
+    .post-form-col { background: var(--white); padding: 2rem; border-radius: var(--radius-xl); }
+    .post-preview-col { position: sticky; top: 1.5rem; height: fit-content; }
+    @media (max-width: 991px) { .post-layout { grid-template-columns: 1fr; } .post-preview-col { position: static; } }
+
+    .form-section { border-bottom: 1px solid var(--ink-50); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+    .form-section:last-child { border-bottom: none; }
+    .form-section-title {
+      font-family: var(--font-heading); font-weight: 700; font-size: var(--text-sm);
+      color: var(--green-700); text-transform: uppercase; letter-spacing: .08em;
+      display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;
+    }
+    .form-section-num {
+      width: 24px; height: 24px; background: var(--green-500); color: var(--white);
+      border-radius: 50%; font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .freshness-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius-full);
+      font-size: var(--text-xs); font-weight: 700; font-family: var(--font-heading);
+      margin-top: 6px;
+    }
+    .freshness-badge.fresh { background: #dcfce7; color: var(--green-700); }
+    .freshness-badge.warn  { background: #fff9db; color: #7a5800; }
+    .freshness-badge.danger { background: #fce8e8; color: #7a1c1c; }
+    .quantity-row { display: flex; gap: 10px; align-items: flex-end; }
+    .quantity-row input { flex: 2; }
+    .quantity-row select { flex: 1; }
+    .packaging-toggle {
+      display: flex; gap: 0;
+      background: var(--ink-50); border-radius: var(--radius-md); overflow: hidden; border: 1.5px solid var(--ink-100);
+    }
+    .packaging-btn {
+      flex: 1; padding: 10px; text-align: center;
+      font-family: var(--font-heading); font-size: var(--text-sm); font-weight: 600;
+      cursor: pointer; border: none; background: none; color: var(--ink-500);
+      transition: all var(--transition-fast);
+    }
+    .packaging-btn.active.yes { background: var(--green-500); color: var(--white); }
+    .packaging-btn.active.no  { background: var(--danger);    color: var(--white); }
+    .packaging-warning {
+      display: none; background: #fff3cd; border: 1px solid #ffc107;
+      border-radius: var(--radius-md); padding: 10px 14px; font-size: var(--text-xs); color: #664d03; margin-top: 8px;
+    }
+    .packaging-warning.visible { display: block; }
+    .special-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .option-toggle-card {
+      border: 1.5px solid var(--ink-100); border-radius: var(--radius-md);
+      padding: 1rem; cursor: pointer; transition: all var(--transition-base);
+    }
+    .option-toggle-card:hover { border-color: var(--green-300); }
+    .option-toggle-card.active-emergency {
+      border-color: var(--emergency); background: #fce8e8;
+      animation: pulse-ring-red 1.2s ease-out infinite;
+    }
+    .option-toggle-card.active-schedule { border-color: var(--green-400); background: var(--green-50); }
+    .schedule-details { display: none; margin-top: 1rem; }
+    .schedule-details.visible { display: block; }
+    /* Submit button */
+    .submit-btn-wrap { position: sticky; bottom: 0; background: var(--white); padding: 1rem 0; border-top: 1px solid var(--ink-100); }
+
+    /* Right preview */
+    .preview-card {
+      background: var(--dash-card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      color: var(--dash-text);
+    }
+    .preview-title { font-family: var(--font-heading); font-weight: 700; color: var(--white); font-size: var(--text-sm); margin-bottom: 1.25rem; }
+    .impact-preview {
+      background: rgba(61,166,104,0.1); border: 1px solid rgba(61,166,104,0.2);
+      border-radius: var(--radius-md); padding: 1rem; margin: 1rem 0;
+      text-align: center;
+    }
+    .impact-preview-big {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--green-300); line-height: 1;
+    }
+    .impact-preview-label { font-size: var(--text-xs); color: var(--dash-muted); margin-top: 4px; }
+  </style>
+</head>
+<body style="background:var(--dash-bg);padding:1.5rem;min-height:100vh;">
+
+<div id="toast-container"></div>
+
+<!-- Back nav -->
+<div style="margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">
+  <a href="index.html" style="color:var(--green-300);text-decoration:none;display:flex;align-items:center;gap:6px;font-size:var(--text-sm);font-family:var(--font-heading);font-weight:600;">
+    <i class="bi bi-arrow-left"></i> Back to Dashboard
+  </a>
+  <span style="color:rgba(255,255,255,0.2);">|</span>
+  <span style="font-family:var(--font-heading);font-weight:700;color:var(--white);">Post Surplus Food Donation</span>
+</div>
+
+<div class="post-layout">
+
+  <!-- ── LEFT: Form ──────────────────────────────────────── -->
+  <div class="post-form-col">
+
+    <!-- Section 1: Photo Upload -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="form-section-num">1</span> Food Photo</div>
+      <div class="photo-upload-zone" id="photoZone" onclick="document.getElementById('photoInput').click()">
+        <img class="photo-preview" id="photoPreview" src="" alt="Preview">
+        <i class="bi bi-camera upload-icon" id="uploadIcon"></i>
+        <div class="upload-text" id="uploadText">Drag photo here or click to upload</div>
+        <div class="upload-hint" id="uploadHint">JPG, PNG, WEBP • Max 5MB • Clear food photo required</div>
+        <div class="photo-overlay" id="photoOverlay">
+          <button type="button" class="btn btn-sm btn-green" onclick="event.stopPropagation();document.getElementById('photoInput').click()"><i class="bi bi-arrow-repeat"></i> Replace</button>
+          <button type="button" class="btn btn-sm btn-danger" onclick="event.stopPropagation();removePhoto()"><i class="bi bi-trash"></i> Remove</button>
+        </div>
+      </div>
+      <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" style="display:none;">
+      <div class="form-error" id="photoErr"></div>
+    </div>
+
+    <!-- Section 2: Food Details -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="form-section-num">2</span> Food Details</div>
+      <div class="form-field">
+        <label class="form-label" for="foodName">Food Name <span class="required">*</span></label>
+        <input type="text" id="foodName" class="form-input" placeholder="e.g. Veg Biryani, Dal Makhani, Bread Rolls" required oninput="updatePreview()">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Category <span class="required">*</span></label>
+        <div class="category-radio-group">
+          <div class="category-radio-option" data-value="veg" onclick="selectCategory('veg')">🌿 Vegetarian</div>
+          <div class="category-radio-option" data-value="non_veg" onclick="selectCategory('non_veg')">🍖 Non-Vegetarian</div>
+          <div class="category-radio-option" data-value="vegan" onclick="selectCategory('vegan')">🌱 Vegan</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Food Type (select all that apply)</label>
+        <div class="tag-selector" id="foodTypeTags">
+          <div class="tag-chip" data-value="rice">🍚 Rice</div>
+          <div class="tag-chip" data-value="curry">🍛 Curry</div>
+          <div class="tag-chip" data-value="bread">🍞 Bread</div>
+          <div class="tag-chip" data-value="snacks">🍿 Snacks</div>
+          <div class="tag-chip" data-value="dessert">🍮 Dessert</div>
+          <div class="tag-chip" data-value="beverages">🥤 Beverages</div>
+          <div class="tag-chip" data-value="salad">🥗 Salad</div>
+          <div class="tag-chip" data-value="other">📦 Other</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Quantity -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="form-section-num">3</span> Quantity</div>
+      <div class="form-field">
+        <label class="form-label">Quantity <span class="required">*</span></label>
+        <div class="quantity-row">
+          <input type="number" id="quantity" class="form-input" placeholder="60" min="0.1" step="0.1" oninput="updatePreview()">
+          <select id="quantityUnit" class="form-input" onchange="updatePreview()">
+            <option value="kg">kg</option>
+            <option value="liters">liters</option>
+            <option value="portions">portions</option>
+            <option value="boxes">boxes</option>
+            <option value="trays">trays</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="servings">Estimated Servings <span class="required">*</span></label>
+        <input type="number" id="servings" class="form-input" placeholder="80" min="1" oninput="updatePreview()">
+        <div class="form-hint" id="servingsHint">How many people can this feed?</div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Packaging Status <span class="required">*</span></label>
+        <div class="packaging-toggle">
+          <button type="button" class="packaging-btn yes" id="pkgYes" onclick="setPackaging(true)">✅ Yes, Packaged</button>
+          <button type="button" class="packaging-btn no"  id="pkgNo"  onclick="setPackaging(false)">❌ Not Packaged</button>
+        </div>
+        <div class="packaging-warning" id="pkgWarning">
+          ⚠️ FSSAI guidelines require food to be properly packaged before donation. Please package the food before listing.
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Timing -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="form-section-num">4</span> Timing <span style="font-size:.65rem;font-weight:400;text-transform:none;color:var(--ink-300);letter-spacing:0;">(FSSAI safety compliance)</span></div>
+      <div class="form-field">
+        <label class="form-label" for="preparedAt">Preparation Time <span class="required">*</span></label>
+        <input type="datetime-local" id="preparedAt" class="form-input" oninput="checkFreshness()">
+        <div id="freshnessBadge" class="freshness-badge" style="display:none;"></div>
+      </div>
+      <div class="row g-3">
+        <div class="col-6">
+          <div class="form-field">
+            <label class="form-label" for="availFrom">Available From <span class="required">*</span></label>
+            <input type="time" id="availFrom" class="form-input">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-field">
+            <label class="form-label" for="availUntil">Available Until <span class="required">*</span></label>
+            <input type="time" id="availUntil" class="form-input">
+          </div>
+        </div>
+      </div>
+      <!-- FSSAI Expiry Info -->
+      <div style="background:var(--green-50);border:1px solid var(--green-100);border-radius:var(--radius-md);padding:12px 16px;font-size:var(--text-xs);color:var(--ink-500);">
+        <strong style="color:var(--green-700);font-family:var(--font-heading);">FSSAI Food Safety Time Standards</strong>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;">
+          <span>🍛 Cooked/Hot food: 4 hours max</span>
+          <span>❄️ Refrigerated: 24 hours max</span>
+          <span>📦 Packaged: 2 days before expiry</span>
+          <span>🌿 Fresh produce: Same day only</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Pickup Details -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="form-section-num">5</span> Pickup Details</div>
+      <div class="form-field">
+        <label class="form-label" for="pickupAddr1">Address Line 1 <span class="required">*</span></label>
+        <input type="text" id="pickupAddr1" class="form-input" placeholder="Building name, street">
+        <button type="button" class="btn btn-outline-green btn-sm mt-2" onclick="useRegisteredAddress()">
+          <i class="bi bi-geo-alt"></i> Use My Registered Address
+        </button>
+      </div>
+      <div class="row g-3">
+        <div class="col-6">
+          <div class="form-field">
+            <label class="form-label" for="pickupCity">City <span class="required">*</span></label>
+            <input type="text" id="pickupCity" class="form-input" placeholder="Surat">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-field">
+            <label class="form-label" for="pickupPin">PIN Code <span class="required">*</span></label>
+            <input type="text" id="pickupPin" class="form-input" placeholder="395007" maxlength="6">
+          </div>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="contactNum">Contact Number <span class="required">*</span></label>
+        <input type="tel" id="contactNum" class="form-input" placeholder="98765 43210">
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="specialInstructions">
+          Special Instructions
+          <span style="color:var(--ink-300);font-weight:400;font-size:.75rem;float:right;" id="instrCount">0/300</span>
+        </label>
+        <textarea id="specialInstructions" class="form-input" rows="3"
+          placeholder="e.g. Food is at back gate. Bring containers. Call before arrival."
+          maxlength="300" oninput="document.getElementById('instrCount').textContent=this.value.length+'/300'"></textarea>
+      </div>
+    </div>
+
+    <!-- Section 6: Options -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="form-section-num">6</span> Options</div>
+      <div class="special-options">
+        <div class="option-toggle-card" id="emergencyCard" onclick="toggleEmergency()">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span style="font-size:1.25rem;">🚨</span>
+            <strong style="font-family:var(--font-heading);font-size:var(--text-sm);">Emergency</strong>
+          </div>
+          <div style="font-size:var(--text-xs);color:var(--ink-500);">Priority dispatch to all nearby NGOs</div>
+        </div>
+        <div class="option-toggle-card" id="scheduleCard" onclick="toggleSchedule()">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span style="font-size:1.25rem;">📅</span>
+            <strong style="font-family:var(--font-heading);font-size:var(--text-sm);">Schedule</strong>
+          </div>
+          <div style="font-size:var(--text-xs);color:var(--ink-500);">Set a recurring donation schedule</div>
+        </div>
+      </div>
+      <div class="schedule-details" id="scheduleDetails">
+        <div class="row g-3">
+          <div class="col-6">
+            <label class="form-label">Frequency</label>
+            <select class="form-input" id="schedFreq">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Starting From</label>
+            <input type="date" class="form-input" id="schedStart">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-btn-wrap">
+      <button type="button" class="btn btn-green w-100 btn-lg" id="postSubmitBtn" onclick="handleSubmit()">
+        <i class="bi bi-send-fill"></i> Post Donation Now →
+      </button>
+    </div>
+
+  </div><!-- /post-form-col -->
+
+  <!-- ── RIGHT: Live Preview ─────────────────────────────── -->
+  <div class="post-preview-col">
+
+    <!-- Food Safety Score -->
+    <div class="preview-card mb-3">
+      <div class="preview-title">🛡️ Live Food Safety Score</div>
+
+      <div class="safety-score-wrap">
+        <div class="safety-circle-svg">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12"/>
+            <circle id="scoreCircle" cx="70" cy="70" r="58" fill="none"
+              stroke="#2d8653" stroke-width="12" stroke-linecap="round"
+              stroke-dasharray="364.42" stroke-dashoffset="364.42"
+              transform="rotate(-90 70 70)" style="transition: stroke-dashoffset 0.6s ease, stroke 0.4s ease;"/>
+          </svg>
+          <div class="safety-score-number">
+            <div class="safety-score-value" id="safetyScoreNum" style="color:var(--green-500);">0</div>
+            <div class="safety-score-label">/100</div>
+          </div>
+        </div>
+        <div id="safetyBadgeDisplay" style="font-size:.8rem;font-weight:700;font-family:var(--font-heading);margin-top:0.5rem;color:var(--ink-300);">Fill the form to score</div>
+
+        <div class="safety-checklist w-100 mt-3">
+          <div class="safety-check-item">
+            <div class="safety-check-icon check-fail" id="chkPhoto">✗</div>
+            <span>Photo uploaded</span>
+            <span class="safety-check-pts">+25 pts</span>
+          </div>
+          <div class="safety-check-item">
+            <div class="safety-check-icon check-fail" id="chkFresh">✗</div>
+            <span>Prepared within 4h</span>
+            <span class="safety-check-pts">+35 pts</span>
+          </div>
+          <div class="safety-check-item">
+            <div class="safety-check-icon check-fail" id="chkPkg">✗</div>
+            <span>Properly packaged</span>
+            <span class="safety-check-pts">+20 pts</span>
+          </div>
+          <div class="safety-check-item">
+            <div class="safety-check-icon check-pass" id="chkVerified">✓</div>
+            <span>FSSAI Verified Account</span>
+            <span class="safety-check-pts">+20 pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact Preview -->
+    <div class="preview-card mb-3">
+      <div class="preview-title">📊 Estimated Impact</div>
+      <div class="impact-preview">
+        <div class="impact-preview-big" id="impactPeople">—</div>
+        <div class="impact-preview-label">people will be fed</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:0.75rem;">
+        <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:10px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:700;color:var(--green-300);" id="impactCO2">—</div>
+          <div style="font-size:.7rem;color:var(--dash-muted);">kg CO₂ prevented</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:10px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:700;color:var(--saffron-400);" id="impactMeals">—</div>
+          <div style="font-size:.7rem;color:var(--dash-muted);">meals</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NGO Match Preview -->
+    <div class="preview-card">
+      <div class="preview-title">🎯 Nearby NGO Matches</div>
+      <div class="ngo-match-preview" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);">
+        <div class="ngo-match-item">
+          <div class="ngo-match-avatar">🏢</div>
+          <div>
+            <div class="ngo-match-name" style="color:var(--white);">Asha Foundation</div>
+            <div class="ngo-match-meta" style="color:var(--dash-muted);">📍 1.2 km • Capacity: 120/day • ★4.8</div>
+          </div>
+          <div class="ngo-match-score">96</div>
+        </div>
+        <div class="ngo-match-item">
+          <div class="ngo-match-avatar">🤝</div>
+          <div>
+            <div class="ngo-match-name" style="color:var(--white);">Seva Ashram</div>
+            <div class="ngo-match-meta" style="color:var(--dash-muted);">📍 2.8 km • Capacity: 200/day • ★4.6</div>
+          </div>
+          <div class="ngo-match-score">82</div>
+        </div>
+        <div class="ngo-match-item">
+          <div class="ngo-match-avatar">💚</div>
+          <div>
+            <div class="ngo-match-name" style="color:var(--white);">Annapurna Trust</div>
+            <div class="ngo-match-meta" style="color:var(--dash-muted);">📍 4.5 km • Capacity: 150/day • ★4.7</div>
+          </div>
+          <div class="ngo-match-score">74</div>
+        </div>
+      </div>
+      <div style="font-size:.7rem;color:var(--dash-muted);margin-top:8px;text-align:center;">
+        All 3 NGOs will be notified instantly on submission
+      </div>
+    </div>
+
+  </div><!-- /post-preview-col -->
+</div>
+
+<!-- Confirmation Modal -->
+<div class="confirm-modal-overlay" id="confirmModal">
+  <div class="confirm-modal">
+    <h3 style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:1rem;">
+      ✅ Confirm Donation
+    </h3>
+    <div id="confirmSummary" style="font-size:var(--text-sm);color:var(--ink-700);margin-bottom:1.5rem;"></div>
+    <div style="display:flex;gap:1rem;">
+      <button class="btn btn-outline-green flex-1" onclick="closeConfirm()">← Edit</button>
+      <button class="btn btn-green flex-1" id="confirmFinalBtn" onclick="finalPost()">
+        <i class="bi bi-check-circle"></i> Confirm & Post
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Overlay -->
+<div id="successOverlay" style="display:none;position:fixed;inset:0;background:rgba(11,42,26,0.95);z-index:999;display:none;align-items:center;justify-content:center;flex-direction:column;">
+  <div class="check-bounce" style="font-size:5rem;margin-bottom:1.5rem;">✅</div>
+  <h2 style="font-family:var(--font-display);font-weight:800;color:var(--white);margin-bottom:0.5rem;">Donation Posted!</h2>
+  <p style="color:var(--green-200);margin-bottom:2rem;text-align:center;max-width:400px;">
+    3 nearby NGOs have been notified. You'll receive a confirmation once one accepts.
+  </p>
+  <div style="display:flex;gap:1rem;">
+    <a href="active.html" class="btn btn-primary">View Active Donations</a>
+    <a href="post.html" class="btn btn-outline-white" onclick="location.reload()">Post Another</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { calculateFoodSafetyScore, getSafetyBadge, co2FromKg, createDonation } from '../../assets/js/firestore.js';
+  import { showToast } from '../../assets/js/notifications.js';
+  import { generatePickupQRData, generateDeliveryQRData } from '../../assets/js/tracking.js';
+  import { initTagSelector } from '../../assets/js/ui.js';
+  import { computeImpact } from '../../assets/js/analytics.js';
+
+  let state = {
+    imageUrl: null, foodCategory: null, packaged: true, isEmergency: false, isScheduled: false,
+    photoFile: null, foodTypes: []
+  };
+
+  initTagSelector((selected) => { state.foodTypes = selected; });
+
+  // Photo upload
+  document.getElementById('photoInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showToast('File Too Large', 'Max 5MB allowed', 'warn'); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      state.imageUrl = e.target.result;
+      state.photoFile = file;
+      document.getElementById('photoPreview').src = e.target.result;
+      document.getElementById('photoPreview').classList.add('visible');
+      document.getElementById('photoOverlay').classList.add('visible');
+      document.getElementById('uploadIcon').style.display = 'none';
+      document.getElementById('uploadText').style.display = 'none';
+      document.getElementById('uploadHint').style.display = 'none';
+      updateSafetyScore();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  window.removePhoto = function() {
+    state.imageUrl = null; state.photoFile = null;
+    document.getElementById('photoPreview').classList.remove('visible');
+    document.getElementById('photoPreview').src = '';
+    document.getElementById('photoOverlay').classList.remove('visible');
+    document.getElementById('uploadIcon').style.display = '';
+    document.getElementById('uploadText').style.display = '';
+    document.getElementById('uploadHint').style.display = '';
+    document.getElementById('photoInput').value = '';
+    updateSafetyScore();
+  };
+
+  window.selectCategory = function(cat) {
+    document.querySelectorAll('.category-radio-option').forEach(o => {
+      o.classList.toggle('selected', o.dataset.value === cat);
+    });
+    state.foodCategory = cat;
+  };
+
+  window.setPackaging = function(val) {
+    state.packaged = val;
+    document.getElementById('pkgYes').classList.toggle('active', val);
+    document.getElementById('pkgNo').classList.toggle('active', !val);
+    document.getElementById('pkgWarning').classList.toggle('visible', !val);
+    updateSafetyScore();
+  };
+  setPackaging(true); // default
+
+  window.checkFreshness = function() {
+    const prepVal = document.getElementById('preparedAt').value;
+    if (!prepVal) return;
+    const hoursAgo = (Date.now() - new Date(prepVal)) / (1000 * 60 * 60);
+    const badge = document.getElementById('freshnessBadge');
+    badge.style.display = 'inline-flex';
+    if (hoursAgo < 0)   { badge.className = 'freshness-badge warn'; badge.textContent = '⚠️ Future time — please re-check'; }
+    else if (hoursAgo <= 2) { badge.className = 'freshness-badge fresh'; badge.textContent = '✅ Freshly Prepared'; }
+    else if (hoursAgo <= 4) { badge.className = 'freshness-badge warn';  badge.textContent = `⚠️ Prepared ${hoursAgo.toFixed(1)}h ago — near limit`; }
+    else                    { badge.className = 'freshness-badge danger'; badge.textContent = `🔴 Prepared ${hoursAgo.toFixed(1)}h ago — may not meet FSSAI standards`; }
+    updateSafetyScore();
+  };
+
+  window.toggleEmergency = function() {
+    state.isEmergency = !state.isEmergency;
+    document.getElementById('emergencyCard').classList.toggle('active-emergency', state.isEmergency);
+  };
+
+  window.toggleSchedule = function() {
+    state.isScheduled = !state.isScheduled;
+    document.getElementById('scheduleCard').classList.toggle('active-schedule', state.isScheduled);
+    document.getElementById('scheduleDetails').classList.toggle('visible', state.isScheduled);
+  };
+
+  window.useRegisteredAddress = function() {
+    document.getElementById('pickupAddr1').value = 'Hotel Street, Near Railway Station';
+    document.getElementById('pickupCity').value  = 'Surat';
+    document.getElementById('pickupPin').value   = '395003';
+    showToast('Address Applied', 'Your registered address has been filled in.', 'success');
+  };
+
+  window.updatePreview = function() {
+    const servings = parseInt(document.getElementById('servings').value) || 0;
+    const qty      = parseFloat(document.getElementById('quantity').value) || 0;
+    const unit     = document.getElementById('quantityUnit').value;
+    const kgEst    = unit === 'kg' ? qty : unit === 'portions' ? qty / 8 : qty * 1.5;
+    const impact   = computeImpact(kgEst);
+    document.getElementById('impactPeople').textContent = servings || impact.people || '—';
+    document.getElementById('impactMeals').textContent  = (servings * 1.2).toFixed(0) || '—';
+    document.getElementById('impactCO2').textContent    = impact.co2 || '—';
+    // Auto-suggest
+    if (qty && unit === 'kg') {
+      document.getElementById('servingsHint').textContent = `~${Math.round(qty * 8)} people per ${qty} kg of rice-based food`;
+    }
+    updateSafetyScore();
+  };
+
+  function updateSafetyScore() {
+    const prepVal   = document.getElementById('preparedAt').value;
+    const hoursAgo  = prepVal ? (Date.now() - new Date(prepVal)) / (1000 * 60 * 60) : 99;
+    const donation  = {
+      imageUrl:       state.imageUrl,
+      preparedAt:     prepVal,
+      packaged:       state.packaged,
+      donorVerified:  true, // demo — replace with real user.verified
+      fssaiCertified: true  // demo
+    };
+    const result    = calculateFoodSafetyScore(donation);
+    const score     = result.total;
+    const badge     = getSafetyBadge(score);
+
+    // Update circle
+    const circumference = 364.42;
+    const offset = circumference - (score / 100) * circumference;
+    const circle = document.getElementById('scoreCircle');
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = badge.color;
+    document.getElementById('safetyScoreNum').textContent = score;
+    document.getElementById('safetyScoreNum').style.color = badge.color;
+    document.getElementById('safetyBadgeDisplay').textContent = `${badge.icon} ${badge.label}`;
+    document.getElementById('safetyBadgeDisplay').style.color = badge.color;
+
+    // Checklist
+    const c = (id, pass) => {
+      const el = document.getElementById(id);
+      el.textContent = pass ? '✓' : '✗';
+      el.className = `safety-check-icon ${pass ? 'check-pass' : 'check-fail'}`;
+    };
+    c('chkPhoto',    !!state.imageUrl);
+    c('chkFresh',    hoursAgo <= 4 && hoursAgo >= 0);
+    c('chkPkg',      state.packaged);
+    c('chkVerified', true);
+  }
+
+  window.handleSubmit = function() {
+    const foodName = document.getElementById('foodName').value;
+    if (!foodName)            { showToast('Required', 'Please enter the food name.', 'warn'); return; }
+    if (!state.foodCategory)  { showToast('Required', 'Please select a food category.', 'warn'); return; }
+    if (!document.getElementById('quantity').value) { showToast('Required', 'Please enter quantity.', 'warn'); return; }
+    if (!document.getElementById('preparedAt').value) { showToast('Required', 'Please enter preparation time.', 'warn'); return; }
+    if (!document.getElementById('pickupAddr1').value) { showToast('Required', 'Please enter pickup address.', 'warn'); return; }
+    if (!state.imageUrl) { showToast('Photo Required', 'Please upload a food photo for safety verification.', 'warn'); return; }
+
+    const qty  = document.getElementById('quantity').value;
+    const unit = document.getElementById('quantityUnit').value;
+    document.getElementById('confirmSummary').innerHTML = `
+      <div style="background:var(--ink-50);border-radius:var(--radius-md);padding:1rem;margin-bottom:1rem;">
+        <div style="font-weight:700;font-family:var(--font-heading);margin-bottom:0.5rem;">${foodName}</div>
+        <div style="font-size:var(--text-xs);color:var(--ink-500);">
+          ${state.foodCategory === 'veg' ? '🌿 Vegetarian' : state.foodCategory === 'non_veg' ? '🍖 Non-Vegetarian' : '🌱 Vegan'} •
+          ${qty} ${unit} • Serves ~${document.getElementById('servings').value || 'N/A'} people
+        </div>
+      </div>
+      <div style="font-size:var(--text-xs);color:var(--ink-500);">
+        📍 ${document.getElementById('pickupAddr1').value}, ${document.getElementById('pickupCity').value}<br>
+        ${state.isEmergency ? '🚨 Emergency dispatch mode: ON<br>' : ''}
+        📊 Food Safety Score: <strong>${document.getElementById('safetyScoreNum').textContent}/100</strong>
+      </div>
+    `;
+    document.getElementById('confirmModal').classList.add('open');
+  };
+
+  window.closeConfirm = function() {
+    document.getElementById('confirmModal').classList.remove('open');
+  };
+
+  window.finalPost = async function() {
+    const btn = document.getElementById('confirmFinalBtn');
+    btn.innerHTML = '<span class="spinner"></span> Posting...';
+    btn.disabled = true;
+
+    try {
+      // In production: await createDonation(user.uid, { ... })
+      await new Promise(r => setTimeout(r, 1500)); // Simulate
+      document.getElementById('confirmModal').classList.remove('open');
+      const overlay = document.getElementById('successOverlay');
+      overlay.style.display = 'flex';
+      setTimeout(() => window.location.href = 'active.html', 4000);
+    } catch(e) {
+      showToast('Error', 'Failed to post donation. Please try again.', 'error');
+    } finally {
+      btn.innerHTML = '<i class="bi bi-check-circle"></i> Confirm & Post';
+      btn.disabled = false;
+    }
+  };
+
+  // Init
+  updateSafetyScore();
+  // Set default preparedAt to now
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('preparedAt').value = now.toISOString().slice(0,16);
+  checkFreshness();
+</script>
+</body>
+</html>

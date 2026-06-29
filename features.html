@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Features — FoodRescue Platform</title>
+  <meta name="description" content="Explore FoodRescue's industry-first real-time features: FSSAI-compliant Food Safety Engine, Smart NGO Matching, Live GPS Tracking, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <style>
+    /* Page specific styles for premium feel */
+    .features-hero {
+      background: linear-gradient(135deg, var(--green-900), var(--green-800));
+      padding: 7rem 0 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .features-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(61,166,104,0.15), transparent 60%);
+      pointer-events: none;
+    }
+    .interactive-demo-card {
+      background: var(--ink-900);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      color: var(--white);
+      box-shadow: var(--shadow-lg);
+    }
+    .tab-nav-btn {
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--green-200);
+      font-family: var(--font-heading);
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-base);
+    }
+    .tab-nav-btn.active {
+      background: var(--green-500);
+      color: var(--white);
+      border-color: var(--green-500);
+      box-shadow: 0 0 20px rgba(61,166,104,0.4);
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(245,146,30,0.12);
+      border: 1px solid rgba(245,146,30,0.25);
+      color: var(--saffron-400);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .live-status-pill {
+      background: rgba(61,166,104,0.15);
+      border: 1px solid var(--green-500);
+      color: var(--green-400);
+      border-radius: var(--radius-full);
+      padding: 4px 12px;
+      font-size: var(--text-xs);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pulse-dot {
+      width: 8px; height: 8px;
+      background: var(--green-400);
+      border-radius: 50%;
+      animation: pulse-ring 1.5s ease-out infinite;
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<!-- Navigation -->
+<nav class="fr-nav" id="mainNav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="how-it-works.html" class="nav-link">How It Works</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="impact.html" class="nav-link">Impact</a>
+      <a href="features.html" class="nav-link active">Features</a>
+      <a href="faq.html" class="nav-link">FAQ</a>
+    </div>
+
+    <div class="nav-actions">
+      <a href="login.html" class="nav-login">Login</a>
+      <a href="signup.html" class="nav-cta">Donate Food →</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mob-close" id="mobClose" aria-label="Close menu">&times;</button>
+  <a href="how-it-works.html" class="mob-link">How It Works</a>
+  <a href="about.html" class="mob-link">About</a>
+  <a href="impact.html" class="mob-link">Impact</a>
+  <a href="features.html" class="mob-link">Features</a>
+  <a href="faq.html" class="mob-link">FAQ</a>
+  <a href="login.html" class="mob-link">Login</a>
+  <a href="signup.html" class="btn btn-primary mt-3">Donate Food →</a>
+</div>
+
+<!-- Hero Section -->
+<section class="features-hero">
+  <div class="container">
+    <span class="section-eyebrow" style="color:var(--green-300);">Next-Gen Logistics</span>
+    <h1 style="font-family:var(--font-display); font-size:var(--text-display); font-weight:800; color:var(--white); margin:0.5rem 0 1rem;">
+      Engineered for Zero Waste
+    </h1>
+    <p style="font-size:var(--text-lead); color:var(--green-200); max-width:680px; margin:0 auto 2rem;">
+      FoodRescue combines state-of-the-art dispatch matching, automated food safety verification, and transparent status flows to make rescue operations frictionless.
+    </p>
+  </div>
+</section>
+
+<!-- Deep Dive Interactive Demo -->
+<section class="section" style="background:var(--white);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow reveal-on-scroll">Try It Live</span>
+      <h2 class="section-title text-center reveal-on-scroll">Interactive Feature Showcase</h2>
+      <p class="section-subtitle text-center mx-auto reveal-on-scroll">
+        Click the tabs below to explore how the backend logic keeps food fresh and ensures timely delivery.
+      </p>
+    </div>
+
+    <!-- Tabs Nav -->
+    <div class="d-flex justify-content-center gap-2 flex-wrap mb-4 reveal-on-scroll">
+      <button class="tab-nav-btn active" onclick="switchDemoTab('safety')">🛡️ Safety Engine</button>
+      <button class="tab-nav-btn" onclick="switchDemoTab('match')">🎯 Match Algorithm</button>
+      <button class="tab-nav-btn" onclick="switchDemoTab('gps')">📍 Live GPS Flow</button>
+      <button class="tab-nav-btn" onclick="switchDemoTab('csr')">📜 CSR & Analytics</button>
+    </div>
+
+    <!-- Tab Contents Wrapper -->
+    <div class="interactive-demo-card reveal-on-scroll">
+      
+      <!-- TAB 1: Safety Engine -->
+      <div id="demo-safety" class="demo-tab-content">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-6">
+            <span class="step-badge">FSSAI Compliance Core</span>
+            <h3 style="font-family:var(--font-heading); font-weight:700; color:var(--white); margin-bottom:1rem;">Automated Food Safety Scoring</h3>
+            <p style="color:var(--green-100); line-height:1.75; font-size:var(--text-sm);">
+              Before a donation is visible to any NGO, the platform scores the food on a scale of 0 to 100. It checks prep time, packaging, donor FSSAI registration status, and photo validity. Any score below 50 triggers automatic rejection to ensure safety.
+            </p>
+            <div style="background:rgba(255,255,255,0.04); border-radius:var(--radius-md); padding:1rem;" class="mt-3">
+              <label class="form-label" style="color:var(--green-300);">Adjust Preparation Time (Hours Ago)</label>
+              <input type="range" class="form-range" id="safetyRange" min="0.5" max="8" step="0.5" value="1" oninput="runInteractiveSafety()">
+              <div class="d-flex justify-content-between font-monospace" style="font-size:0.75rem; color:var(--green-200);">
+                <span>Fresh (0.5h)</span>
+                <span id="rangeVal">1 hour ago</span>
+                <span>Stale (8h)</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-6">
+            <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius-lg); padding:2rem; text-align:center;">
+              <div style="font-size:var(--text-xs); color:var(--dash-muted); margin-bottom:1rem; text-transform:uppercase;">Live Safety Verification System</div>
+              <div style="font-family:var(--font-display); font-size:3rem; font-weight:800; color:var(--green-400);" id="safetyScoreDisplay">95</div>
+              <div id="safetyScoreLabel" class="freshness-badge fresh" style="display:inline-block; margin:0.5rem 0 1rem;">🛡️ Excellent — Safety Cleared</div>
+              <div style="text-align:left; font-size:var(--text-xs); color:var(--green-200); display:flex; flex-direction:column; gap:8px;">
+                <div class="d-flex justify-content-between"><span>Photo Verification:</span><span style="color:var(--green-400);">✔ Uploaded (+25)</span></div>
+                <div class="d-flex justify-content-between"><span>Prep Time Check:</span><span id="safetyPrepCheck" style="color:var(--green-400);">✔ Fresh (+35)</span></div>
+                <div class="d-flex justify-content-between"><span>FSSAI License:</span><span style="color:var(--green-400);">✔ Active (+20)</span></div>
+                <div class="d-flex justify-content-between"><span>Packaged Status:</span><span style="color:var(--green-400);">✔ Yes (+20)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Match Algorithm -->
+      <div id="demo-match" class="demo-tab-content" style="display:none;">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-6">
+            <span class="step-badge">Proximity Match Engine</span>
+            <h3 style="font-family:var(--font-heading); font-weight:700; color:var(--white); margin-bottom:1rem;">Match Score Optimization</h3>
+            <p style="color:var(--green-100); line-height:1.75; font-size:var(--text-sm);">
+              NGO matching is calculated instantly based on proximity, current capacity limits, urgency countdowns, and historical NGO response times. The best matching NGOs receive push alerts immediately.
+            </p>
+            <div style="background:rgba(255,255,255,0.04); border-radius:var(--radius-md); padding:1rem;" class="mt-3">
+              <label class="form-label" style="color:var(--green-300);">Simulated NGO Distance (km)</label>
+              <input type="range" class="form-range" id="distanceRange" min="0.5" max="15" step="0.5" value="1.5" oninput="runInteractiveMatch()">
+              <div class="d-flex justify-content-between font-monospace" style="font-size:0.75rem; color:var(--green-200);">
+                <span>0.5 km</span>
+                <span id="distanceVal">1.5 km</span>
+                <span>15 km</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-6">
+            <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius-lg); padding:1.5rem;">
+              <div style="font-size:var(--text-xs); color:var(--dash-muted); margin-bottom:1rem; text-transform:uppercase; text-align:center;">Ranking Results</div>
+              <div style="display:flex; flex-direction:column; gap:10px;" id="matchRankings">
+                <!-- Filled dynamically by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: GPS Flow -->
+      <div id="demo-gps" class="demo-tab-content" style="display:none;">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-6">
+            <span class="step-badge">8-Step Status Flow</span>
+            <h3 style="font-family:var(--font-heading); font-weight:700; color:var(--white); margin-bottom:1rem;">Real-Time Coordination</h3>
+            <p style="color:var(--green-100); line-height:1.75; font-size:var(--text-sm);">
+              A secure status pipeline protects the handoff of food donations. From posting to volunteer assignment, pickup, route navigation, and delivery scan, every event is tracked live.
+            </p>
+            <div class="d-flex gap-2 flex-wrap mt-3">
+              <button class="btn btn-green btn-sm" onclick="advanceGpsFlow()">Advance Status Pipeline</button>
+              <button class="btn btn-outline-green btn-sm" onclick="resetGpsFlow()">Reset Flow</button>
+            </div>
+          </div>
+          
+          <div class="col-lg-6">
+            <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius-lg); padding:1.5rem;">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="live-status-pill"><div class="pulse-dot"></div> Live Update</span>
+                <span id="gpsFlowState" class="status-badge status-posted">posted</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:12px;" id="gpsTimelineDisplay">
+                <!-- Timeline items -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: CSR Certificate -->
+      <div id="demo-csr" class="demo-tab-content" style="display:none;">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-6">
+            <span class="step-badge">Environmental Impact Reporting</span>
+            <h3 style="font-family:var(--font-heading); font-weight:700; color:var(--white); margin-bottom:1rem;">CSR Compliant Analytics</h3>
+            <p style="color:var(--green-100); line-height:1.75; font-size:var(--text-sm);">
+              Establishments receive downloadable, verifiable social impact certificates. These metrics compile directly into corporate sustainability portfolios, meeting UN Sustainable Development Goals (SDG 2, 12, 13, 17) compliance criteria.
+            </p>
+            <button class="btn btn-green btn-sm mt-3" onclick="triggerDownloadDemoCert()"><i class="bi bi-award"></i> Generate Sample Certificate</button>
+          </div>
+          
+          <div class="col-lg-6 text-center">
+            <div style="background:rgba(255,255,255,0.02); border: 2px dashed rgba(255,255,255,0.1); border-radius:var(--radius-lg); padding:2rem;">
+              <i class="bi bi-file-earmark-pdf" style="font-size:3rem; color:var(--saffron-400); display:block; margin-bottom:1rem;"></i>
+              <div style="font-family:var(--font-heading); font-weight:700; font-size:1.1rem; color:var(--white);">Verifiable Social Impact Audit</div>
+              <div style="font-size:var(--text-xs); color:var(--green-300); margin-top:8px;">
+                Certificate contains unique secure identifier linked to the block of rescued food in Surat databases.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Features Deep Grid -->
+<section class="section" style="background:var(--ink-50);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow reveal-on-scroll">Comprehensive Tech Suite</span>
+      <h2 class="section-title text-center reveal-on-scroll">The Complete Food Rescue Infrastructure</h2>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card h-100">
+          <div class="feature-icon">🛡️</div>
+          <div class="feature-title">FSSAI Safety Validation</div>
+          <div class="feature-desc">Analyzes preparation details, packaging specifications, and picture proof. Standardized templates keep every listing within public health guidelines.</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card h-100">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Proximity Match Engine</div>
+          <div class="feature-desc">Calculates match index based on travel times and NGO demand patterns. Maximizes food distribution efficiency while food is hot.</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card h-100">
+          <div class="feature-icon">🛵</div>
+          <div class="feature-title">Volunteer Dispatch Network</div>
+          <div class="feature-desc">Matches nearby courier riders with active routes. Rewards engagement with certification, gift codes, and local movement leaderboards.</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card h-100">
+          <div class="feature-icon">📍</div>
+          <div class="feature-title">Real-Time Routing & ETA</div>
+          <div class="feature-desc">Provides precise turn-by-turn navigation overlay. Both restaurant staff and NGO coordinators monitor the rider's ETA continuously.</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card h-100">
+          <div class="feature-icon">💬</div>
+          <div class="feature-title">Secure Handoff Verification</div>
+          <div class="feature-desc">Requires camera-to-screen QR validation at pickup and arrival terminals. Guards the logistics chain against missing or spoiled shipments.</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div class="feature-card h-100">
+          <div class="feature-icon">📈</div>
+          <div class="feature-title">SDG Metrics Tracking</div>
+          <div class="feature-desc">Auto-calculates carbon credit indices, meals provided, and waste offset. Output converts instantly into standard formats for CSR filing.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4">
+        <div class="footer-logo"><span>🍃</span> FoodRescue</div>
+        <p class="footer-tagline">Rescuing Surplus Food, Feeding Lives.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-twitter-x"></i></a>
+          <a href="#"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6"><div class="footer-heading">Quick Links</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="impact.html">Impact</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
+      <div class="col-lg-2 col-6"><div class="footer-heading">Join Us</div><ul class="footer-links"><li><a href="signup.html?role=restaurant">Donor</a></li><li><a href="signup.html?role=ngo">NGO</a></li><li><a href="signup.html?role=volunteer">Volunteer</a></li></ul></div>
+      <div class="col-lg-4"><div class="footer-heading">Contact</div><div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>Surat, Gujarat 395007</span></div><div class="footer-contact-item"><i class="bi bi-envelope"></i><span>hello@foodrescue.in</span></div></div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-text">© 2025 FoodRescue Foundation. Made with 💚 in India.</div>
+      <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initScrollReveal, initNavbar, setActiveNavLink } from './assets/js/ui.js';
+  import { calculateFoodSafetyScore, getSafetyBadge } from './assets/js/firestore.js';
+  import { generateCertificate } from './assets/js/tracking.js';
+
+  initNavbar();
+  setActiveNavLink();
+  initScrollReveal();
+
+  window.switchDemoTab = function(tabId) {
+    document.querySelectorAll('.tab-nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.demo-tab-content').forEach(content => content.style.display = 'none');
+    
+    event.currentTarget.classList.add('active');
+    document.getElementById('demo-' + tabId).style.display = 'block';
+    
+    if(tabId === 'match') runInteractiveMatch();
+    if(tabId === 'gps') resetGpsFlow();
+  };
+
+  // Interactive Safety Engine Demo
+  window.runInteractiveSafety = function() {
+    const hours = parseFloat(document.getElementById('safetyRange').value);
+    document.getElementById('rangeVal').textContent = hours === 0.5 ? '30 minutes ago' : `${hours} hours ago`;
+    
+    // Simulate FSSAI calculations
+    const score = Math.max(30, Math.round(100 - (hours * 8.5)));
+    document.getElementById('safetyScoreDisplay').textContent = score;
+    
+    const badge = getSafetyBadge(score);
+    const badgeEl = document.getElementById('safetyScoreLabel');
+    badgeEl.textContent = `${badge.icon} ${badge.label}`;
+    badgeEl.className = `freshness-badge ${badge.cls || 'fresh'}`;
+    badgeEl.style.backgroundColor = badge.color;
+    badgeEl.style.color = '#fff';
+    
+    const prepCheckEl = document.getElementById('safetyPrepCheck');
+    if (hours <= 4) {
+      prepCheckEl.textContent = '✔ Prepared within 4h (+35)';
+      prepCheckEl.style.color = 'var(--green-400)';
+    } else {
+      prepCheckEl.textContent = '✗ Prepared > 4 hours ago (+0)';
+      prepCheckEl.style.color = 'var(--emergency)';
+    }
+  };
+
+  // Interactive NGO Proximity Match Demo
+  window.runInteractiveMatch = function() {
+    const distance = parseFloat(document.getElementById('distanceRange').value);
+    document.getElementById('distanceVal').textContent = `${distance} km`;
+    
+    // Define three dummy NGOs
+    const ngos = [
+      { name: 'Asha Foundation', baseScore: 60, scale: 2.5 },
+      { name: 'Seva Ashram', baseScore: 50, scale: 1.8 },
+      { name: 'Annapurna Trust', baseScore: 40, scale: 1.2 }
+    ];
+    
+    const rankingsHtml = ngos.map(ngo => {
+      // Calculate a live match score based on simulated distance
+      const score = Math.max(20, Math.min(100, Math.round(ngo.baseScore + (25 / (distance * ngo.scale)))));
+      return `
+        <div class="d-flex align-items-center justify-content-between p-2" style="background:rgba(255,255,255,0.02); border-radius:var(--radius-md); border-left: 3px solid ${score > 75 ? 'var(--green-400)' : 'var(--saffron-400)'}">
+          <div>
+            <div style="font-family:var(--font-heading); font-weight:600; color:var(--white); font-size:var(--text-sm);">${ngo.name}</div>
+            <div style="font-size:0.7rem; color:var(--dash-muted);">Simulated distance: ${distance.toFixed(1)} km</div>
+          </div>
+          <div style="font-family:var(--font-display); font-weight:800; color:${score > 75 ? 'var(--green-300)' : 'var(--saffron-300)'}; font-size:1.25rem;">${score}</div>
+        </div>
+      `;
+    }).join('');
+    
+    document.getElementById('matchRankings').innerHTML = rankingsHtml;
+  };
+
+  // GPS Pipeline Handoff Demo
+  const flowStates = ['posted', 'matched', 'accepted', 'assigned', 'pickup_en_route', 'picked_up', 'delivering', 'delivered', 'completed'];
+  let currentFlowIndex = 0;
+  
+  window.advanceGpsFlow = function() {
+    currentFlowIndex = (currentFlowIndex + 1) % flowStates.length;
+    renderGpsTimeline();
+  };
+  
+  window.resetGpsFlow = function() {
+    currentFlowIndex = 0;
+    renderGpsTimeline();
+  };
+  
+  function renderGpsTimeline() {
+    const currentState = flowStates[currentFlowIndex];
+    document.getElementById('gpsFlowState').textContent = currentState.replace(/_/g, ' ');
+    document.getElementById('gpsFlowState').className = `status-badge status-${currentState}`;
+    
+    const steps = [
+      { key: 'posted', icon: '📋', text: 'Donor posted surplus listing' },
+      { key: 'accepted', icon: '✅', text: 'NGO matched and accepted pickup' },
+      { key: 'assigned', icon: '🛵', text: 'Rider matched and dispatched' },
+      { key: 'picked_up', icon: '📦', text: 'Rider scanned Pickup QR' },
+      { key: 'delivered', icon: '❤️', text: 'Rider reached NGO, scanned Delivery QR' }
+    ];
+    
+    const timelineHtml = steps.map(step => {
+      const stepStateIdx = flowStates.indexOf(step.key);
+      const currentIdx = flowStates.indexOf(currentState);
+      const isDone = stepStateIdx <= currentIdx;
+      
+      return `
+        <div class="d-flex align-items-center gap-3" style="opacity: ${isDone ? '1' : '0.45'}; transition: opacity 0.3s ease;">
+          <div style="width:30px; height:30px; border-radius:50%; background: ${isDone ? 'var(--green-500)' : 'rgba(255,255,255,0.06)'}; display:flex; align-items:center; justify-content:center; color:${isDone ? 'var(--white)' : 'var(--dash-muted)'}; font-size:0.8rem; font-weight:700;">
+            ${isDone ? '✓' : step.icon}
+          </div>
+          <div style="font-family:var(--font-heading); font-weight:600; color:var(--white); font-size:var(--text-xs);">${step.text}</div>
+        </div>
+      `;
+    }).join('');
+    
+    document.getElementById('gpsTimelineDisplay').innerHTML = timelineHtml;
+  }
+
+  window.triggerDownloadDemoCert = function() {
+    const dummyRestaurant = {
+      businessName: 'Surat Premium Hotel',
+      totalMealsSaved: 1250,
+      totalFoodKg: 156,
+      co2Saved: 280
+    };
+    generateCertificate(dummyRestaurant, 2025);
+  };
+
+  // Initial runs
+  runInteractiveSafety();
+  runInteractiveMatch();
+  resetGpsFlow();
+</script>
+
+</body>
+</html>

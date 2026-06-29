@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodRescue — Rescuing Surplus Food, Feeding Lives</title>
+  <meta name="description" content="FoodRescue connects restaurants, hotels, and caterers with NGOs and volunteers to rescue surplus food and feed people in need across India — in real time.">
+  <meta name="keywords" content="food donation India, food rescue platform, surplus food NGO, volunteer food delivery, reduce food waste, FSSAI food donation">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://foodrescue.in/">
+  <meta property="og:title" content="FoodRescue — Rescuing Surplus Food, Feeding Lives">
+  <meta property="og:description" content="Turn your restaurant's surplus food into hope for families in need.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0b2a1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+
+  <style>
+    /* Page-specific overrides */
+    .hiw-connector-svg {
+      position: absolute;
+      top: 32px; left: 60%; width: 80%;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .food-tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2rem; }
+    .food-tag {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(61,166,104,0.12);
+      border: 1px solid rgba(61,166,104,0.25);
+      color: var(--green-300);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      font-family: var(--font-heading);
+    }
+    .hero-scroll-hint {
+      display: flex; align-items: center; gap: 8px;
+      font-size: var(--text-xs);
+      color: rgba(255,255,255,0.35);
+      margin-top: 2rem;
+      animation: fadeInUp 1s ease 1.2s both;
+    }
+    .hero-scroll-hint .scroll-arrow {
+      width: 20px; height: 20px;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem;
+      animation: floatY 2s ease-in-out infinite;
+    }
+    .features-eyebrow { text-align: center; margin-bottom: 0.5rem; }
+    .features-title { text-align: center; }
+    .safety-preview {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--green-50);
+      border: 1px solid var(--green-100);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-top: 1rem;
+    }
+    .safety-preview-score {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--green-500);
+    }
+    .mini-progress-steps {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+    .mini-step {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.7rem;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--green-600);
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-full);
+      padding: 3px 10px;
+    }
+    .mini-step-arrow { color: var(--ink-300); font-size: 0.6rem; }
+    .emergency-feature-content {
+      display: flex; align-items: flex-start; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .emergency-example {
+      background: rgba(204,38,38,0.08);
+      border: 1px solid rgba(204,38,38,0.2);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      flex: 1; min-width: 200px;
+    }
+    .emergency-example-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: var(--emergency);
+      margin-bottom: 4px;
+    }
+    .emergency-example-meta {
+      font-size: var(--text-xs);
+      color: var(--ink-500);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- Emergency Banner (Firestore-driven) -->
+<div class="emergency-banner" id="emergencyBanner">
+  <div class="container">
+    <div class="emergency-banner-inner">
+      <div class="emergency-text">
+        <span>🚨 EMERGENCY</span>
+        <span id="emergencyText">Critical food shortage — all volunteers mobilized</span>
+      </div>
+      <a href="#" class="emergency-link" id="emergencyLink">View Emergency Donations →</a>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="fr-nav" id="mainNav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="how-it-works.html" class="nav-link">How It Works</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="impact.html" class="nav-link">Impact</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="faq.html" class="nav-link">FAQ</a>
+    </div>
+
+    <div class="nav-actions">
+      <a href="login.html" class="nav-login">Login</a>
+      <a href="signup.html" class="nav-cta">Donate Food →</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mob-close" id="mobClose" aria-label="Close menu">&times;</button>
+  <a href="how-it-works.html" class="mob-link">How It Works</a>
+  <a href="about.html" class="mob-link">About</a>
+  <a href="impact.html" class="mob-link">Impact</a>
+  <a href="features.html" class="mob-link">Features</a>
+  <a href="faq.html" class="mob-link">FAQ</a>
+  <a href="login.html" class="mob-link">Login</a>
+  <a href="signup.html" class="btn btn-primary mt-3">Donate Food →</a>
+</div>
+
+<!-- ── HERO SECTION ──────────────────────────────────────── -->
+<section class="hero-section" id="hero">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+
+      <!-- Left: Content -->
+      <div class="col-lg-6 order-2 order-lg-1">
+        <div class="hero-eyebrow animate-fadeInUp">
+          🌿 India's First Real-Time Food Rescue Network
+        </div>
+
+        <h1 class="hero-title animate-fadeInUp animate-delay-1">
+          Every Meal
+          <span class="highlight">Matters.</span>
+          Every Bite
+          <span class="text-shimmer">Counts.</span>
+        </h1>
+
+        <p class="hero-subtitle animate-fadeInUp animate-delay-2">
+          FoodRescue connects surplus food from restaurants, hotels, and caterers to NGOs and communities across India — in real time. No food left behind.
+        </p>
+
+        <!-- Stats Row -->
+        <div class="hero-stats animate-fadeInUp animate-delay-3">
+          <div class="hero-stat-item">
+            <div class="hero-stat-number" data-counter data-target="320000">0</div>
+            <div class="hero-stat-label">Meals Saved</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-number" data-counter data-target="850">0</div>
+            <div class="hero-stat-label">Food Donors</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-number" data-counter data-target="280">0</div>
+            <div class="hero-stat-label">Partner NGOs</div>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="hero-ctas animate-fadeInUp animate-delay-4">
+          <a href="signup.html?role=restaurant" class="hero-cta-primary" id="heroDonate">
+            Donate Surplus Food <i class="bi bi-arrow-right"></i>
+          </a>
+          <a href="signup.html?role=ngo" class="hero-cta-secondary" id="heroNGO">
+            Join as NGO
+          </a>
+          <a href="signup.html?role=volunteer" class="hero-cta-ghost" id="heroVolunteer">
+            Become Volunteer
+          </a>
+        </div>
+
+        <div class="hero-scroll-hint">
+          <div class="scroll-arrow"><i class="bi bi-chevron-down"></i></div>
+          Scroll to explore
+        </div>
+      </div>
+
+      <!-- Right: SVG Animation -->
+      <div class="col-lg-6 order-1 order-lg-2 text-center">
+        <div class="hero-illustration float-anim mx-auto" style="max-width:480px; position:relative;">
+
+          <!-- Background glow -->
+          <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(61,166,104,0.2),transparent 70%);pointer-events:none;"></div>
+
+          <svg viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+
+            <!-- Main flow path -->
+            <path id="mainPath"
+              d="M 100 100 C 220 60, 340 180, 300 260 S 200 380, 360 400"
+              stroke="rgba(61,166,104,0.35)" stroke-width="3" stroke-dasharray="8 6" fill="none"
+              class="svg-flow-path"/>
+
+            <!-- Branch path to community -->
+            <path d="M 300 260 C 350 280, 390 310, 400 340"
+              stroke="rgba(245,146,30,0.35)" stroke-width="2" stroke-dasharray="6 5" fill="none"/>
+
+            <!-- Restaurant Icon (top-left) -->
+            <g transform="translate(60,55)">
+              <rect x="0" y="0" width="80" height="80" rx="16" fill="#133d26" stroke="rgba(61,166,104,0.4)" stroke-width="1.5"/>
+              <text x="40" y="50" text-anchor="middle" font-size="34">🏪</text>
+              <rect x="10" y="68" width="60" height="6" rx="3" fill="rgba(61,166,104,0.3)"/>
+            </g>
+            <text x="100" y="155" text-anchor="middle" font-family="Space Grotesk" font-size="11" fill="rgba(197,236,211,0.7)">Donor</text>
+
+            <!-- NGO Center Icon (center) -->
+            <g transform="translate(248,216)">
+              <rect x="0" y="0" width="80" height="80" rx="16" fill="#1a5233" stroke="rgba(61,166,104,0.5)" stroke-width="1.5"/>
+              <text x="40" y="50" text-anchor="middle" font-size="34">🏢</text>
+              <rect x="10" y="68" width="60" height="6" rx="3" fill="rgba(61,166,104,0.3)"/>
+            </g>
+            <text x="288" y="308" text-anchor="middle" font-family="Space Grotesk" font-size="11" fill="rgba(197,236,211,0.7)">NGO</text>
+
+            <!-- Community Icons (bottom-right) -->
+            <g transform="translate(350,345)">
+              <circle cx="40" cy="40" r="40" fill="#226940" opacity="0.6"/>
+              <text x="40" y="55" text-anchor="middle" font-size="34">🤝</text>
+            </g>
+            <text x="390" y="405" text-anchor="middle" font-family="Space Grotesk" font-size="11" fill="rgba(197,236,211,0.7)">Community</text>
+
+            <!-- Volunteer Rider midpoint -->
+            <g transform="translate(195,190)">
+              <circle cx="25" cy="25" r="25" fill="rgba(245,146,30,0.15)" stroke="rgba(245,146,30,0.4)" stroke-width="1.5"/>
+              <text x="25" y="33" text-anchor="middle" font-size="20">🛵</text>
+            </g>
+
+            <!-- Stat chips -->
+            <g transform="translate(20,220)">
+              <rect x="0" y="0" width="105" height="28" rx="8" fill="rgba(45,134,83,0.2)" stroke="rgba(61,166,104,0.3)" stroke-width="1"/>
+              <text x="52" y="19" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="600" fill="#93d9ac">⚡ &lt;5 min match</text>
+            </g>
+            <g transform="translate(330,160)">
+              <rect x="0" y="0" width="110" height="28" rx="8" fill="rgba(245,146,30,0.15)" stroke="rgba(245,146,30,0.3)" stroke-width="1"/>
+              <text x="55" y="19" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="600" fill="#f7aa4a">📍 GPS Tracked</text>
+            </g>
+            <g transform="translate(120,370)">
+              <rect x="0" y="0" width="115" height="28" rx="8" fill="rgba(61,166,104,0.12)" stroke="rgba(61,166,104,0.25)" stroke-width="1"/>
+              <text x="57" y="19" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="600" fill="#5ec285">🛡️ FSSAI Verified</text>
+            </g>
+          </svg>
+
+          <!-- Animated flow dots -->
+          <div class="hero-dots-container">
+            <div class="flow-dot"></div>
+            <div class="flow-dot"></div>
+            <div class="flow-dot"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST BAR ────────────────────────────────────────── -->
+<div class="trust-bar">
+  <div class="container d-flex align-items-center gap-4" style="overflow:hidden;">
+    <span class="trust-logo-label" style="font-size:.7rem;font-weight:700;font-family:var(--font-heading);color:var(--ink-300);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;flex-shrink:0;">Trusted By:</span>
+    <div class="marquee-track">
+      <div class="trust-logo"><i class="bi bi-shield-check"></i> FSSAI</div>
+      <div class="trust-logo"><i class="bi bi-building"></i> NITI Aayog</div>
+      <div class="trust-logo"><i class="bi bi-star"></i> Ministry of Food</div>
+      <div class="trust-logo"><i class="bi bi-laptop"></i> NASSCOM</div>
+      <div class="trust-logo"><i class="bi bi-award"></i> GTU Social Impact</div>
+      <div class="trust-logo"><i class="bi bi-globe-asia-australia"></i> FAO Partner</div>
+      <div class="trust-logo"><i class="bi bi-shield-check"></i> FSSAI</div>
+      <div class="trust-logo"><i class="bi bi-building"></i> NITI Aayog</div>
+      <div class="trust-logo"><i class="bi bi-star"></i> Ministry of Food</div>
+      <div class="trust-logo"><i class="bi bi-laptop"></i> NASSCOM</div>
+      <div class="trust-logo"><i class="bi bi-award"></i> GTU Social Impact</div>
+      <div class="trust-logo"><i class="bi bi-globe-asia-australia"></i> FAO Partner</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ──────────────────────────────────────── -->
+<section class="section hiw-section" id="how-it-works">
+  <div class="container">
+    <div class="text-center mb-2">
+      <span class="section-eyebrow reveal-on-scroll">The Process</span>
+    </div>
+    <h2 class="section-title text-center reveal-on-scroll">From Surplus to Smiles in 6 Steps</h2>
+    <p class="section-subtitle text-center mx-auto reveal-on-scroll" style="margin-bottom:3rem;">
+      Validated through 31 stakeholder interviews across Surat & Ahmedabad.
+    </p>
+
+    <div class="hiw-steps stagger-children">
+      <div class="hiw-step reveal-on-scroll">
+        <span class="hiw-number">1</span>
+        <div class="hiw-icon-wrap">🍽️</div>
+        <div class="hiw-step-title">Post Surplus Food</div>
+        <div class="hiw-step-desc">Photo, category, expiry — listed in under 3 minutes.</div>
+      </div>
+      <div class="hiw-step reveal-on-scroll">
+        <span class="hiw-number">2</span>
+        <div class="hiw-icon-wrap">🛡️</div>
+        <div class="hiw-step-title">FSSAI Safety Check</div>
+        <div class="hiw-step-desc">Auto-validates freshness, packaging & donor license.</div>
+      </div>
+      <div class="hiw-step reveal-on-scroll">
+        <span class="hiw-number">3</span>
+        <div class="hiw-icon-wrap">🔔</div>
+        <div class="hiw-step-title">NGOs Notified</div>
+        <div class="hiw-step-desc">Nearby verified NGOs get real-time push in &lt;30 seconds.</div>
+      </div>
+      <div class="hiw-step reveal-on-scroll">
+        <span class="hiw-number">4</span>
+        <div class="hiw-icon-wrap">✅</div>
+        <div class="hiw-step-title">NGO Accepts</div>
+        <div class="hiw-step-desc">One tap to confirm pickup window & assign volunteer.</div>
+      </div>
+      <div class="hiw-step reveal-on-scroll">
+        <span class="hiw-number">5</span>
+        <div class="hiw-icon-wrap">🛵</div>
+        <div class="hiw-step-title">Volunteer Picks Up</div>
+        <div class="hiw-step-desc">GPS-tracked, QR code handoff at pickup point.</div>
+      </div>
+      <div class="hiw-step reveal-on-scroll">
+        <span class="hiw-number">6</span>
+        <div class="hiw-icon-wrap">❤️</div>
+        <div class="hiw-step-title">Food Reaches People</div>
+        <div class="hiw-step-desc">Delivered with dignity. Impact certificate auto-generated.</div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="how-it-works.html" class="btn btn-outline-green btn-lg">See Full 8-Step Workflow</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── IMPACT STATS ──────────────────────────────────────── -->
+<section class="impact-section" id="impact">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow" style="color:var(--green-300);">Our Impact</span>
+      <h2 class="section-title" style="color:var(--white);">Numbers That Speak Volumes</h2>
+      <p style="color:var(--green-200);font-size:var(--text-sm);max-width:500px;margin:0 auto;">
+        Based on UNEP 2021, FAO 2023 data & live platform metrics.
+      </p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-item reveal-on-scroll">
+        <div class="impact-number" data-counter data-target="320000">0</div>
+        <div class="impact-label">Meals Rescued</div>
+      </div>
+      <div class="impact-item reveal-on-scroll">
+        <div class="impact-number" data-counter data-target="4200" data-suffix=" kg">0</div>
+        <div class="impact-label">Food Saved Monthly</div>
+      </div>
+      <div class="impact-item reveal-on-scroll">
+        <div class="impact-number" data-counter data-target="280">0</div>
+        <div class="impact-label">Partner NGOs</div>
+      </div>
+      <div class="impact-item reveal-on-scroll">
+        <div class="impact-number" data-counter data-target="1100">0</div>
+        <div class="impact-label">Active Volunteers</div>
+      </div>
+      <div class="impact-item reveal-on-scroll">
+        <div class="impact-number" data-counter data-prefix="₹" data-target="4800000">0</div>
+        <div class="impact-label">Worth of Food Saved</div>
+      </div>
+      <div class="impact-item reveal-on-scroll">
+        <div class="impact-number" data-counter data-target="62" data-suffix=" T">0</div>
+        <div class="impact-label">CO₂ Emissions Prevented</div>
+      </div>
+    </div>
+
+    <hr style="border-color:rgba(255,255,255,0.08);margin:3rem 0;">
+
+    <div class="row text-center">
+      <div class="col-md-6 reveal-on-scroll">
+        <div style="font-family:var(--font-display);font-size:clamp(2.5rem,6vw,5rem);font-weight:800;color:var(--saffron-400);">68.7M</div>
+        <div style="font-size:var(--text-sm);color:var(--green-200);margin-bottom:.25rem;">Tonnes of food wasted in India per year</div>
+        <div style="font-size:var(--text-xs);color:var(--green-300);opacity:.6;">Source: UNEP Food Waste Index Report 2021</div>
+      </div>
+      <div class="col-md-6 reveal-on-scroll">
+        <div style="font-family:var(--font-display);font-size:clamp(2.5rem,6vw,5rem);font-weight:800;color:var(--saffron-400);">190M</div>
+        <div style="font-size:var(--text-sm);color:var(--green-200);margin-bottom:.25rem;">Citizens go to bed hungry every night</div>
+        <div style="font-size:var(--text-xs);color:var(--green-300);opacity:.6;">Source: FAO State of Food Security 2023</div>
+      </div>
+    </div>
+
+    <p style="text-align:center;font-size:var(--text-sm);color:rgba(197,236,211,0.6);margin-top:2rem;font-style:italic;max-width:640px;margin-left:auto;margin-right:auto;">
+      "The barrier is not lack of food — it is lack of a reliable, real-time digital bridge." — GTU Societal Internship Report, 2024
+    </p>
+  </div>
+</section>
+
+<!-- ── FEATURES GRID ─────────────────────────────────────── -->
+<section class="section" id="features" style="background:var(--ink-50);">
+  <div class="container">
+    <div class="text-center mb-2">
+      <span class="section-eyebrow reveal-on-scroll">Platform Features</span>
+    </div>
+    <h2 class="section-title text-center reveal-on-scroll">Built for Real-World Food Rescue</h2>
+
+    <div class="features-grid mt-5">
+
+      <!-- Large: Food Rescue Engine -->
+      <div class="feature-card card-large reveal-on-scroll">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">Food Rescue Engine</div>
+        <div class="feature-desc">Automatic FSSAI food safety validation before any NGO is notified. Scores every donation 0–100 based on image, prep time, packaging & donor certification.</div>
+        <div class="safety-preview">
+          <div class="safety-score-value" style="font-family:var(--font-display);font-size:1.4rem;font-weight:800;color:var(--green-500);">91</div>
+          <div>
+            <div style="font-size:var(--text-xs);font-weight:700;font-family:var(--font-heading);color:var(--green-700);">🛡️ Excellent — Cleared for Dispatch</div>
+            <div style="font-size:.7rem;color:var(--ink-300);">Photo ✅ · Freshness ✅ · Packaged ✅ · FSSAI Verified ✅</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart NGO Matching -->
+      <div class="feature-card reveal-on-scroll">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">Smart NGO Matching</div>
+        <div class="feature-desc">AI-powered proximity matching with capacity check, urgency scoring, and reliability rating. Top 5 NGOs ranked and notified instantly.</div>
+        <div class="mini-progress-steps">
+          <span class="mini-step">📍 Distance</span>
+          <span class="mini-step-arrow">+</span>
+          <span class="mini-step">📊 Capacity</span>
+          <span class="mini-step-arrow">+</span>
+          <span class="mini-step">⚡ Urgency</span>
+          <span class="mini-step-arrow">=</span>
+          <span class="mini-step" style="background:var(--green-500);color:#fff;border-color:var(--green-500);">Best Match</span>
+        </div>
+      </div>
+
+      <!-- Live Tracking -->
+      <div class="feature-card reveal-on-scroll">
+        <div class="feature-icon">📍</div>
+        <div class="feature-title">Live GPS Tracking</div>
+        <div class="feature-desc">Volunteer location updates every 30 seconds. Restaurant & NGO see real-time ETA. Full 8-step status pipeline with QR code handoffs.</div>
+        <div class="food-tag-row mt-3">
+          <span class="food-tag">🟢 Posted</span>
+          <span class="food-tag">🛵 En Route</span>
+          <span class="food-tag">📦 Picked Up</span>
+          <span class="food-tag">❤️ Delivered</span>
+        </div>
+      </div>
+
+      <!-- Verified Network -->
+      <div class="feature-card reveal-on-scroll">
+        <div class="feature-icon">✅</div>
+        <div class="feature-title">Verified Network</div>
+        <div class="feature-desc">Every donor is FSSAI-verified. Every NGO is government-registered. Every volunteer has ID verification and completes food safety training.</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:1rem;">
+          <span class="verify-badge verify-fssai"><i class="bi bi-shield-check"></i> FSSAI Verified Donor</span>
+          <span class="verify-badge verify-ngo"><i class="bi bi-building"></i> NGO Registered</span>
+          <span class="verify-badge verify-id"><i class="bi bi-person-check"></i> Govt ID Verified</span>
+        </div>
+      </div>
+
+      <!-- Analytics -->
+      <div class="feature-card reveal-on-scroll">
+        <div class="feature-icon">📈</div>
+        <div class="feature-title">Impact Analytics</div>
+        <div class="feature-desc">Real-time dashboards for every stakeholder. Automated CSR impact certificates. SDG 2, 12, 13, 17 compliant reporting for corporate donors.</div>
+      </div>
+
+      <!-- Large: Emergency Mode -->
+      <div class="feature-card card-large card-emergency reveal-on-scroll">
+        <div class="feature-icon" style="background:var(--emergency);">🚨</div>
+        <div class="feature-title" style="color:var(--emergency);">Emergency Mode</div>
+        <div class="feature-desc">During floods, earthquakes, or disasters — admin activates emergency mode. All volunteers mobilized. Distance limits suspended. Priority recipients activated.</div>
+        <div class="emergency-feature-content mt-3">
+          <div class="emergency-example">
+            <div class="emergency-example-title">🌊 Flood Relief — Surat</div>
+            <div class="emergency-example-meta">12 restaurants · 8 NGOs · 45 volunteers mobilized · 2,400 meals in 4 hours</div>
+          </div>
+          <div class="emergency-example">
+            <div class="emergency-example-title">🏚️ Cyclone Relief — Kutch</div>
+            <div class="emergency-example-meta">6 restaurants · 5 NGOs · 28 volunteers · 1,100 meals distributed</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="features.html" class="btn btn-green btn-lg">Explore All Features</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── JOIN SECTION (Role Cards) ────────────────────────── -->
+<section class="section" id="join">
+  <div class="container">
+    <div class="text-center mb-2">
+      <span class="section-eyebrow reveal-on-scroll">Join the Movement</span>
+    </div>
+    <h2 class="section-title text-center reveal-on-scroll">Choose Your Role in Food Rescue</h2>
+
+    <div class="role-cards">
+      <!-- Donor -->
+      <div class="role-card reveal-on-scroll">
+        <div class="role-card-bar"></div>
+        <div class="role-card-body">
+          <div class="role-icon">🏪</div>
+          <div class="role-title">Food Donors</div>
+          <div class="role-desc">Restaurants, hotels, caterers, cloud kitchens, and bakeries with surplus cooked food.</div>
+          <div class="role-stat">
+            "850+ restaurants trust FoodRescue. Average 80–200 kg saved per partner daily." — GTU Field Research
+          </div>
+          <a href="signup.html?role=restaurant" class="btn btn-primary w-100" id="donorSignup">Register as Donor →</a>
+        </div>
+      </div>
+
+      <!-- NGO (Featured) -->
+      <div class="role-card featured reveal-on-scroll">
+        <div class="role-card-bar" style="background:var(--green-400);"></div>
+        <div class="role-card-body">
+          <span class="role-badge">Most Needed</span>
+          <div class="role-icon">🏢</div>
+          <div class="role-title">NGOs & Shelters</div>
+          <div class="role-desc">Orphanages, old age homes, shelters, and community kitchens feeding daily.</div>
+          <div class="role-stat">
+            "NGOs spend 2–3 hours/day calling donors. FoodRescue cuts that to zero." — Asha Foundation
+          </div>
+          <a href="signup.html?role=ngo" class="btn btn-outline-white w-100 mt-2" id="ngoSignup">Register NGO →</a>
+        </div>
+      </div>
+
+      <!-- Volunteer -->
+      <div class="role-card reveal-on-scroll">
+        <div class="role-card-bar saffron"></div>
+        <div class="role-card-body">
+          <div class="role-icon">🛵</div>
+          <div class="role-title">Volunteers</div>
+          <div class="role-desc">Delivery riders who make the last-mile food rescue mission possible, daily.</div>
+          <div class="role-stat">
+            Earn reward points, digital certificates, and community recognition for every delivery.
+          </div>
+          <a href="signup.html?role=volunteer" class="btn btn-outline-green w-100" id="volSignup">Become Volunteer →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ──────────────────────────────────────── -->
+<section class="testimonials-section section" id="testimonials">
+  <div class="container">
+    <div class="text-center mb-2">
+      <span class="section-eyebrow reveal-on-scroll">Field Voices</span>
+    </div>
+    <h2 class="section-title text-center reveal-on-scroll">From the Ground Up</h2>
+    <p class="section-subtitle text-center mx-auto reveal-on-scroll" style="margin-bottom:3rem;">
+      Real stories from 31 stakeholder interviews across Surat and Ahmedabad.
+    </p>
+
+    <div class="testimonials-wrapper reveal-on-scroll">
+      <div class="testimonials-track" id="testimonialTrack">
+
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            We were throwing away 80 kg of food every night after the buffet closed. We wanted to give it away but didn't know who to call at 11 PM and worried about liability. FoodRescue solved both in one app.
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">🏪</div>
+            <div>
+              <div class="testimonial-name">Ravi Patel</div>
+              <div class="testimonial-role">Hotel Manager, Ahmedabad | Patel's Hotel</div>
+              <div class="testimonial-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            We need food every day for 75 children. Before FoodRescue, we got donations once or twice a week if we were lucky — never knowing how much was coming. Now we have reliable daily supply.
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">🏢</div>
+            <div>
+              <div class="testimonial-name">Sr. Anita Joseph</div>
+              <div class="testimonial-role">NGO Coordinator | Asha Foundation</div>
+              <div class="testimonial-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            I deliver food before my regular job. There was no tracking before, no assigned route, no confirmation. Now I get GPS navigation, a QR scanner, and reward points for every trip. It feels real.
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">🛵</div>
+            <div>
+              <div class="testimonial-name">Ramesh Kumar</div>
+              <div class="testimonial-role">Volunteer Rider, Surat | FoodRescue Guardian</div>
+              <div class="testimonial-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="testimonial-nav">
+        <button class="testimonial-dot active" aria-label="Slide 1"></button>
+        <button class="testimonial-dot" aria-label="Slide 2"></button>
+        <button class="testimonial-dot" aria-label="Slide 3"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA BANNER ────────────────────────────────────────── -->
+<section style="background:linear-gradient(135deg,var(--green-900),var(--green-800));padding:5rem 0;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(61,166,104,0.2),transparent 70%);pointer-events:none;"></div>
+  <div class="container text-center" style="position:relative;z-index:1;">
+    <h2 style="font-family:var(--font-display);font-size:var(--text-display);font-weight:800;color:var(--white);margin-bottom:1rem;">
+      Start Rescuing Food Today
+    </h2>
+    <p style="color:var(--green-200);font-size:var(--text-lead);margin-bottom:2.5rem;max-width:560px;margin-left:auto;margin-right:auto;">
+      Join 850+ donors, 280 NGOs, and 1,100 volunteers across India building a food-secure future.
+    </p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="signup.html" class="hero-cta-primary">Get Started Free →</a>
+      <a href="contact.html" class="hero-cta-secondary">Talk to Our Team</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────── -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-logo">
+          <span style="font-size:1.3rem;">🍃</span>
+          FoodRescue
+        </div>
+        <p class="footer-tagline">Rescuing Surplus Food, Feeding Lives. India's first real-time food rescue platform.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+        <div class="sdg-badges">
+          <span class="sdg-badge sdg-2">SDG 2</span>
+          <span class="sdg-badge sdg-12">SDG 12</span>
+          <span class="sdg-badge sdg-13">SDG 13</span>
+          <span class="sdg-badge sdg-17">SDG 17</span>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-6 col-6">
+        <div class="footer-heading">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="impact.html">Impact</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2 col-md-6 col-6">
+        <div class="footer-heading">Join Us</div>
+        <ul class="footer-links">
+          <li><a href="signup.html?role=restaurant">Register as Donor</a></li>
+          <li><a href="signup.html?role=ngo">Join as NGO</a></li>
+          <li><a href="signup.html?role=volunteer">Become Volunteer</a></li>
+          <li><a href="login.html?admin=1">Admin Login</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item">
+          <i class="bi bi-geo-alt"></i>
+          <span>FoodRescue Foundation, Surat, Gujarat — 395007</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="bi bi-telephone"></i>
+          <span>+91 98765 43210</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="bi bi-envelope"></i>
+          <span>hello@foodrescue.in</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-text">© 2025 FoodRescue Foundation. Made with 💚 in India.</div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initScrollReveal, initNavbar, setActiveNavLink, initTestimonialCarousel } from './assets/js/ui.js';
+  import { initCounterObserver } from './assets/js/analytics.js';
+  import { listenEmergencies } from './assets/js/firestore.js';
+  import { showToast } from './assets/js/notifications.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initNavbar();
+    setActiveNavLink();
+    initScrollReveal();
+    initCounterObserver();
+    initTestimonialCarousel();
+
+    // Emergency banner listener
+    try {
+      listenEmergencies((emergency) => {
+        const banner = document.getElementById('emergencyBanner');
+        const text   = document.getElementById('emergencyText');
+        const link   = document.getElementById('emergencyLink');
+        if (emergency && banner) {
+          text.textContent = `${emergency.title} — ${emergency.location || 'Active'}`;
+          banner.classList.add('active');
+        } else if (banner) {
+          banner.classList.remove('active');
+        }
+      });
+    } catch(e) {
+      // Firebase not configured yet — OK in demo mode
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Scanner — FoodRescue Volunteer</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="dash-body" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;">
+<div id="toast-container"></div>
+
+<div style="max-width:480px;width:100%;margin:0 auto;">
+  <a href="index.html" style="display:flex;align-items:center;gap:8px;color:var(--green-300);text-decoration:none;font-family:var(--font-heading);font-weight:600;font-size:var(--text-sm);margin-bottom:2rem;">
+    <i class="bi bi-arrow-left"></i> Back to Dashboard
+  </a>
+
+  <div class="dash-chart-card text-center mb-4">
+    <div style="font-size:3rem;margin-bottom:1rem;">📷</div>
+    <h2 style="font-family:var(--font-heading);font-weight:700;color:var(--white);margin-bottom:0.5rem;">QR Code Scanner</h2>
+    <p style="font-size:var(--text-sm);color:var(--dash-muted);margin-bottom:1.5rem;">
+      Scan the QR code at pickup or delivery point to confirm the handoff.
+    </p>
+
+    <!-- Scan Type Toggle -->
+    <div style="display:flex;gap:0;background:rgba(255,255,255,0.06);border-radius:var(--radius-md);overflow:hidden;border:1.5px solid rgba(255,255,255,0.1);margin-bottom:1.5rem;">
+      <button id="btnPickup" onclick="setScanType('pickup')" style="flex:1;padding:10px;font-family:var(--font-heading);font-size:var(--text-sm);font-weight:600;border:none;cursor:pointer;background:var(--green-500);color:white;">
+        📦 Pickup QR
+      </button>
+      <button id="btnDelivery" onclick="setScanType('delivery')" style="flex:1;padding:10px;font-family:var(--font-heading);font-size:var(--text-sm);font-weight:600;border:none;cursor:pointer;background:transparent;color:var(--dash-muted);">
+        ❤️ Delivery QR
+      </button>
+    </div>
+
+    <!-- Camera View -->
+    <div id="cameraView" style="position:relative;border-radius:var(--radius-xl);overflow:hidden;background:rgba(0,0,0,0.4);margin-bottom:1rem;display:none;">
+      <video id="qrVideo" autoplay playsinline style="width:100%;border-radius:var(--radius-xl);display:block;"></video>
+      <!-- Scan overlay -->
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+        <div style="width:200px;height:200px;border:3px solid var(--green-400);border-radius:16px;box-shadow:0 0 0 5000px rgba(0,0,0,0.4);">
+          <div style="position:absolute;top:-2px;left:-2px;width:30px;height:30px;border-top:4px solid var(--green-400);border-left:4px solid var(--green-400);border-radius:8px 0 0 0;"></div>
+          <div style="position:absolute;top:-2px;right:-2px;width:30px;height:30px;border-top:4px solid var(--green-400);border-right:4px solid var(--green-400);border-radius:0 8px 0 0;"></div>
+          <div style="position:absolute;bottom:-2px;left:-2px;width:30px;height:30px;border-bottom:4px solid var(--green-400);border-left:4px solid var(--green-400);border-radius:0 0 0 8px;"></div>
+          <div style="position:absolute;bottom:-2px;right:-2px;width:30px;height:30px;border-bottom:4px solid var(--green-400);border-right:4px solid var(--green-400);border-radius:0 0 8px 0;"></div>
+          <!-- Scanning line -->
+          <div class="scanner-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Start / Stop Camera -->
+    <button id="startScanBtn" onclick="startScan()" class="btn btn-green w-100 mb-2">
+      <i class="bi bi-camera-video"></i> Start Camera Scan
+    </button>
+    <button id="stopScanBtn" onclick="stopScan()" class="btn btn-outline-green w-100 mb-3" style="display:none;">
+      <i class="bi bi-stop-circle"></i> Stop Scanner
+    </button>
+
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+      <span style="font-size:var(--text-xs);color:var(--dash-muted);font-family:var(--font-heading);">OR</span>
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+    </div>
+
+    <!-- Manual Code Entry -->
+    <div style="display:flex;gap:8px;">
+      <input type="text" id="manualCode" class="form-input" placeholder="Enter 6-character code" maxlength="8" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:var(--white);flex:1;" onkeydown="if(event.key==='Enter')verifyManual()">
+      <button onclick="verifyManual()" class="btn btn-green">Verify</button>
+    </div>
+
+    <!-- 'BarcodeDetector not supported' fallback -->
+    <div id="fallbackMsg" style="display:none;margin-top:1rem;padding:10px;background:rgba(245,146,30,0.12);border:1px solid rgba(245,146,30,0.3);border-radius:var(--radius-md);font-size:var(--text-xs);color:var(--saffron-400);">
+      ⚠️ Your browser doesn't support built-in QR scanning. Please use the manual code entry above or try Chrome/Edge.
+    </div>
+  </div>
+
+  <!-- Success Card (shown on scan) -->
+  <div class="dash-chart-card" id="successCard" style="display:none;text-align:center;border:2px solid var(--green-400);">
+    <div style="font-size:3rem;margin-bottom:1rem;" id="successEmoji">✅</div>
+    <h3 style="font-family:var(--font-heading);font-weight:700;color:var(--white);margin-bottom:0.5rem;" id="successTitle">Pickup Confirmed!</h3>
+    <p style="font-size:var(--text-sm);color:var(--dash-muted);margin-bottom:1.5rem;" id="successBody">
+      Handoff verified. Navigate to the NGO for delivery.
+    </p>
+    <div id="successDetails" style="background:rgba(61,166,104,0.12);border-radius:var(--radius-md);padding:1rem;margin-bottom:1.5rem;text-align:left;font-size:var(--text-xs);color:var(--green-300);"></div>
+    <button onclick="resetScanner()" class="btn btn-green w-100">Scan Another QR</button>
+  </div>
+
+</div>
+
+<style>
+  .scanner-line {
+    position: absolute; top: 50%; left: 4px; right: 4px;
+    height: 2px; background: var(--green-400); border-radius: 1px;
+    animation: scanMove 2s ease-in-out infinite;
+  }
+  @keyframes scanMove {
+    0% { top: 10%; } 50% { top: 90%; } 100% { top: 10%; }
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { startQRScanner, stopQRScanner, advanceDonationStatus } from '../../assets/js/tracking.js';
+  import { addVolunteerRewardPoints } from '../../assets/js/firestore.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  let scanType = 'pickup';
+  const urlType = new URLSearchParams(window.location.search).get('type');
+  if (urlType === 'delivery') { setScanType('delivery'); }
+
+  window.setScanType = function(type) {
+    scanType = type;
+    document.getElementById('btnPickup').style.background   = type === 'pickup'   ? 'var(--green-500)' : 'transparent';
+    document.getElementById('btnPickup').style.color        = type === 'pickup'   ? 'white' : 'var(--dash-muted)';
+    document.getElementById('btnDelivery').style.background = type === 'delivery' ? 'var(--saffron-400)' : 'transparent';
+    document.getElementById('btnDelivery').style.color      = type === 'delivery' ? 'white' : 'var(--dash-muted)';
+  };
+
+  window.startScan = function() {
+    document.getElementById('cameraView').style.display = 'block';
+    document.getElementById('startScanBtn').style.display = 'none';
+    document.getElementById('stopScanBtn').style.display  = 'block';
+    if (!('BarcodeDetector' in window)) {
+      document.getElementById('fallbackMsg').style.display = 'block';
+      return;
+    }
+    startQRScanner('qrVideo', onQRScanned);
+  };
+
+  window.stopScan = function() {
+    stopQRScanner();
+    document.getElementById('cameraView').style.display  = 'none';
+    document.getElementById('startScanBtn').style.display = 'block';
+    document.getElementById('stopScanBtn').style.display  = 'none';
+  };
+
+  async function onQRScanned(data) {
+    stopQRScanner();
+    document.getElementById('cameraView').style.display  = 'none';
+    document.getElementById('startScanBtn').style.display = 'block';
+    document.getElementById('stopScanBtn').style.display  = 'none';
+    await processQR(data);
+  }
+
+  window.verifyManual = async function() {
+    const code = document.getElementById('manualCode').value.trim();
+    if (!code) { showToast('Enter Code', 'Please enter the verification code.', 'warn'); return; }
+    // Simulate a manual QR payload
+    await processQR({ type: scanType, donationId: 'demo_' + code, ts: Date.now() });
+  };
+
+  async function processQR(data) {
+    try {
+      const payload = typeof data === 'string' ? JSON.parse(data) : data;
+      const isPickup   = payload.type === 'pickup';
+      const isDelivery = payload.type === 'delivery';
+      const donationId = payload.donationId;
+
+      if (isPickup) {
+        // await advanceDonationStatus(donationId, 'pickup_en_route', 'vol_id', 'volunteer');
+        showSuccess('✅', 'Pickup Confirmed!', 'Food picked up. Navigate to NGO for delivery.', {
+          'Donation ID': donationId,
+          'Points Earned': '+50 pts',
+          'Status': 'Delivering'
+        });
+        // await addVolunteerRewardPoints('vol_id', 50);
+      } else if (isDelivery) {
+        showSuccess('❤️', 'Delivery Confirmed!', 'Food delivered successfully. Impact certificate will be sent.', {
+          'Donation ID': donationId,
+          'Points Earned': '+100 pts',
+          'Status': 'Completed'
+        });
+        // await addVolunteerRewardPoints('vol_id', 100);
+      } else {
+        showToast('Unknown QR', 'This QR code is not recognized.', 'error');
+      }
+    } catch(e) {
+      showToast('Invalid QR', 'Could not read QR code. Try manual entry.', 'error');
+    }
+  }
+
+  function showSuccess(emoji, title, body, details) {
+    document.getElementById('successEmoji').textContent = emoji;
+    document.getElementById('successTitle').textContent = title;
+    document.getElementById('successBody').textContent  = body;
+    document.getElementById('successDetails').innerHTML = Object.entries(details).map(([k,v]) =>
+      `<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--dash-muted);">${k}:</span><strong style="color:var(--green-300);">${v}</strong></div>`
+    ).join('');
+    document.getElementById('successCard').style.display = 'block';
+    document.querySelector('.dash-chart-card:not(#successCard)').style.display = 'none';
+  }
+
+  window.resetScanner = function() {
+    document.getElementById('successCard').style.display = 'none';
+    document.querySelector('.dash-chart-card:not(#successCard)').style.display = 'block';
+    document.getElementById('manualCode').value = '';
+  };
+</script>
+</body>
+</html>

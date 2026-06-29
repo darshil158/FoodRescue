@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequently Asked Questions — FoodRescue</title>
+  <meta name="description" content="Common questions about FoodRescue — food safety, FSSAI compliance, volunteer process, NGO eligibility, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body>
+<div id="toast-container"></div>
+<nav class="fr-nav" id="mainNav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="nav-links">
+      <a href="how-it-works.html" class="nav-link">How It Works</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="impact.html" class="nav-link">Impact</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="faq.html" class="nav-link active">FAQ</a>
+    </div>
+    <div class="nav-actions"><a href="login.html" class="nav-login">Login</a><a href="signup.html" class="nav-cta">Donate Food →</a></div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mob-close" id="mobClose">&times;</button>
+  <a href="how-it-works.html" class="mob-link">How It Works</a><a href="about.html" class="mob-link">About</a><a href="impact.html" class="mob-link">Impact</a><a href="features.html" class="mob-link">Features</a><a href="faq.html" class="mob-link">FAQ</a><a href="login.html" class="mob-link">Login</a><a href="signup.html" class="btn btn-primary mt-3">Donate Food →</a>
+</div>
+
+<section style="background:linear-gradient(135deg,var(--green-900),var(--green-800));padding:6rem 0 4rem;text-align:center;">
+  <div class="container">
+    <h1 style="font-family:var(--font-display);font-size:var(--text-display);font-weight:800;color:var(--white);margin:0.5rem 0 1rem;">Frequently Asked Questions</h1>
+    <p style="font-size:var(--text-lead);color:var(--green-200);max-width:500px;margin:0 auto;">Everything you need to know about FoodRescue — food safety, eligibility, process, and privacy.</p>
+  </div>
+</section>
+
+<section class="section" style="background:var(--white);">
+  <div class="container" style="max-width:800px;">
+
+    <div class="faq-category reveal-on-scroll">
+      <div class="faq-category-title">🍽️ For Food Donors</div>
+      <div class="accordion" id="faqDonors">
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false">
+            What types of food can I donate? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq1" data-bs-parent="#faqDonors">
+            <div class="faq-answer">
+              You can donate any fresh, cooked food that meets FSSAI guidelines: freshly cooked meals (within 4 hours), properly refrigerated food (within 24 hours), fresh bakery items (same-day), and packaged foods with valid expiry dates. You <strong>cannot</strong> donate: food that was left out &gt;4 hours at room temperature, spoiled or expired food, alcohol, or items with known allergens not disclosed.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false">
+            Do I need an FSSAI license to donate? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq2" data-bs-parent="#faqDonors">
+            <div class="faq-answer">
+              Yes. All food donors on FoodRescue must hold a valid FSSAI license. This is to protect both recipients and donors legally. We verify your 14-digit FSSAI number during registration. If your license is under renewal, contact our team to arrange interim verification.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false">
+            Am I liable if someone gets sick from my donation? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq3" data-bs-parent="#faqDonors">
+            <div class="faq-answer">
+              FoodRescue operates under the Food Safety and Standards (Food Donation) Regulations, 2019, which provide Good Samaritan protections to verified donors who act in good faith. Each donation is timestamped, photo-verified, and safety-scored. Our platform creates a full audit trail that protects you legally. Always ensure food meets our safety standards before posting.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false">
+            What if no NGO accepts my donation? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq4" data-bs-parent="#faqDonors">
+            <div class="faq-answer">
+              If no NGO within the initial 5 km radius accepts within the urgency window, our system automatically expands to 10 km, then 15 km. If still unaccepted, you'll receive a notification and the donation will be marked as expired. Our team is working on expanding NGO partnerships to reduce this rate to &lt;5% of all donations.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false">
+            How do I get my CSR certificate? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq5" data-bs-parent="#faqDonors">
+            <div class="faq-answer">
+              After each completed donation, an automated PDF certificate is generated and emailed to your registered address. Annual CSR certificates (aggregating all 12-month donations) are generated in January and include SDG 2, 12, 13, 17 compliance reporting. Download anytime from Impact → Dashboard.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-category reveal-on-scroll">
+      <div class="faq-category-title">🏢 For NGOs</div>
+      <div class="accordion" id="faqNGOs">
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false">
+            What documents does our NGO need? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq6" data-bs-parent="#faqNGOs">
+            <div class="faq-answer">
+              Required: NGO registration certificate (Societies Act or Trust Act), PAN number, address proof, contact details of coordinator. Optional but recommended: 12A/80G certificate, FCRA registration (for international donors), capacity details (meals/day). Verification takes 2–5 business days.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq7" aria-expanded="false">
+            What happens if we reject too many donations? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq7" data-bs-parent="#faqNGOs">
+            <div class="faq-answer">
+              NGO reliability scores are tracked. Consistent rejection without reasons (e.g., capacity full) lowers your reliability score, which affects your position in the matching algorithm. We understand that NGOs have real capacity constraints — please update your daily capacity in the dashboard so the system matches you appropriately.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-category reveal-on-scroll">
+      <div class="faq-category-title">🛵 For Volunteers</div>
+      <div class="accordion" id="faqVols">
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq8" aria-expanded="false">
+            What training do I need to complete? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq8" data-bs-parent="#faqVols">
+            <div class="faq-answer">
+              All volunteers must complete a 1-hour food safety module covering: temperature danger zones, proper handling, signs of spoilage, QR handoff process, and emergency protocol. A quiz with minimum 70% score is required before your first delivery. The module is available in English, Hindi, and Gujarati.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq9" aria-expanded="false">
+            How do reward points work? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq9" data-bs-parent="#faqVols">
+            <div class="faq-answer">
+              Every successful delivery earns 50–100 points depending on distance and urgency. Bonus points for emergency deliveries (+50), perfect-rating deliveries (+25), and milestones. Tiers: 🌱 Seedling (0–499), 🪴 Sapling (500–1999), 🛡️ Guardian (2000+). Points can be redeemed for platform badges, community recognition, and partner discounts.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-category reveal-on-scroll">
+      <div class="faq-category-title">🔒 Privacy & Safety</div>
+      <div class="accordion" id="faqPrivacy">
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq10" aria-expanded="false">
+            Is my personal data safe? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq10" data-bs-parent="#faqPrivacy">
+            <div class="faq-answer">
+              All data is stored on Firebase with end-to-end security rules. Phone numbers and addresses are only shared with matched parties during an active donation. GPS location is only tracked during active deliveries and is deleted after completion. We comply with India's Personal Data Protection framework. See our full Privacy Policy for details.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq11" aria-expanded="false">
+            How is my government ID protected? <i class="bi bi-chevron-down faq-chevron"></i>
+          </button>
+          <div class="collapse" id="faq11" data-bs-parent="#faqPrivacy">
+            <div class="faq-answer">
+              Government ID photos are stored in encrypted Firebase Storage with strict access controls — only admin verification staff can view them. After verification, the raw images are archived and deleted from active storage within 90 days. We never share ID documents with donors, NGOs, or other volunteers.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5 reveal-on-scroll">
+      <div style="font-size:var(--text-md);color:var(--ink-500);margin-bottom:1.5rem;">Still have questions?</div>
+      <a href="contact.html" class="btn btn-green btn-lg">Contact Our Team →</a>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;">
+      <div class="footer-bottom-text">© 2025 FoodRescue Foundation. Made with 💚 in India.</div>
+      <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .faq-category { margin-bottom: 2.5rem; }
+  .faq-category-title { font-family: var(--font-heading); font-weight: 700; font-size: 1rem; color: var(--green-700); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1rem; }
+  .faq-item { border-bottom: 1px solid var(--ink-100); }
+  .faq-question { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; padding: 1rem 0; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-sm); color: var(--ink-900); cursor: pointer; text-align: left; gap: 1rem; }
+  .faq-question:hover { color: var(--green-600); }
+  .faq-chevron { font-size: 0.9rem; flex-shrink: 0; transition: transform var(--transition-base); }
+  .faq-question:not(.collapsed) .faq-chevron { transform: rotate(180deg); }
+  .faq-answer { font-size: var(--text-sm); color: var(--ink-500); line-height: 1.75; padding: 0 0 1.25rem; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initScrollReveal, initNavbar, setActiveNavLink } from './assets/js/ui.js';
+  initNavbar(); setActiveNavLink(); initScrollReveal();
+</script>
+</body>
+</html>

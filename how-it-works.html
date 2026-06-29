@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works — FoodRescue</title>
+  <meta name="description" content="Learn about FoodRescue's 8-step food rescue workflow — from surplus food posting to FSSAI safety checks, volunteer GPS tracking, and delivery confirmation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body>
+<div id="toast-container"></div>
+<nav class="fr-nav" id="mainNav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="nav-links">
+      <a href="how-it-works.html" class="nav-link active">How It Works</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="impact.html" class="nav-link">Impact</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="faq.html" class="nav-link">FAQ</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-login">Login</a>
+      <a href="signup.html" class="nav-cta">Donate Food →</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mob-close" id="mobClose">&times;</button>
+  <a href="index.html" class="mob-link">Home</a>
+  <a href="about.html" class="mob-link">About</a>
+  <a href="impact.html" class="mob-link">Impact</a>
+  <a href="features.html" class="mob-link">Features</a>
+  <a href="faq.html" class="mob-link">FAQ</a>
+  <a href="signup.html" class="btn btn-primary mt-3">Donate Food →</a>
+</div>
+
+<!-- Page Header -->
+<section style="background:linear-gradient(135deg,var(--green-900),var(--green-800));padding:6rem 0 4rem;text-align:center;">
+  <div class="container">
+    <span class="section-eyebrow" style="color:var(--green-300);">The Process</span>
+    <h1 style="font-family:var(--font-display);font-size:var(--text-display);font-weight:800;color:var(--white);margin:0.5rem 0 1rem;">
+      How FoodRescue Works
+    </h1>
+    <p style="font-size:var(--text-lead);color:var(--green-200);max-width:600px;margin:0 auto 2rem;">
+      A research-validated 8-step workflow derived from 31 stakeholder interviews, 10 field days, and direct experience with real food rescue operations in Surat and Ahmedabad.
+    </p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="signup.html" class="hero-cta-primary">Start Donating →</a>
+      <a href="signup.html?role=ngo" class="hero-cta-secondary">Join as NGO</a>
+    </div>
+  </div>
+</section>
+
+<!-- 8-Step Process -->
+<section class="section" style="background:var(--white);">
+  <div class="container">
+
+    <!-- Role tabs -->
+    <div style="display:flex;gap:0;justify-content:center;margin-bottom:3rem;border-radius:var(--radius-md);overflow:hidden;border:1.5px solid var(--ink-100);max-width:500px;margin-left:auto;margin-right:auto;">
+      <button class="role-tab-btn active" id="tabAll" onclick="showRole('all')">📋 All Steps</button>
+      <button class="role-tab-btn" id="tabRest" onclick="showRole('restaurant')">🏪 Donor View</button>
+      <button class="role-tab-btn" id="tabNGO" onclick="showRole('ngo')">🏢 NGO View</button>
+      <button class="role-tab-btn" id="tabVol" onclick="showRole('volunteer')">🛵 Volunteer</button>
+    </div>
+
+    <div class="hiw-steps-vertical">
+
+      <!-- Step 1 -->
+      <div class="hiw-step-v reveal-on-scroll" data-role="restaurant">
+        <div class="hiw-step-v-number">01</div>
+        <div class="hiw-step-v-connector"></div>
+        <div class="hiw-step-v-content">
+          <div class="hiw-step-v-icon">🍽️</div>
+          <div>
+            <div class="hiw-step-v-title">Restaurant Posts Surplus Food</div>
+            <div class="hiw-step-v-desc">
+              Staff opens FoodRescue app, uploads a photo of the surplus food, enters quantity, category, preparation time, and pickup address. Takes &lt;3 minutes on any smartphone.
+            </div>
+            <div class="hiw-step-v-detail">
+              <strong>Field Data:</strong> "We have food left after every lunch and dinner service. We need something we can use in 2 minutes — not 20." — Restaurant owner, Surat
+            </div>
+            <div class="hiw-step-v-tags">
+              <span class="hiw-tag">📷 Photo Upload</span>
+              <span class="hiw-tag">⚖️ Quantity & Category</span>
+              <span class="hiw-tag">📍 GPS Address</span>
+              <span class="hiw-tag">⏰ Prep Time</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="hiw-step-v reveal-on-scroll" data-role="restaurant">
+        <div class="hiw-step-v-number">02</div>
+        <div class="hiw-step-v-connector"></div>
+        <div class="hiw-step-v-content">
+          <div class="hiw-step-v-icon">🛡️</div>
+          <div>
+            <div class="hiw-step-v-title">FSSAI Food Safety Validation</div>
+            <div class="hiw-step-v-desc">
+              Automatic scoring (0–100) based on preparation time, packaging status, image quality, donor FSSAI certification, and meal category. Food that fails basic safety standards (&lt;30/100) is rejected automatically.
+            </div>
+            <div class="hiw-step-v-detail">
+              <strong>FSSAI Standards Applied:</strong> Hot cooked food: 4h max • Refrigerated: 24h max • Fresh produce: same day
+            </div>
+            <div class="hiw-step-v-tags">
+              <span class="hiw-tag">🛡️ Safety Score</span>
+              <span class="hiw-tag">⏱️ Freshness Check</span>
+              <span class="hiw-tag">📦 Packaging Verify</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="hiw-step-v reveal-on-scroll" data-role="ngo">
+        <div class="hiw-step-v-number">03</div>
+        <div class="hiw-step-v-connector"></div>
+        <div class="hiw-step-v-content">
+          <div class="hiw-step-v-icon">🔔</div>
+          <div>
+            <div class="hiw-step-v-title">NGOs Receive Instant Notification</div>
+            <div class="hiw-step-v-desc">
+              Top 5 NGOs are ranked by a smart scoring algorithm: proximity (30%), available capacity (30%), urgency (20%), and reliability rating (20%). All 5 receive push notification within 30 seconds.
+            </div>
+            <div class="hiw-step-v-detail">
+              <strong>Match Score Formula:</strong> 0.3×(1/Distance) + 0.3×NeedLevel + 0.2×Capacity + 0.2×(1/TimeToExpiry)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="hiw-step-v reveal-on-scroll" data-role="ngo">
+        <div class="hiw-step-v-number">04</div>
+        <div class="hiw-step-v-connector"></div>
+        <div class="hiw-step-v-content">
+          <div class="hiw-step-v-icon">✅</div>
+          <div>
+            <div class="hiw-step-v-title">NGO Accepts & Sets Pickup Window</div>
+            <div class="hiw-step-v-desc">
+              An NGO coordinator reviews the food details and safety score, then confirms a pickup time window. If no NGO responds within the urgency window, the platform widens the radius.
+            </div>
+            <div class="hiw-step-v-detail">
+              <strong>Field Finding:</strong> "We spend 2–3 hours every day calling donors or WhatsApp groups. FoodRescue makes it zero." — Asha Foundation, Ahmedabad
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="hiw-step-v reveal-on-scroll" data-role="volunteer">
+        <div class="hiw-step-v-number">05</div>
+        <div class="hiw-step-v-connector"></div>
+        <div class="hiw-step-v-content">
+          <div class="hiw-step-v-icon">👤</div>
+          <div>
+            <div class="hiw-step-v-title">Volunteer Assigned</div>
+            <div class="hiw-step-v-desc">
+              The nearest available, verified volunteer is assigned within 2 minutes. If they reject, it moves to the next volunteer. Three consecutive rejections = temporary suspension.
+            </div>
+            <div class="hiw-step-v-tags">
+              <span class="hiw-tag">📍 GPS Proximity</span>
+              <span class="hiw-tag">✅ ID Verified</span>
+              <span class="hiw-tag">⭐ Rating Filtered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="hiw-step-v reveal-on-scroll" data-role="volunteer">
+        <div class="hiw-step-v-number">06</div>
+        <div class="hiw-step-v-connector"></div>
+        <div class="hiw-step-v-content">
+          <div class="hiw-step-v-icon">🛵</div>
+          <div>
+            <div class="hiw-step-v-title">Volunteer Picks Up — QR Scanned</div>
+            <div class="hiw-step-v-desc">
+              Volunteer arrives at restaurant. Food safety re-check is done on the spot. Volunteer scans the restaurant's Pickup QR code. This triggers automatic GPS tracking (location updates every 30 seconds).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="hiw-step-v reveal-on-scroll" data-role="volunteer">
+        <div class="hiw-step-v-number">07</div>
+        <div class="hiw-step-v-connector"></div>
+        <div class="hiw-step-v-content">
+          <div class="hiw-step-v-icon">🚗</div>
+          <div>
+            <div class="hiw-step-v-title">GPS-Tracked Delivery</div>
+            <div class="hiw-step-v-desc">
+              Restaurant and NGO can both see volunteer's live location, real-time ETA via Google Maps, and status updates throughout delivery. Dedicated chat thread for any coordination.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="hiw-step-v reveal-on-scroll" data-role="ngo">
+        <div class="hiw-step-v-number">08</div>
+        <div class="hiw-step-v-connector last"></div>
+        <div class="hiw-step-v-content">
+          <div class="hiw-step-v-icon">❤️</div>
+          <div>
+            <div class="hiw-step-v-title">Delivery Confirmed — Impact Generated</div>
+            <div class="hiw-step-v-desc">
+              NGO coordinator scans Delivery QR. This closes the donation loop: restaurant gets CSR impact certificate, volunteer gets reward points, NGO gets receipt for records. Full audit trail stored on Firestore.
+            </div>
+            <div class="hiw-step-v-tags">
+              <span class="hiw-tag">📜 CSR Certificate</span>
+              <span class="hiw-tag">🏆 Reward Points</span>
+              <span class="hiw-tag">📊 Impact Report</span>
+              <span class="hiw-tag">🌿 SDG Compliance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4">
+        <div class="footer-logo"><span>🍃</span> FoodRescue</div>
+        <p class="footer-tagline">Rescuing Surplus Food, Feeding Lives.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-twitter-x"></i></a>
+          <a href="#"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6"><div class="footer-heading">Quick Links</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="impact.html">Impact</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
+      <div class="col-lg-2 col-6"><div class="footer-heading">Join Us</div><ul class="footer-links"><li><a href="signup.html?role=restaurant">Donor</a></li><li><a href="signup.html?role=ngo">NGO</a></li><li><a href="signup.html?role=volunteer">Volunteer</a></li></ul></div>
+      <div class="col-lg-4"><div class="footer-heading">Contact</div><div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>Surat, Gujarat 395007</span></div><div class="footer-contact-item"><i class="bi bi-envelope"></i><span>hello@foodrescue.in</span></div></div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-text">© 2025 FoodRescue Foundation. Made with 💚 in India.</div>
+      <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .hiw-steps-vertical { display:flex; flex-direction:column; gap:0; }
+  .hiw-step-v { display:flex; gap:1.5rem; align-items:flex-start; padding-bottom:3rem; position:relative; }
+  .hiw-step-v-number { font-family:var(--font-display); font-size:2.5rem; font-weight:800; color:var(--green-100); min-width:60px; text-align:right; flex-shrink:0; padding-top:0.25rem; }
+  .hiw-step-v-connector { position:absolute; left:78px; top:44px; bottom:0; width:3px; background:linear-gradient(to bottom,var(--green-300),var(--green-100)); }
+  .hiw-step-v-connector.last { background:linear-gradient(to bottom,var(--green-300),transparent); }
+  .hiw-step-v-content { display:flex; gap:1.5rem; flex:1; padding-left:1rem; }
+  .hiw-step-v-icon { width:52px; height:52px; border-radius:14px; background:var(--green-50); border:2px solid var(--green-200); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; margin-top:4px; }
+  .hiw-step-v-title { font-family:var(--font-heading); font-weight:700; font-size:1.1rem; color:var(--ink-900); margin-bottom:0.5rem; }
+  .hiw-step-v-desc { font-size:var(--text-sm); color:var(--ink-500); line-height:1.7; margin-bottom:0.75rem; }
+  .hiw-step-v-detail { font-size:var(--text-xs); color:var(--green-700); background:var(--green-50); border:1px solid var(--green-200); border-radius:var(--radius-md); padding:10px 14px; margin-bottom:0.75rem; }
+  .hiw-step-v-tags { display:flex; gap:6px; flex-wrap:wrap; }
+  .hiw-tag { font-size:.7rem; font-weight:700; font-family:var(--font-heading); padding:4px 12px; border-radius:var(--radius-full); background:var(--green-50); border:1px solid var(--green-200); color:var(--green-700); }
+  .role-tab-btn { padding:10px 16px; border:none; background:none; font-family:var(--font-heading); font-weight:600; font-size:var(--text-sm); cursor:pointer; color:var(--ink-500); transition:all var(--transition-base); }
+  .role-tab-btn.active { background:var(--green-500); color:var(--white); }
+  @media (max-width:768px) { .hiw-step-v-number { font-size:1.5rem; min-width:40px; } .hiw-step-v-connector { left:52px; } }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initScrollReveal, initNavbar, setActiveNavLink } from './assets/js/ui.js';
+  initNavbar(); setActiveNavLink(); initScrollReveal();
+
+  window.showRole = function(role) {
+    document.querySelectorAll('.role-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(role === 'all' ? 'tabAll' : role === 'restaurant' ? 'tabRest' : role === 'ngo' ? 'tabNGO' : 'tabVol').classList.add('active');
+    document.querySelectorAll('.hiw-step-v').forEach(step => {
+      step.style.display = (role === 'all' || step.dataset.role === role) ? 'flex' : 'none';
+    });
+  };
+</script>
+</body>
+</html>

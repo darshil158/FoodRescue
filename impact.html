@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impact — FoodRescue</title>
+  <meta name="description" content="See the real-world impact of FoodRescue: meals saved, food rescued, CO₂ prevented, and communities fed across India.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div id="toast-container"></div>
+<nav class="fr-nav" id="mainNav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="nav-links">
+      <a href="how-it-works.html" class="nav-link">How It Works</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="impact.html" class="nav-link active">Impact</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="faq.html" class="nav-link">FAQ</a>
+    </div>
+    <div class="nav-actions"><a href="login.html" class="nav-login">Login</a><a href="signup.html" class="nav-cta">Donate Food →</a></div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mob-close" id="mobClose">&times;</button>
+  <a href="how-it-works.html" class="mob-link">How It Works</a><a href="about.html" class="mob-link">About</a><a href="impact.html" class="mob-link">Impact</a><a href="features.html" class="mob-link">Features</a><a href="faq.html" class="mob-link">FAQ</a><a href="login.html" class="mob-link">Login</a><a href="signup.html" class="btn btn-primary mt-3">Donate Food →</a>
+</div>
+
+<section style="background:linear-gradient(135deg,var(--green-900),var(--green-800));padding:6rem 0 4rem;text-align:center;">
+  <div class="container">
+    <span class="section-eyebrow" style="color:var(--green-300);">Our Impact</span>
+    <h1 style="font-family:var(--font-display);font-size:var(--text-display);font-weight:800;color:var(--white);margin:0.5rem 0 1rem;">Every Number Tells a Story</h1>
+    <p style="font-size:var(--text-lead);color:var(--green-200);max-width:560px;margin:0 auto;">
+      Real-time platform metrics, grounded in verified field data from Surat, Ahmedabad, and across Gujarat.
+    </p>
+  </div>
+</section>
+
+<!-- Live Impact Counter Grid -->
+<section class="impact-section section" style="padding-top:4rem;">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="impact-grid">
+      <div class="impact-item"><div class="impact-number" data-counter data-target="320000">0</div><div class="impact-label">Total Meals Saved</div></div>
+      <div class="impact-item"><div class="impact-number" data-counter data-target="4200" data-suffix=" kg">0</div><div class="impact-label">Food Rescued This Month</div></div>
+      <div class="impact-item"><div class="impact-number" data-counter data-target="850">0</div><div class="impact-label">Verified Donors</div></div>
+      <div class="impact-item"><div class="impact-number" data-counter data-target="280">0</div><div class="impact-label">Partner NGOs</div></div>
+      <div class="impact-item"><div class="impact-number" data-counter data-target="1100">0</div><div class="impact-label">Active Volunteers</div></div>
+      <div class="impact-item"><div class="impact-number" data-counter data-prefix="₹" data-target="4800000">0</div><div class="impact-label">Worth of Food Saved</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Charts -->
+<section class="section" style="background:var(--ink-50);">
+  <div class="container">
+    <div class="text-center mb-4">
+      <span class="section-eyebrow reveal-on-scroll">Data Insights</span>
+      <h2 class="section-title text-center reveal-on-scroll">Platform Analytics</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-8 reveal-on-scroll">
+        <div style="background:var(--ink-800);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-xl);padding:1.5rem;">
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--white);margin-bottom:0.25rem;">Meals Rescued Per Month</div>
+          <div style="font-size:var(--text-xs);color:rgba(197,236,211,0.5);margin-bottom:1rem;">Last 6 months · All cities</div>
+          <div style="height:240px;"><canvas id="impactLine"></canvas></div>
+        </div>
+      </div>
+      <div class="col-lg-4 reveal-on-scroll">
+        <div style="background:var(--ink-800);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-xl);padding:1.5rem;height:100%;">
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--white);margin-bottom:0.25rem;">Donor Type Split</div>
+          <div style="font-size:var(--text-xs);color:rgba(197,236,211,0.5);margin-bottom:1rem;">All registered donors</div>
+          <div style="height:200px;"><canvas id="impactDoughnut"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Environmental Impact -->
+<section class="section" style="background:var(--white);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow reveal-on-scroll">Environmental</span>
+      <h2 class="section-title text-center reveal-on-scroll">Beyond Hunger — Our Planet Impact</h2>
+    </div>
+    <div class="row g-4 text-center">
+      <div class="col-md-4 reveal-on-scroll">
+        <div style="padding:2rem;border:1.5px solid var(--green-200);border-radius:var(--radius-xl);">
+          <div style="font-size:3rem;margin-bottom:1rem;">🌡️</div>
+          <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--green-600);">62 T</div>
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:0.5rem;">CO₂ Prevented</div>
+          <div style="font-size:var(--text-sm);color:var(--ink-500);">Equivalent to taking 14 cars off the road for one year (1.8 kg CO₂ per kg food waste prevented)</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div style="padding:2rem;border:1.5px solid var(--green-200);border-radius:var(--radius-xl);">
+          <div style="font-size:3rem;margin-bottom:1rem;">💧</div>
+          <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--green-600);">2.1M L</div>
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:0.5rem;">Water Saved</div>
+          <div style="font-size:var(--text-sm);color:var(--ink-500);">Based on 500L water embedded per kg of food — the water that went into growing and cooking it</div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal-on-scroll">
+        <div style="padding:2rem;border:1.5px solid var(--green-200);border-radius:var(--radius-xl);">
+          <div style="font-size:3rem;margin-bottom:1rem;">🏔️</div>
+          <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--green-600);">4.2 T</div>
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--ink-900);margin-bottom:0.5rem;">Landfill Waste Prevented</div>
+          <div style="font-size:var(--text-sm);color:var(--ink-500);">Food in landfills generates methane — 23× more potent than CO₂. Every kg rescued is a climate win</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:linear-gradient(135deg,var(--green-900),var(--green-800));padding:5rem 0;text-align:center;">
+  <div class="container">
+    <h2 style="font-family:var(--font-display);font-size:var(--text-display);font-weight:800;color:var(--white);margin-bottom:1rem;">Help Us Reach 1 Million Meals</h2>
+    <p style="color:var(--green-200);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;">Join as a donor, NGO partner, or volunteer and be part of India's largest food rescue network.</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="signup.html" class="hero-cta-primary">Join Now →</a>
+      <a href="about.html" class="hero-cta-secondary">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;">
+      <div class="footer-bottom-text">© 2025 FoodRescue Foundation. Made with 💚 in India.</div>
+      <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initScrollReveal, initNavbar, setActiveNavLink } from './assets/js/ui.js';
+  import { initCounterObserver, buildLineChart, buildDoughnutChart, getDemoLineData, getDemoDoughnutData } from './assets/js/analytics.js';
+  initNavbar(); setActiveNavLink(); initScrollReveal(); initCounterObserver();
+  const ld = getDemoLineData();
+  buildLineChart('impactLine', ld.labels, ld.datasets, 'dark');
+  const dd = getDemoDoughnutData();
+  buildDoughnutChart('impactDoughnut', ['Restaurants','Hotels','Caterers'], [48,32,20], ['#3da668','#f5921e','#93d9ac'], 'dark');
+</script>
+</body>
+</html>

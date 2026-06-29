@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Active Donations — FoodRescue Restaurant</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="dash-body">
+<div id="toast-container"></div>
+<button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo"><div class="logo-icon">🍃</div><span>FoodRescue</span></a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar"><i class="bi bi-building"></i></div>
+      <div><div class="sidebar-user-name">Patel's Dhaba</div><div class="sidebar-user-role"><span class="verified-dot"></span> Verified Donor</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"   class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="post.html"    class="sidebar-nav-link"><i class="bi bi-plus-circle"></i> Post Donation</a>
+    <a href="active.html"  class="sidebar-nav-link active"><i class="bi bi-lightning-charge"></i> Active</a>
+    <a href="history.html" class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="impact.html"  class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i> Impact</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html" class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Profile</a>
+  </nav>
+  <div class="sidebar-footer"><button class="sidebar-logout" data-logout><i class="bi bi-box-arrow-left"></i> Logout</button></div>
+</aside>
+<main class="dash-main">
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">Active Donations</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+    <div class="dash-topbar-actions">
+      <a href="post.html" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i> Post New</a>
+    </div>
+  </div>
+  <div class="dash-content">
+    <div id="activeDonationsFeed" class="donation-feed">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</main>
+
+<!-- Tracking Modal -->
+<div class="confirm-modal-overlay" id="trackingModal">
+  <div class="confirm-modal" style="max-width:680px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <h4 style="font-family:var(--font-heading);font-weight:700;margin:0;" id="trackModalTitle">Live Tracking</h4>
+      <button onclick="closeTracking()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--ink-300);">&times;</button>
+    </div>
+    <div id="trackingTimeline"></div>
+    <div style="background:var(--ink-50);border-radius:var(--radius-md);height:280px;display:flex;align-items:center;justify-content:center;margin-top:1rem;">
+      <div style="text-align:center;color:var(--ink-300);">
+        <i class="bi bi-geo-alt" style="font-size:2rem;display:block;margin-bottom:0.5rem;"></i>
+        <span style="font-size:var(--text-sm);">Live map — connect Google Maps API to enable</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { renderStatusTimeline } from '../../assets/js/tracking.js';
+  import { initDashboardSidebar, initLogout, startExpiryTimer } from '../../assets/js/ui.js';
+  initDashboardSidebar(); initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+
+  const demoDonations = [
+    { id:'d1', foodName:'Veg Biryani', category:'veg', qty:'60 kg', servings:80,
+      status:'delivering', ngo:'Asha Foundation', volunteer:'Ramesh Kumar',
+      expiresAt: new Date(Date.now() + 5400000).toISOString(), safetyScore: 91 },
+    { id:'d2', foodName:'Dal Makhani', category:'veg', qty:'30 kg', servings:40,
+      status:'assigned', ngo:'Seva Ashram', volunteer:'Priya Singh',
+      expiresAt: new Date(Date.now() + 9000000).toISOString(), safetyScore: 85 },
+    { id:'d3', foodName:'Bread Rolls', category:'veg', qty:'20 boxes', servings:60,
+      status:'posted', ngo:null, volunteer:null,
+      expiresAt: new Date(Date.now() + 3600000).toISOString(), safetyScore: 78 }
+  ];
+
+  const feed = document.getElementById('activeDonationsFeed');
+  feed.innerHTML = demoDonations.map(d => `
+    <div class="donation-feed-card ${d.status==='posted'?'warning':''}">
+      <div class="donation-food-img">${d.category==='veg'?'🌿':'🍖'}</div>
+      <div>
+        <div class="donation-feed-title">${d.foodName}</div>
+        <div class="donation-feed-meta">
+          <span><i class="bi bi-box-seam"></i>${d.qty}</span>
+          <span>👥 ~${d.servings} people</span>
+          ${d.ngo ? `<span>🏢 ${d.ngo}</span>` : ''}
+          ${d.volunteer ? `<span>🛵 ${d.volunteer}</span>` : ''}
+        </div>
+        <span class="status-badge status-${d.status}">${d.status.replace('_',' ')}</span>
+        <div style="margin-top:8px;">
+          <span class="donation-timer" id="timer_${d.id}">⏱️ Loading...</span>
+        </div>
+      </div>
+      <div class="donation-feed-actions">
+        <div class="safety-score-mini">
+          <div class="safety-score-bar"><div class="safety-score-fill score-excellent" style="width:${d.safetyScore}%"></div></div>
+          <span style="font-size:.7rem;color:var(--dash-muted);">${d.safetyScore}/100</span>
+        </div>
+        <button class="btn btn-green btn-sm" onclick="showTracking('${d.id}','${d.foodName}','${d.status}')">
+          <i class="bi bi-geo-alt"></i> Track
+        </button>
+      </div>
+    </div>
+  `).join('');
+
+  demoDonations.forEach(d => {
+    const timerEl = document.getElementById('timer_' + d.id);
+    if (timerEl) startExpiryTimer(timerEl, d.expiresAt);
+  });
+
+  window.showTracking = function(id, name, status) {
+    document.getElementById('trackModalTitle').textContent = `Tracking: ${name}`;
+    renderStatusTimeline(document.getElementById('trackingTimeline'), status, {});
+    document.getElementById('trackingModal').classList.add('open');
+  };
+  window.closeTracking = function() {
+    document.getElementById('trackingModal').classList.remove('open');
+  };
+</script>
+</body>
+</html>

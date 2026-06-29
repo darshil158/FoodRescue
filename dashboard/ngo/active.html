@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Active Shipments — NGO Dashboard</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">
+        <i class="bi bi-building"></i>
+      </div>
+      <div>
+        <div class="sidebar-user-name">Asha Foundation</div>
+        <div class="sidebar-user-role">
+          <span class="verified-dot"></span>
+          <span>Registered NGO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"    class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="incoming.html" class="sidebar-nav-link"><i class="bi bi-inbox"></i> Incoming <span class="nav-badge" id="incomingBadge">3</span></a>
+    <a href="active.html"   class="sidebar-nav-link active"><i class="bi bi-lightning-charge"></i> Active</a>
+    <a href="history.html"  class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="beneficiaries.html" class="sidebar-nav-link"><i class="bi bi-people"></i> Beneficiaries</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"  class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">Active Food Shipments</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+    <div class="row g-4">
+      
+      <!-- Shipments List -->
+      <div class="col-lg-6">
+        <div class="dash-table-card">
+          <div class="dash-table-header">
+            <div class="dash-table-title">Accepted Shipments</div>
+          </div>
+          <div style="padding: 1rem 0;" id="activeShipmentsFeed">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Map & Progress Details -->
+      <div class="col-lg-6">
+        <div class="dash-chart-card h-100" style="display:flex; flex-direction:column;">
+          <div class="dash-chart-title">Live Tracking & Pipeline Timeline</div>
+          <div id="timelineContainer" style="margin-bottom:1.5rem;">
+            <div style="text-align:center; color:var(--dash-muted); padding:2rem;">Select a shipment to track</div>
+          </div>
+          
+          <!-- Mock Map Container -->
+          <div style="flex:1; min-height:280px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius-lg); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+            <div style="text-align:center; color:var(--dash-muted); z-index:2;" id="mapText">
+              <i class="bi bi-geo-alt-fill" style="font-size:2rem; color:var(--green-400); display:block; margin-bottom:0.5rem;"></i>
+              Select shipment to view delivery map.
+            </div>
+            <!-- Mock route overlay -->
+            <div id="mockMapOverlay" style="display:none; position:absolute; inset:0; background: radial-gradient(circle at 50% 50%, rgba(61,166,104,0.1), transparent 80%);">
+              <div style="position:absolute; top:20%; left:20%; font-size:1.5rem;" title="Donor">🏪</div>
+              <div style="position:absolute; bottom:20%; right:20%; font-size:1.5rem;" title="NGO">🏢</div>
+              <div id="mockRiderDot" style="position:absolute; top:20%; left:20%; font-size:1.2rem; transition: all 1.5s ease-in-out;" title="Rider">🛵</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { renderStatusTimeline } from '../../assets/js/tracking.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const activeShipments = [
+    { id: 'ship1', foodName: 'Dal Makhani + Rice', status: 'pickup_en_route', qty: '45 kg', servings: 60, restaurant: "Patel's Dhaba", volunteer: 'Ramesh Kumar', vehicle: '🏍️ Motorcycle' },
+    { id: 'ship2', foodName: 'Paneer Tikka Roll', status: 'delivering', qty: '30 pieces', servings: 30, restaurant: 'Surat Premium Hotel', volunteer: 'Priya Singh', vehicle: '🛵 Auto Rickshaw' }
+  ];
+
+  let selectedShipmentId = null;
+
+  function renderShipments() {
+    const feed = document.getElementById('activeShipmentsFeed');
+    feed.innerHTML = activeShipments.map(s => `
+      <div class="donation-feed-card mx-3 mb-3 cursor-pointer ${selectedShipmentId === s.id ? 'active-donation-card' : ''}" onclick="selectShipment('${s.id}')" style="border-left: 3px solid ${selectedShipmentId === s.id ? 'var(--green-400)' : 'transparent'};">
+        <div class="donation-food-img">📦</div>
+        <div style="flex:1;">
+          <div class="donation-feed-title">${s.foodName}</div>
+          <div class="donation-feed-meta">
+            <span>🏪 ${s.restaurant}</span>
+            <span>🛵 ${s.volunteer}</span>
+          </div>
+          <span class="status-badge status-${s.status}">${s.status.replace(/_/g, ' ')}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.selectShipment = function(id) {
+    selectedShipmentId = id;
+    renderShipments();
+    
+    const shipment = activeShipments.find(s => s.id === id);
+    if (!shipment) return;
+
+    // Timeline Rendering
+    const timelineContainer = document.getElementById('timelineContainer');
+    timelineContainer.innerHTML = '';
+    
+    const timelineEl = document.createElement('div');
+    timelineContainer.appendChild(timelineEl);
+    renderStatusTimeline(timelineEl, shipment.status, {});
+
+    // Mock Map Animation
+    document.getElementById('mapText').style.display = 'none';
+    const overlay = document.getElementById('mockMapOverlay');
+    overlay.style.display = 'block';
+    
+    const dot = document.getElementById('mockRiderDot');
+    if (shipment.status === 'pickup_en_route') {
+      dot.style.top = '25%';
+      dot.style.left = '30%';
+    } else {
+      dot.style.top = '60%';
+      dot.style.left = '65%';
+    }
+  };
+
+  renderShipments();
+</script>
+
+<style>
+  .active-donation-card {
+    background: rgba(255, 255, 255, 0.03);
+  }
+</style>
+
+</body>
+</html>

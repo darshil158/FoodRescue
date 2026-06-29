@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Dashboard — FoodRescue</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebarAvatar">
+        <i class="bi bi-building"></i>
+      </div>
+      <div>
+        <div class="sidebar-user-name" id="sidebarName">Loading...</div>
+        <div class="sidebar-user-role">
+          <span class="verified-dot"></span>
+          <span id="sidebarRole">Verified Donor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"   class="sidebar-nav-link active"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="post.html"    class="sidebar-nav-link"><i class="bi bi-plus-circle"></i> Post Donation</a>
+    <a href="active.html"  class="sidebar-nav-link"><i class="bi bi-lightning-charge"></i> Active <span class="nav-badge" id="activeBadge">0</span></a>
+    <a href="history.html" class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="impact.html"  class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i> Impact</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html" class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Profile</a>
+    <a href="#" class="sidebar-nav-link" id="notifLink"><i class="bi bi-bell"></i> Notifications <span class="nav-badge" id="notifBadge" style="display:none;">0</span></a>
+    <a href="#" class="sidebar-nav-link" onclick="toggleChat()"><i class="bi bi-chat-dots"></i> Messages</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting" id="greetingText">Good morning 👋</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+    <div class="dash-topbar-actions">
+      <a href="post.html" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i> Post Donation</a>
+      <button class="dash-topbar-btn" title="Notifications">
+        <i class="bi bi-bell"></i>
+        <div class="notif-dot" style="display:none;"></div>
+      </button>
+      <button class="dash-topbar-btn" onclick="toggleChat()" title="Messages">
+        <i class="bi bi-chat-dots"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="dash-content">
+
+    <!-- Stat Cards -->
+    <div class="stat-cards-row" id="statCards">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="bi bi-box-seam"></i></div>
+        <div class="stat-number" id="statTotal">—</div>
+        <div class="stat-label">Total Donations</div>
+        <div class="stat-trend up"><i class="bi bi-arrow-up"></i> 12%</div>
+      </div>
+      <div class="stat-card accent-saffron">
+        <div class="stat-icon"><i class="bi bi-people"></i></div>
+        <div class="stat-number" id="statMeals">—</div>
+        <div class="stat-label">Meals Saved</div>
+        <div class="stat-trend up"><i class="bi bi-arrow-up"></i> 8%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="bi bi-tree"></i></div>
+        <div class="stat-number" id="statKg">—</div>
+        <div class="stat-label">Food Rescued (kg)</div>
+        <div class="stat-trend up"><i class="bi bi-arrow-up"></i> 15%</div>
+      </div>
+      <div class="stat-card accent-saffron">
+        <div class="stat-icon"><i class="bi bi-star"></i></div>
+        <div class="stat-number" id="statScore">—</div>
+        <div class="stat-label">Impact Score</div>
+        <div class="stat-trend up"><i class="bi bi-arrow-up"></i> 3pt</div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-8">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">
+            Donation Activity
+            <span class="dash-chart-subtitle">Last 30 days</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="restLineChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">Food Category Split</div>
+          <div class="chart-container">
+            <canvas id="restDoughnutChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Donations + Notifications -->
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="dash-table-card">
+          <div class="dash-table-header">
+            <div class="dash-table-title">Active Donations</div>
+            <a href="active.html" style="font-size:var(--text-xs);color:var(--dash-muted);text-decoration:none;">View all →</a>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="dash-table" id="activeDonationsTable">
+              <thead>
+                <tr>
+                  <th>Food Name</th>
+                  <th>Quantity</th>
+                  <th>Posted</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="activeDonationsTbody">
+                <tr><td colspan="5" style="text-align:center;color:var(--dash-muted);padding:2rem;">Loading donations...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="notif-panel">
+          <div class="notif-header">
+            <span style="font-family:var(--font-heading);font-weight:700;font-size:var(--text-sm);color:var(--white);">
+              Notifications
+            </span>
+            <span style="font-size:var(--text-xs);color:var(--dash-muted);cursor:pointer;">Mark all read</span>
+          </div>
+          <div class="notif-list" id="notifList">
+            <!-- Notifications loaded by JS -->
+            <div class="notif-item unread">
+              <div class="notif-dot"></div>
+              <div>
+                <div class="notif-content-title">✅ NGO Accepted</div>
+                <div class="notif-content-body">Asha Foundation accepted your Veg Biryani donation</div>
+              </div>
+              <div class="notif-time">2m ago</div>
+            </div>
+            <div class="notif-item unread">
+              <div class="notif-dot"></div>
+              <div>
+                <div class="notif-content-title">🛵 Volunteer Assigned</div>
+                <div class="notif-content-body">Ramesh Kumar (🏍️) will pick up in ~15 min</div>
+              </div>
+              <div class="notif-time">5m ago</div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-dot"></div>
+              <div>
+                <div class="notif-content-title">❤️ Delivery Confirmed</div>
+                <div class="notif-content-body">Yesterday's Dal Makhani reached 65 families</div>
+              </div>
+              <div class="notif-time">1h ago</div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-dot"></div>
+              <div>
+                <div class="notif-content-title">🏆 Impact Milestone</div>
+                <div class="notif-content-body">You've rescued 500 kg of food this month!</div>
+              </div>
+              <div class="notif-time">3h ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dash-content -->
+</main>
+
+<!-- Chat Panel -->
+<button class="chat-fab" onclick="toggleChat()" aria-label="Open messages">
+  <i class="bi bi-chat-dots-fill"></i>
+  <span class="chat-badge" style="display:none;">0</span>
+</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="sidebar-avatar" style="width:32px;height:32px;background:var(--green-700);font-size:.8rem;flex-shrink:0;">
+      <i class="bi bi-building"></i>
+    </div>
+    <div>
+      <div style="font-family:var(--font-heading);font-weight:700;font-size:var(--text-sm);" class="chat-partner-name">Messages</div>
+      <div style="font-size:.65rem;color:var(--green-300);">Tap a donation to chat</div>
+    </div>
+    <button onclick="toggleChat()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);font-size:1rem;cursor:pointer;">&times;</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div style="padding:2rem;text-align:center;color:var(--ink-300);font-size:var(--text-sm);">
+      Select an active donation to start messaging
+    </div>
+  </div>
+  <div class="chat-input-wrap">
+    <input type="text" class="chat-input" placeholder="Type a message...">
+    <button class="chat-send"><i class="bi bi-send-fill"></i></button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { requireRole } from '../../assets/js/auth.js';
+  import { getDonationsByDonor, listenActiveDonations } from '../../assets/js/firestore.js';
+  import { listenUserNotifications } from '../../assets/js/notifications.js';
+  import { initRestaurantCharts, initCounterObserver } from '../../assets/js/analytics.js';
+  import { initDashboardSidebar, initLogout, formatRelativeTime } from '../../assets/js/ui.js';
+
+  initDashboardSidebar();
+  initLogout();
+
+  // Set greeting
+  const hour = new Date().getHours();
+  const greetings = ['Good evening', 'Good morning', 'Good afternoon'];
+  const g = hour < 12 ? greetings[1] : hour < 17 ? greetings[2] : greetings[0];
+  document.getElementById('greetingText').textContent = `${g} 👋`;
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+  // Demo stats (replace with Firestore in production)
+  const demoStats = { totalDonations: 42, totalMealsSaved: 3360, totalFoodKg: 420, impactScore: 87 };
+  document.getElementById('statTotal').textContent  = demoStats.totalDonations;
+  document.getElementById('statMeals').textContent  = demoStats.totalMealsSaved.toLocaleString('en-IN');
+  document.getElementById('statKg').textContent     = demoStats.totalFoodKg + ' kg';
+  document.getElementById('statScore').textContent  = demoStats.impactScore + '/100';
+
+  // Try to load real user data
+  try {
+    const user = await requireRole('restaurant');
+    if (user) {
+      document.getElementById('sidebarName').textContent = user.name || 'Restaurant';
+      if (user.avatar) {
+        const av = document.getElementById('sidebarAvatar');
+        av.innerHTML = `<img src="${user.avatar}" alt="Avatar">`;
+      }
+    }
+  } catch(e) {
+    // Demo mode
+    document.getElementById('sidebarName').textContent = "Patel's Dhaba";
+  }
+
+  // Charts
+  initRestaurantCharts();
+
+  // Demo donations table
+  const demoRows = [
+    { name: 'Veg Biryani', qty: '60 kg', posted: '15m ago', status: 'accepted', id: '1' },
+    { name: 'Dal Makhani', qty: '30 kg', posted: '2h ago', status: 'delivering', id: '2' },
+    { name: 'Bread Rolls', qty: '20 boxes', posted: 'Yesterday', status: 'completed', id: '3' },
+    { name: 'Palak Paneer', qty: '25 kg', posted: '3 days ago', status: 'completed', id: '4' }
+  ];
+  const tbody = document.getElementById('activeDonationsTbody');
+  tbody.innerHTML = demoRows.map(r => `
+    <tr>
+      <td><div class="food-name">${r.name}</div></td>
+      <td><div class="food-qty"><i class="bi bi-box-seam"></i>${r.qty}</div></td>
+      <td style="font-size:var(--text-xs);color:var(--dash-muted);">${r.posted}</td>
+      <td><span class="status-badge status-${r.status}">${r.status.replace('_',' ')}</span></td>
+      <td>
+        <a href="active.html?id=${r.id}" style="font-size:var(--text-xs);color:var(--green-400);text-decoration:none;">
+          <i class="bi bi-eye"></i> View
+        </a>
+      </td>
+    </tr>
+  `).join('');
+
+  document.getElementById('activeBadge').textContent = demoRows.filter(r => ['accepted','assigned','delivering'].includes(r.status)).length;
+
+  window.toggleChat = function() {
+    document.getElementById('chatPanel').classList.toggle('open');
+  };
+</script>
+</body>
+</html>

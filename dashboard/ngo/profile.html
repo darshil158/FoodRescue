@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NGO Profile — FoodRescue</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">
+        <i class="bi bi-building"></i>
+      </div>
+      <div>
+        <div class="sidebar-user-name">Asha Foundation</div>
+        <div class="sidebar-user-role">
+          <span class="verified-dot"></span>
+          <span>Registered NGO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"    class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Overview</a>
+    <a href="incoming.html" class="sidebar-nav-link"><i class="bi bi-inbox"></i> Incoming <span class="nav-badge" id="incomingBadge">3</span></a>
+    <a href="active.html"   class="sidebar-nav-link"><i class="bi bi-lightning-charge"></i> Active</a>
+    <a href="history.html"  class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="beneficiaries.html" class="sidebar-nav-link"><i class="bi bi-people"></i> Beneficiaries</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html"  class="sidebar-nav-link active"><i class="bi bi-person-circle"></i> Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">NGO Profile Setup</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+    <div class="dash-topbar-actions">
+      <button class="btn btn-primary btn-sm" onclick="saveNgoProfile()"><i class="bi bi-check-circle"></i> Save Settings</button>
+    </div>
+  </div>
+
+  <div class="dash-content">
+    <div class="row g-4">
+      
+      <!-- Profile Widget -->
+      <div class="col-lg-4">
+        <div class="dash-chart-card text-center">
+          <div style="width:100px; height:100px; border-radius:50%; background:var(--green-700); border:3px solid var(--green-500); margin:0 auto 1rem; display:flex; align-items:center; justify-content:center; font-size:2.5rem;">🏢</div>
+          <h4 style="font-family:var(--font-heading); font-weight:700; color:var(--white); font-size:1.1rem; margin-bottom:0.25rem;">Asha Foundation</h4>
+          <div style="margin: 8px 0;"><span class="verify-badge verify-ngo"><i class="bi bi-award"></i> Verification Active</span></div>
+          <p style="font-size:var(--text-xs); color:var(--dash-muted); margin-bottom:1.5rem;">Registered since March 2024</p>
+          <button class="btn btn-outline-green btn-sm w-100"><i class="bi bi-camera"></i> Change NGO Logo</button>
+        </div>
+      </div>
+
+      <!-- Settings Form -->
+      <div class="col-lg-8">
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">Organization Information</div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label-dark">Organization Name</label>
+              <input type="text" class="form-input-dark" value="Asha Foundation">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Director Name</label>
+              <input type="text" class="form-input-dark" value="Sr. Anita Joseph">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Registered Email</label>
+              <input type="email" class="form-input-dark" value="contact@ashafoundation.org">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Emergency Contact Phone</label>
+              <input type="tel" class="form-input-dark" value="9876543221">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Govt NGO Registration Number</label>
+              <input type="text" class="form-input-dark" value="REG-SURAT-2024-889" readonly style="opacity:.65;">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-dark">Max Daily Meal Capacity</label>
+              <input type="number" class="form-input-dark" value="120" id="ngoCap">
+            </div>
+            <div class="col-12">
+              <label class="form-label-dark">Headquarters Address</label>
+              <textarea class="form-input-dark" rows="2">Near Nehru Garden, Nanpura, Surat — 395001</textarea>
+            </div>
+          </div>
+
+          <div class="dash-chart-title mt-4">Security Credentials</div>
+          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius-md); padding:1rem; display:flex; flex-direction:column; gap:10px;">
+            <div class="d-flex justify-content-between align-items-center">
+              <span style="font-size:var(--text-xs); color:var(--dash-text);">12A Exemption Certificate:</span>
+              <span class="status-badge status-completed">Verified</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span style="font-size:var(--text-xs); color:var(--dash-text);">80G Tax Exemption Status:</span>
+              <span class="status-badge status-completed">Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  window.saveNgoProfile = function() {
+    showToast('Settings Saved', 'NGO details updated successfully.', 'success');
+  };
+</script>
+
+</body>
+</html>
