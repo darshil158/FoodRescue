@@ -181,7 +181,7 @@
     <div class="row align-items-center gy-5">
 
       <!-- Left: Content -->
-      <div class="col-lg-8 order-2 order-lg-1">
+      <div class="col-lg-6 order-2 order-lg-1">
         <div class="hero-eyebrow animate-fadeInUp">
           🌿 India's First Real-Time Food Rescue Network
         </div>
@@ -235,7 +235,7 @@
       </div>
 
       <!-- Right: SVG Animation -->
-      <div class="col-lg-4 order-1 order-lg-2 text-center">
+      <div class="col-lg-6 order-1 order-lg-2 text-center">
         <div class="hero-illustration float-anim mx-auto" style="max-width:480px; position:relative;">
 
           <!-- Background glow -->
@@ -313,24 +313,21 @@
 <!-- ── TRUST BAR ────────────────────────────────────────── -->
 <div class="trust-bar">
   <div class="container d-flex align-items-center gap-4" style="overflow:hidden;">
-    <span class="trust-logo-label d-flex flex-column" style="font-size:.7rem;font-weight:700;font-family:var(--font-heading);color:var(--ink-300);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;flex-shrink:0;">
-      Trusted By:
-      <div class="marquee-track">
-        <div class="trust-logo"><i class="bi bi-shield-check"></i> FSSAI</div>
-        <div class="trust-logo"><i class="bi bi-building"></i> NITI Aayog</div>
-        <div class="trust-logo"><i class="bi bi-star"></i> Ministry of Food</div>
-        <div class="trust-logo"><i class="bi bi-laptop"></i> NASSCOM</div>
-        <div class="trust-logo"><i class="bi bi-award"></i> GTU Social Impact</div>
-        <div class="trust-logo"><i class="bi bi-globe-asia-australia"></i> FAO Partner</div>
-        <div class="trust-logo"><i class="bi bi-shield-check"></i> FSSAI</div>
-        <div class="trust-logo"><i class="bi bi-building"></i> NITI Aayog</div>
-        <div class="trust-logo"><i class="bi bi-star"></i> Ministry of Food</div>
-        <div class="trust-logo"><i class="bi bi-laptop"></i> NASSCOM</div>
-        <div class="trust-logo"><i class="bi bi-award"></i> GTU Social Impact</div>
-        <div class="trust-logo"><i class="bi bi-globe-asia-australia"></i> FAO Partner</div>
-      </div>
-    </span>
-    
+    <span class="trust-logo-label" style="font-size:.7rem;font-weight:700;font-family:var(--font-heading);color:var(--ink-300);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;flex-shrink:0;">Trusted By:</span>
+    <div class="marquee-track">
+      <div class="trust-logo"><i class="bi bi-shield-check"></i> FSSAI</div>
+      <div class="trust-logo"><i class="bi bi-building"></i> NITI Aayog</div>
+      <div class="trust-logo"><i class="bi bi-star"></i> Ministry of Food</div>
+      <div class="trust-logo"><i class="bi bi-laptop"></i> NASSCOM</div>
+      <div class="trust-logo"><i class="bi bi-award"></i> GTU Social Impact</div>
+      <div class="trust-logo"><i class="bi bi-globe-asia-australia"></i> FAO Partner</div>
+      <div class="trust-logo"><i class="bi bi-shield-check"></i> FSSAI</div>
+      <div class="trust-logo"><i class="bi bi-building"></i> NITI Aayog</div>
+      <div class="trust-logo"><i class="bi bi-star"></i> Ministry of Food</div>
+      <div class="trust-logo"><i class="bi bi-laptop"></i> NASSCOM</div>
+      <div class="trust-logo"><i class="bi bi-award"></i> GTU Social Impact</div>
+      <div class="trust-logo"><i class="bi bi-globe-asia-australia"></i> FAO Partner</div>
+    </div>
   </div>
 </div>
 
@@ -772,6 +769,15 @@
     initScrollReveal();
     initCounterObserver();
     initTestimonialCarousel();
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[Service Worker] Registered successfully', reg.scope))
+          .catch((err) => console.warn('[Service Worker] Registration failed', err));
+      });
+    }
 
     // Emergency banner listener
     try {
