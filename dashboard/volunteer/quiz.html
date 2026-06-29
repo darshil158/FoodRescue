@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Safety Certification Quiz — Volunteer</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .quiz-card {
+      background: var(--dash-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .slide-step { display: none; }
+    .slide-step.active { display: block; }
+    .quiz-option {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: var(--text-sm);
+      color: var(--dash-text);
+      transition: all var(--transition-fast);
+    }
+    .quiz-option:hover {
+      border-color: var(--green-300);
+      background: rgba(255,255,255,0.08);
+    }
+    .quiz-option.selected {
+      border-color: var(--green-400);
+      background: rgba(61,166,104,0.12);
+      color: var(--green-300);
+    }
+  </style>
+</head>
+<body class="dash-body">
+
+<div id="toast-container"></div>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-header">
+    <a href="../../index.html" class="sidebar-logo">
+      <div class="logo-icon">🍃</div>
+      <span>FoodRescue</span>
+    </a>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">
+        <i class="bi bi-person"></i>
+      </div>
+      <div>
+        <div class="sidebar-user-name">Ramesh Kumar</div>
+        <div class="sidebar-user-role">
+          <span class="verified-dot"></span>
+          <span>🌱 Seedling</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main Menu</div>
+    <a href="index.html"   class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i> Dashboard</a>
+    <a href="tasks.html"   class="sidebar-nav-link"><i class="bi bi-lightning-charge"></i> My Tasks</a>
+    <a href="scan.html"    class="sidebar-nav-link"><i class="bi bi-qr-code-scan"></i> Scan QR</a>
+    <a href="history.html" class="sidebar-nav-link"><i class="bi bi-clock-history"></i> History</a>
+    <a href="rewards.html" class="sidebar-nav-link"><i class="bi bi-trophy"></i> Rewards</a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="profile.html" class="sidebar-nav-link"><i class="bi bi-person-circle"></i> Profile</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" data-logout>
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="dash-main">
+  <!-- Top Bar -->
+  <div class="dash-topbar">
+    <div>
+      <div class="dash-greeting">FSSAI Food Safety Training</div>
+      <div class="dash-date" id="dateText"></div>
+    </div>
+  </div>
+
+  <div class="dash-content" style="max-width:800px;">
+    
+    <!-- Step Progress bar -->
+    <div class="quiz-card" id="trainingPanel">
+      <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:1rem;">
+        <span style="font-family:var(--font-heading); font-weight:700; color:var(--white);" id="panelTitle">Module 1: Temperature Safety</span>
+        <span style="font-size:var(--text-xs); color:var(--dash-muted);" id="stepIndicator">Step 1 of 4</span>
+      </div>
+
+      <!-- Slide 1: Temperature Zones -->
+      <div class="slide-step active" id="slide1">
+        <h4 style="font-family:var(--font-heading); font-weight:700; color:var(--white); margin-bottom:1rem;">🌡️ FSSAI Temperature Danger Zones</h4>
+        <p style="color:var(--dash-text); line-height:1.75; font-size:var(--text-sm); margin-bottom:1rem;">
+          To prevent dangerous bacterial growth, food must be kept outside the "Danger Zone" (5°C to 60°C). Hot cooked food must be dispatched, delivered, and consumed within <strong>4 hours</strong> of preparation.
+        </p>
+        <div style="background:rgba(245,146,30,0.08); border-left:3px solid var(--saffron-400); padding:1rem; border-radius:4px; font-size:var(--text-xs); color:var(--saffron-300);">
+          <strong>Critical Rule:</strong> If food sits at room temperature for over 4 hours, it must not be delivered. Cancel dispatch and flag immediately.
+        </div>
+      </div>
+
+      <!-- Slide 2: Handoff Protocol -->
+      <div class="slide-step" id="slide2">
+        <h4 style="font-family:var(--font-heading); font-weight:700; color:var(--white); margin-bottom:1rem;">📦 Safe Handoff Handovers</h4>
+        <p style="color:var(--dash-text); line-height:1.75; font-size:var(--text-sm); margin-bottom:1rem;">
+          Always ensure food containers are securely sealed, leak-proof, and kept upright during transport. Do not open food packages or expose them to dust/dirt. 
+        </p>
+        <div style="background:rgba(61,166,104,0.08); border-left:3px solid var(--green-400); padding:1rem; border-radius:4px; font-size:var(--text-xs); color:var(--green-300);">
+          <strong>Cleanliness standard:</strong> Sanitize hands before pickup. Ensure storage boxes inside delivery vehicles are clean.
+        </div>
+      </div>
+
+      <!-- Slide 3: Rejection Rules -->
+      <div class="slide-step" id="slide3">
+        <h4 style="font-family:var(--font-heading); font-weight:700; color:var(--white); margin-bottom:1rem;">🚨 Spotting and Rejecting Spoiled Items</h4>
+        <p style="color:var(--dash-text); line-height:1.75; font-size:var(--text-sm); margin-bottom:1rem;">
+          Inspect the item details on pickup. Signs of spoilage include sour odors, fermentation gas (swollen packaging), mold growth, or discoloration. Never proceed with delivery if these signs are detected.
+        </p>
+      </div>
+
+      <!-- Slide 4: The Quiz -->
+      <div class="slide-step" id="slide4">
+        <h4 style="font-family:var(--font-heading); font-weight:700; color:var(--white); margin-bottom:1rem;" id="quizQuestion">Loading question...</h4>
+        <div id="quizOptions">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Nav buttons -->
+      <div style="display:flex; justify-content:space-between; margin-top:2rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:1.5rem;">
+        <button class="btn btn-outline-green btn-sm" id="prevBtn" onclick="goPrevSlide()" disabled>Previous</button>
+        <button class="btn btn-green btn-sm" id="nextBtn" onclick="goNextSlide()">Continue</button>
+      </div>
+    </div>
+
+    <!-- Success Certification Badge -->
+    <div class="quiz-card text-center" id="successPanel" style="display:none; border:2px solid var(--green-500); background:rgba(61,166,104,0.08);">
+      <div style="font-size:4rem; margin-bottom:1rem;">🏆</div>
+      <h3 style="font-family:var(--font-display); font-weight:800; color:var(--white); margin-bottom:0.5rem;">FSSAI Certified Volunteer</h3>
+      <p style="color:var(--green-300); font-size:var(--text-sm); margin-bottom:2rem;">
+        Congratulations! You passed the training course with a score of <strong id="passingScore">100%</strong>. Your profile has been updated and you can now accept delivery runs.
+      </p>
+      <a href="index.html" class="btn btn-green">Go to Dashboard</a>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { initDashboardSidebar, initLogout } from '../../assets/js/ui.js';
+  import { showToast } from '../../assets/js/notifications.js';
+
+  initDashboardSidebar();
+  initLogout();
+  document.getElementById('dateText').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  let currentStep = 1;
+  const totalSteps = 4;
+
+  const quizQuestions = [
+    {
+      q: "What is the FSSAI temperature danger zone where bacteria grow most rapidly?",
+      options: ["-18°C to 0°C", "5°C to 60°C", "70°C to 100°C"],
+      answer: 1
+    },
+    {
+      q: "What is the maximum time hot cooked food can sit at room temperature before dispatch?",
+      options: ["2 hours", "4 hours", "8 hours"],
+      answer: 1
+    },
+    {
+      q: "What visual/olfactory signs indicate spoiled food?",
+      options: ["Sour odor or mold", "Swollen packaging", "All of the above"],
+      answer: 2
+    }
+  ];
+
+  let currentQuestionIndex = 0;
+  let userAnswers = [];
+
+  window.goPrevSlide = function() {
+    if (currentStep > 1) {
+      document.getElementById(`slide${currentStep}`).classList.remove('active');
+      currentStep--;
+      document.getElementById(`slide${currentStep}`).classList.add('active');
+      updateStepButtons();
+    }
+  };
+
+  window.goNextSlide = function() {
+    if (currentStep < totalSteps) {
+      document.getElementById(`slide${currentStep}`).classList.remove('active');
+      currentStep++;
+      document.getElementById(`slide${currentStep}`).classList.add('active');
+      updateStepButtons();
+      if (currentStep === 4) {
+        loadQuestion();
+      }
+    } else {
+      // Quiz submission check
+      evaluateQuiz();
+    }
+  };
+
+  function updateStepButtons() {
+    document.getElementById('stepIndicator').textContent = `Step ${currentStep} of ${totalSteps}`;
+    document.getElementById('prevBtn').disabled = currentStep === 1;
+    
+    if (currentStep === totalSteps) {
+      document.getElementById('panelTitle').textContent = 'Safety Assessment Quiz';
+      document.getElementById('nextBtn').textContent = currentQuestionIndex === quizQuestions.length - 1 ? 'Submit Answers' : 'Next Question';
+    } else {
+      document.getElementById('panelTitle').textContent = currentStep === 1 ? 'Module 1: Temperature Safety' : currentStep === 2 ? 'Module 2: Safe Handoff' : 'Module 3: Rejecting Items';
+      document.getElementById('nextBtn').textContent = 'Continue';
+    }
+  }
+
+  function loadQuestion() {
+    const question = quizQuestions[currentQuestionIndex];
+    document.getElementById('quizQuestion').textContent = question.q;
+    
+    const optionsContainer = document.getElementById('quizOptions');
+    optionsContainer.innerHTML = question.options.map((opt, i) => `
+      <div class="quiz-option ${userAnswers[currentQuestionIndex] === i ? 'selected' : ''}" onclick="selectOption(${i})">
+        ${opt}
+      </div>
+    `).join('');
+
+    document.getElementById('nextBtn').disabled = userAnswers[currentQuestionIndex] === undefined;
+  }
+
+  window.selectOption = function(index) {
+    userAnswers[currentQuestionIndex] = index;
+    // Highlight selected option
+    const options = document.querySelectorAll('.quiz-option');
+    options.forEach((opt, idx) => opt.classList.toggle('selected', idx === index));
+    document.getElementById('nextBtn').disabled = false;
+  };
+
+  function evaluateQuiz() {
+    if (currentQuestionIndex < quizQuestions.length - 1) {
+      currentQuestionIndex++;
+      loadQuestion();
+      updateStepButtons();
+    } else {
+      // Final submission check
+      let correctCount = 0;
+      quizQuestions.forEach((q, idx) => {
+        if(userAnswers[idx] === q.answer) {
+          correctCount++;
+        }
+      });
+
+      const passPercent = Math.round((correctCount / quizQuestions.length) * 100);
+      if (passPercent >= 70) {
+        document.getElementById('trainingPanel').style.display = 'none';
+        document.getElementById('passingScore').textContent = `${passPercent}%`;
+        document.getElementById('successPanel').style.display = 'block';
+        showToast('🎉 Certification Awarded!', 'You successfully passed the FSSAI training.', 'success');
+      } else {
+        showToast('Assessment Failed', `Score: ${passPercent}%. You need at least 70% to pass. Please try again.`, 'error');
+        // Reset quiz and go back
+        currentQuestionIndex = 0;
+        userAnswers = [];
+        currentStep = 1;
+        document.getElementById('slide4').classList.remove('active');
+        document.getElementById('slide1').classList.add('active');
+        updateStepButtons();
+      }
+    }
+  }
+</script>
+
+</body>
+</html>
